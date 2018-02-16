@@ -17,8 +17,8 @@ class Element():
     else:
       self.grammar = CFG.fromstring("""
         Build -> MatchedLayers
-        MatchedLayers -> EvenLayer OddLayer
         MatchedLayers -> MatchedLayers MatchedLayers
+        MatchedLayers -> EvenLayer OddLayer
         EvenLayer -> MatchedEvenRows
         OddLayer -> MatchedOddRows
         MatchedEvenRows -> MatchedEvenRows MatchedEvenRows
@@ -78,13 +78,24 @@ class Element():
   
     All size units are in LDU
 
+    Algorithm:
+
+    1. Try production rules until one succeeds
+
     >>> b = Element(size=(8*20,8*20,8*24))
     >>> b.generate()
     >>> b.inner_height()
     192.0
     """
     for prod in self.grammar.productions(lhs=self.lhs):
+      print(prod)
       for i, rhs in enumerate(prod.rhs()):
+        if rhs.symbol() == 'MatchedLayers':
+          if self.root().inner_height() < self.root().size[2]:
+            child = Element(rhs, parent=(self.parent or self), size=(self.size[0],self.size[1], 48))
+            (self.parent or self).children.append(child)
+            child.generate()
+
         if rhs.symbol() == 'MatchedLayers':
           if self.root().inner_height() < self.root().size[2]:
             child = Element(rhs, parent=(self.parent or self), size=(self.size[0],self.size[1], 48))
