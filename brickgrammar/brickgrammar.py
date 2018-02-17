@@ -206,15 +206,11 @@ class Element():
 
     return ret
 
-  def is_valid_shape(self):
+  def current_working_shape(self):
     cws = CurrentWorkingShape()
     cws.add_filled_border(3,3,3)
-
-    try:
-      cws.apply(self.terminal())
-      return True
-    except CollisionError:
-      return False
+    cws.apply(self.terminal())
+    return cws
 
   def generate(self):
     """ 
@@ -234,7 +230,9 @@ class Element():
         child = Element(parent=self, lhs=rhs)
         self.children.append(child)
 
-        if not self.root().is_valid_shape():
+        try:        
+          self.root().current_working_shape()
+        except CollisionError:
           self.children.remove(child)
 
       if len(self.children) > 0:
@@ -242,10 +240,9 @@ class Element():
            child.generate()
         break
 
-
 if __name__ == '__main__':
   build = Element() 
   build.generate()
   #print(build)
   print(build.terminal())
-  print(build.is_valid_shape())
+  print(build.current_working_shape())
