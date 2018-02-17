@@ -26,9 +26,22 @@ class CurrentWorkingShape():
             self.filled.add((x,y,z))
 
   def norm_pos(pos):
+    """ 
+    Normalizes a position
+
+    >>> CurrentWorkingShape.norm_pos((1,2,3))
+    (1, 2, 3)
+    >>> CurrentWorkingShape.norm_pos((1.0,2.0,3.0))
+    (1, 2, 3)
+    >>> CurrentWorkingShape.norm_pos((1.1,2.2,3.3))
+    Traceback (most recent call last):
+      ...
+    ValueError: 1.100000 is not an integer
+    """
+    
     for i in pos:
       if not float(i).is_integer():
-        raise IndexError('%f is not an integer')
+        raise ValueError('%f is not an integer' % i)
 
     return tuple(int(i) for i in pos)
 
