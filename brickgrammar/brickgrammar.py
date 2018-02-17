@@ -77,8 +77,8 @@ class CurrentWorkingShape():
       elif op == ')': 
         position = positions.pop()
       elif op.startswith('Move'):
-        (x,y,z) = op[5:-1].split(',')
-        position = (position[0]+float(x), position[1]+float(y), position[2]+float(z))
+        args = tuple(float(i) for i in op[5:-1].split(','))
+        position = (position[0]+args[0], position[1]+args[1], position[2]+args[2])
       else:
         raise NotImplementedError('Op not implemented: ' + op)
 
@@ -132,17 +132,25 @@ class Element():
       self.grammar = parent.grammar
     else:
       self.grammar = CFG.fromstring("""
-        #Stud -> P2x2
+        Stud -> Pu R B P2x2 Po
         Stud -> P1x1
         Stud -> 
 
-        #P2x2 -> Pu Po 'Place3022'
-        #P2x2 -> 'Place3022'
+        P2x2 -> Pu U R B Stud Po Place3022
+        P1x1 -> Pu U Stud Po Place3024
         
-        P1x1 -> Pu U Stud Po 'Place3024'
-        P1x1 -> 'Place3024'
+        P2x2 -> Place3022
+        P1x1 -> Place3024
 
-        U -> 'Move(0,-1,0)'
+        Place3022 -> 'Place3022'
+        Place3024 -> 'Place3024'        
+
+        U -> 'Move( 0,-1, 0)'
+        D -> 'Move( 0, 1, 0)'
+        L -> 'Move(-.5,0, 0)'
+        R -> 'Move( .5,0, 0)'
+        B -> 'Move( 0, 0, .5)'
+        F -> 'Move( 0, 0,-.5 )'
         Pu -> '('
         Po -> ')'
     """)
@@ -190,12 +198,9 @@ class Element():
     ret = []
 
     if isinstance(self.lhs, Nonterminal):
-      for prod in self.grammar.productions(lhs=self.lhs):
-        if not prod.rhs():
-          pass
-        if len(prod.rhs()) == 1 and not isinstance(prod.rhs()[0], Nonterminal):
-          ret.append(prod.rhs()[0])
-
+      # Add the shortest sentence
+      ret += list(generate.generate(self.grammar, start=self.lhs, depth=3))[-1]
+      
     for child in self.children:
       ret += child.terminal()
 
@@ -218,9 +223,6 @@ class Element():
     Algorithm:
 
     1. Try production rules until one succeeds
-
-    >>> b = Element()
-    >>> b.generate()
     """
 
     #for sent in generate.generate(self.grammar, depth=4):
