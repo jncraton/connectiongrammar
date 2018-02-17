@@ -16,10 +16,12 @@ class CurrentWorkingShape():
     left = "0 0 1 0 1 0 -1 0 0"
     right = "0 0 -1 0 1 0 1 0 0"
     color = 0
+    yellow = 14
+    blue = 1
 
     pos = (pos[0] * 20, pos[1] * 8, pos[2] * 20)
     
-    self.ldraw += ("1 %d %d %d %d %s %s.dat\n" % (color, pos[0], pos[1], pos[2], front, part))    
+    self.ldraw += ("1 %d %d %d %d %s %s.dat\n" % (blue, pos[0], pos[1], pos[2], front, part))    
 
   def add_filled_border(self,xsize,ysize,zsize):
     """
@@ -86,7 +88,7 @@ class CurrentWorkingShape():
       elif op == 'Place3022':
         p = (position[0] - .5,position[1],position[2] - .5,position[0] - .5)
         self.fill_rect(p, (2,1,2))
-        self.append_ldraw(p, '3022')
+        self.append_ldraw(position, '3022')
       elif op == '(': 
         positions.append(position)
       elif op == ')': 
@@ -154,8 +156,13 @@ class Element():
         Stud -> P1x1
         Stud -> 
 
-        P2x2 -> Pu U R B Stud Po Pu U L B Stud Po Pu U R F Stud Po Pu U L F Stud Po Place3022
-        P1x1 -> Pu U Stud Po Place3024
+        Antistud -> Pu D P1x1 Po
+        Antistud -> 
+
+        PlateConnection -> Pu Pu U Stud Po Antistud Po
+        
+        P2x2 -> Pu R B PlateConnection Po Pu L B PlateConnection Po Pu R F PlateConnection Po Pu L F PlateConnection Po Place3022
+        P1x1 -> PlateConnection Place3024
         
         P2x2 -> Place3022
         P1x1 -> Place3024
