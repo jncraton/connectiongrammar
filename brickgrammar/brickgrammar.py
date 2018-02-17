@@ -57,7 +57,7 @@ class CurrentWorkingShape():
     for x in range(0, size[0]):
       for y in range(0, size[1]):
         for z in range(0, size[2]):
-          self.fill_space((pos[0] + x, pos[1] + y, pos[2] - z))
+          self.fill_space((pos[0] + x, pos[1] - y, pos[2] + z))
             
   def apply(self, operations):
     """
@@ -69,13 +69,16 @@ class CurrentWorkingShape():
 
     for op in operations:
       if op == 'Place3024':
-        self.fill_rect((position[0], position[1], position[2]))
+        self.fill_rect(position)
+      elif op == 'Place3022': 
+        self.fill_rect((position[0] - .5,position[1],position[2] - .5,position[0] - .5), (2,1,2))
       elif op == '(': 
         positions.append(position)
       elif op == ')': 
         position = positions.pop()
-      elif op == 'Up':
-        position = (position[0], position[1], position[2]-1)
+      elif op.startswith('Move'):
+        (x,y,z) = op[5:-1].split(',')
+        position = (position[0]+float(x), position[1]+float(y), position[2]+float(z))
       else:
         raise NotImplementedError('Op not implemented: ' + op)
 
@@ -129,20 +132,17 @@ class Element():
       self.grammar = parent.grammar
     else:
       self.grammar = CFG.fromstring("""
-        Stud -> P1x1
+        #Stud -> P2x2
         Stud -> P1x1
         Stud -> 
+
+        #P2x2 -> Pu Po 'Place3022'
+        #P2x2 -> 'Place3022'
+        
         P1x1 -> Pu U Stud Po 'Place3024'
         P1x1 -> 'Place3024'
-      
-        U -> 'Up'
-        D -> 'Down'
-        L -> 'Left'
-        R -> 'Right'
-        F -> 'Forward'
-        B -> 'Back'
-        CW -> 'CCW'
-        CCW -> 'CW'
+
+        U -> 'Move(0,-1,0)'
         Pu -> '('
         Po -> ')'
     """)
@@ -234,8 +234,12 @@ class Element():
 
         if not self.root().is_valid_shape():
           self.children.remove(child)
-        else:
-          child.generate()
+
+      if len(self.children) > 0:
+        for child in self.children:
+           child.generate()
+        break
+
 
 if __name__ == '__main__':
   build = Element() 
