@@ -25,7 +25,16 @@ class CurrentWorkingShape():
           if abs(x) == xsize or abs(y) == ysize or abs(z) == zsize:
             self.filled.add((x,y,z))
 
+  def norm_pos(pos):
+    for i in pos:
+      if not float(i).is_integer():
+        raise IndexError('%f is not an integer')
+
+    return tuple(int(i) for i in pos)
+
   def fill_space(self, pos):
+    pos = CurrentWorkingShape.norm_pos(pos)
+  
     if pos in self.filled:
       raise CollisionError('Cannot fill %s' % (pos,))
 
@@ -107,6 +116,7 @@ class Element():
       self.grammar = parent.grammar
     else:
       self.grammar = CFG.fromstring("""
+        Stud -> P1x1
         Stud -> P1x1
         Stud -> 
         P1x1 -> Pu U Stud Po 'Place3024'
