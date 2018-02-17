@@ -8,6 +8,18 @@ class CollisionError(BaseException): pass
 class CurrentWorkingShape():
   def __init__(self):
     self.filled = set()
+    self.ldraw = ''
+
+  def append_ldraw(self, pos, part):
+    front = "1 0 0 0 1 0 0 0 1"
+    back = "-1 0 0 0 1 0 0 0 -1"
+    left = "0 0 1 0 1 0 -1 0 0"
+    right = "0 0 -1 0 1 0 1 0 0"
+    color = 0
+
+    pos = (pos[0] * 20, pos[1] * 8, pos[2] * 20)
+    
+    self.ldraw += ("1 %d %d %d %d %s %s.dat\n" % (color, pos[0], pos[1], pos[2], front, part))    
 
   def add_filled_border(self,xsize,ysize,zsize):
     """
@@ -70,8 +82,11 @@ class CurrentWorkingShape():
     for op in operations:
       if op == 'Place3024':
         self.fill_rect(position)
-      elif op == 'Place3022': 
-        self.fill_rect((position[0] - .5,position[1],position[2] - .5,position[0] - .5), (2,1,2))
+        self.append_ldraw(position, '3024')
+      elif op == 'Place3022':
+        p = (position[0] - .5,position[1],position[2] - .5,position[0] - .5)
+        self.fill_rect(p, (2,1,2))
+        self.append_ldraw(p, '3022')
       elif op == '(': 
         positions.append(position)
       elif op == ')': 
@@ -133,10 +148,13 @@ class Element():
     else:
       self.grammar = CFG.fromstring("""
         Stud -> Pu R B P2x2 Po
+        Stud -> Pu L B P2x2 Po
+        Stud -> Pu R F P2x2 Po
+        Stud -> Pu L F P2x2 Po
         Stud -> P1x1
         Stud -> 
 
-        P2x2 -> Pu U R B Stud Po Place3022
+        P2x2 -> Pu U R B Stud Po Pu U L B Stud Po Pu U R F Stud Po Pu U L F Stud Po Place3022
         P1x1 -> Pu U Stud Po Place3024
         
         P2x2 -> Place3022
@@ -172,12 +190,15 @@ class Element():
     'Stud'
     """
 
-    ret = [self.lhs.symbol()]
+    ret = []
+
+    if not self.children:
+      ret.append(str(self.lhs))
 
     for child in self.children:
       ret.append(child.__str__())
 
-    return '\n'.join(ret)
+    return ' '.join(ret)
 
   def terminal(self):
     """
@@ -197,9 +218,12 @@ class Element():
 
     ret = []
 
-    if isinstance(self.lhs, Nonterminal):
+    if isinstance(self.lhs, Nonterminal) and not self.children:
       # Add the shortest sentence
       ret += list(generate.generate(self.grammar, start=self.lhs, depth=3))[-1]
+
+    if isinstance(self.lhs, str):
+      ret += [self.lhs]
       
     for child in self.children:
       ret += child.terminal()
@@ -208,7 +232,7 @@ class Element():
 
   def current_working_shape(self):
     cws = CurrentWorkingShape()
-    cws.add_filled_border(3,3,3)
+    cws.add_filled_border(4,3,4)
     cws.apply(self.terminal())
     return cws
 
@@ -226,23 +250,33 @@ class Element():
     #return
 
     for prod in self.grammar.productions(lhs=self.lhs):
+      new_children = []
+
       for rhs in prod.rhs():
-        child = Element(parent=self, lhs=rhs)
-        self.children.append(child)
+        new_children.append(Element(parent=self, lhs=rhs))
+        self.children.append(new_children[-1])
 
-        try:        
-          self.root().current_working_shape()
-        except CollisionError:
-          self.children.remove(child)
+      try:
+        self.root().current_working_shape()
+      except CollisionError:
+        for child in new_children:
+          self.children.pop()
+          
+      if self.children:
+         break
 
-      if len(self.children) > 0:
-        for child in self.children:
-           child.generate()
-        break
+    for child in self.children:
+       child.generate()
 
 if __name__ == '__main__':
   build = Element() 
   build.generate()
   #print(build)
-  print(build.terminal())
-  print(build.current_working_shape())
+  #print(build.terminal())
+
+  cws = build.current_working_shape()
+
+  print(cws.ldraw)
+
+  with open('test.ldr', 'w') as ldr:
+    ldr.write(cws.ldraw)
