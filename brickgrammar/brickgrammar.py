@@ -3,6 +3,8 @@ from nltk.grammar import Nonterminal
 from nltk.parse import generate
 from enum import Enum
 
+class CollisionError(BaseException): pass
+
 class CurrentWorkingShape():
   def __init__(self):
     self.filled = set()
@@ -25,11 +27,16 @@ class CurrentWorkingShape():
 
   def fill_space(self, pos):
     if pos in self.filled:
-      return False
+      raise CollisionError('Cannot fill %s' % (pos,))
 
     self.filled.add(pos)
-    return True
 
+  def fill_rect(self, pos, size=(1,1,1)):
+    for x in range(0, size[0]):
+      for y in range(0, size[1]):
+        for z in range(0, size[2]):
+          self.fill_space((pos[0] + x, pos[1] + y, pos[2] - z))
+            
   def apply(self, operations):
     """
     Applys a set of operations
@@ -40,8 +47,7 @@ class CurrentWorkingShape():
 
     for op in operations:
       if op == 'Place3024':
-        if not self.fill_space((position[0], position[1], position[2])):
-          return False
+        self.fill_rect((position[0], position[1], position[2]))
       elif op == '(': 
         positions.append(position)
       elif op == ')': 
@@ -49,9 +55,7 @@ class CurrentWorkingShape():
       elif op == 'Up':
         position = (position[0], position[1], position[2]-1)
       else:
-        raise Exception('Op not found: ' + op)
-
-    return True
+        raise NotImplementedError('Op not implemented: ' + op)
 
 class Element():
   """ 
@@ -177,7 +181,12 @@ class Element():
   def is_valid_shape(self):
     cws = CurrentWorkingShape()
     cws.add_filled_border(3,3,3)
-    return cws.apply(self.terminal())
+
+    try:
+      cws.apply(self.terminal())
+      return True
+    except CollisionError:
+      return False
 
   def generate(self):
     """ 
