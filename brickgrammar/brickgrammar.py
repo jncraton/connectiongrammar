@@ -20,7 +20,7 @@ class CurrentWorkingShape():
     for x in range(-xsize, xsize + 1):
       for y in range(-ysize, ysize + 1):
         for z in range(-zsize, zsize + 1):
-          if abs(x) == 2 or abs(y) == 2 or abs(z) == 2:
+          if abs(x) == xsize or abs(y) == ysize or abs(z) == zsize:
             self.filled.add((x,y,z))
 
   def fill_space(self, pos):
@@ -39,19 +39,19 @@ class CurrentWorkingShape():
     position = (0,0,0)
 
     for op in operations:
-      print(op)
-      if op == 'Place3003': 
-        if not self.fill_space((position[0], position[1], position[2])) or \
-           not self.fill_space((position[0]+1, position[1], position[2])) or \
-           not self.fill_space((position[0]+1, position[1]+1, position[2])) or \
-           not self.fill_space((position[0], position[1]+1, position[2])):
-           return False
+      if op == 'Place3024':
+        if not self.fill_space((position[0], position[1], position[2])):
+          return False
+      elif op == '(': 
+        positions.append(position)
+      elif op == ')': 
+        position = positions.pop()
+      elif op == 'Up':
+        position = (position[0], position[1], position[2]-1)
       else:
         raise Exception('Op not found: ' + op)
 
     return True
-
-cws = CurrentWorkingShape()    
 
 class Element():
   """ 
@@ -65,12 +65,12 @@ class Element():
   The grammar builds an instruction set for a simple element insertion
   machine. The machine implements the following operations:
 
-  U - Up (+z) one brick
-  D - Down (-z) one brick
+  U - Up (-y) one brick
+  D - Down (y) one brick
   L - Left (-x) one module 
   R - Right (+x) one module 
-  F - Forward (+y) one module 
-  B - Back (-y) one module
+  F - Forward (+z) one module 
+  B - Back (-z) one module
   CW - Rotate next element clockwise 
   CCW - Rotate next element counter clockwise 
   Place - Places a block
@@ -98,19 +98,16 @@ class Element():
   1. Check that the current graph creates a valid working shape.
   
   """
-  def __init__(self, lhs=None, parent=None, size=None):
+  def __init__(self, lhs=None, parent=None):
     if parent:
       self.grammar = parent.grammar
     else:
       self.grammar = CFG.fromstring("""
-        E2x2 -> Pu U L F E2x2 Po E2x2
-        E2x2 -> Pu U R F E2x2 Po E2x2
-        E2x2 -> Pu U L B E2x2 Po E2x2
-        E2x2 -> Pu U R B E2x2 Po E2x2
-        E1x1 -> 'Place3005'
-        E1x2 -> 'Place3004'
-        E2x2 -> 'Place3003'
-        E2x2 -> 
+        Stud -> P1x1
+        Stud -> 
+        P1x1 -> Pu U Stud Po 'Place3024'
+        P1x1 -> 'Place3024'
+      
         U -> 'Up'
         D -> 'Down'
         L -> 'Left'
@@ -123,14 +120,6 @@ class Element():
         Po -> ')'
     """)
 
-    if size:
-      assert size[0] % 40 == 0, "Width must be multiple of 40"
-      assert size[1] % 40 == 0, "Depth must be multiple of 40"
-      if size[2]:
-        assert size[2] % 48 == 0, "Depth must be multiple of 48"
-
-    self.size = size  
-    
     self.lhs = lhs or self.grammar.start()
     self.parent = parent
     self.children = []
@@ -145,7 +134,7 @@ class Element():
     """
     >>> e = Element()
     >>> str(e)
-    'E2x2'
+    'Stud'
     """
 
     ret = [self.lhs.symbol()]
@@ -163,26 +152,31 @@ class Element():
 
     >>> e = Element()
     >>> str(e)
-    'E2x2'
+    'Stud'
     >>> e.terminal()
-    ['Place3003']
+    []
+    >>> e = Element(lhs=Nonterminal('P1x1'))
+    >>> e.terminal()
+    ['Place3024']
     """
+
+    ret = []
 
     if isinstance(self.lhs, Nonterminal):
       for prod in self.grammar.productions(lhs=self.lhs):
+        if not prod.rhs():
+          pass
         if len(prod.rhs()) == 1 and not isinstance(prod.rhs()[0], Nonterminal):
-          self.lhs = prod.rhs()[0]
-
-    ret = [self.lhs]
+          ret.append(prod.rhs()[0])
 
     for child in self.children:
-      ret.append(child.__str__())
+      ret += child.terminal()
 
     return ret
 
   def is_valid_shape(self):
     cws = CurrentWorkingShape()
-    cws.add_filled_border(2,2,2)
+    cws.add_filled_border(3,3,3)
     return cws.apply(self.terminal())
 
   def generate(self):
@@ -200,17 +194,20 @@ class Element():
     #for sent in generate.generate(self.grammar, depth=4):
     #  print(sent)
     #return
-    
-    #for prod in self.grammar.productions(lhs=self.lhs):
-    #  print(prod.rhs())
-    #  for rhs in prod.rhs():
-    #    for prod in self.grammar.productions(lhs=rhs):
-    #      print(prod)
-    #      pass
+
+    for prod in self.grammar.productions(lhs=self.lhs):
+      for rhs in prod.rhs():
+        child = Element(parent=self, lhs=rhs)
+        self.children.append(child)
+
+        if not self.root().is_valid_shape():
+          self.children.remove(child)
+        else:
+          child.generate()
 
 if __name__ == '__main__':
-  build = Element(size=(8*20,8*20,8*24)) 
+  build = Element() 
   build.generate()
-  print(build)
+  #print(build)
   print(build.terminal())
   print(build.is_valid_shape())
