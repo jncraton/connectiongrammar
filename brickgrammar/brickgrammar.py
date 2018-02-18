@@ -89,6 +89,12 @@ class CurrentWorkingShape():
         p = (position[0] - .5,position[1],position[2] - .5,position[0] - .5)
         self.fill_rect(p, (2,1,2))
         self.append_ldraw(position, '3022')
+      elif op == 'AssertFilledAbove':
+        if (position[0], position[1] - 1, position[2]) not in positions:
+          raise CollisionError('Not filled')
+      elif op == 'AssertFilledBelow':
+        if (position[0], position[1] + 1, position[2]) not in positions:
+          raise CollisionError('Not filled')
       elif op == '(': 
         positions.append(position)
       elif op == ')': 
@@ -149,6 +155,7 @@ class Element():
       self.grammar = parent.grammar
     else:
       self.grammar = CFG.fromstring("""
+        Stud -> 'AssertFilledAbove'
         Stud -> Pu R B P2x2 Po
         Stud -> Pu L B P2x2 Po
         Stud -> Pu R F P2x2 Po
@@ -156,6 +163,7 @@ class Element():
         Stud -> P1x1
         Stud -> 
 
+        Antistud -> 'AssertFilledBelow'
         Antistud -> Pu D P1x1 Po
         Antistud -> 
 
@@ -283,8 +291,6 @@ class Element():
 if __name__ == '__main__':
   build = Element() 
   build.generate()
-  #print(build)
-  #print(build.terminal())
 
   cws = build.current_working_shape()
 
