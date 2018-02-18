@@ -3,6 +3,12 @@ all: test main
 main:
 	python3 brickgrammar/brickgrammar.py
 
+time:
+	time python3 brickgrammar/brickgrammar.py
+
+profile:
+	python3 -m cProfile -s cumtime brickgrammar/brickgrammar.py
+
 test:
 	python3 -m doctest brickgrammar/brickgrammar.py
 
