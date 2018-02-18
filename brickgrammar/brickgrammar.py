@@ -239,7 +239,7 @@ class Element():
 
   def current_working_shape(self):
     cws = CurrentWorkingShape()
-    cws.add_filled_border(4,3,4)
+    cws.add_filled_border(3,2,3)
     cws.apply(self.terminal())
     return cws
 
@@ -287,3 +287,6 @@ if __name__ == '__main__':
 
   with open('test.ldr', 'w') as ldr:
     ldr.write(cws.ldraw)
+    
+  with open('inst.txt', 'w') as inst:
+    inst.write('\n'.join(build.terminal()))
