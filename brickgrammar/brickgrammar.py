@@ -298,6 +298,16 @@ if __name__ == '__main__':
 
   with open('test.ldr', 'w') as ldr:
     ldr.write(cws.ldraw)
-    
+
+  indent = 0
   with open('inst.txt', 'w') as inst:
-    inst.write('\n'.join(build.terminal()))
+    for line in build.terminal():
+      if line == ')':
+        indent -= 1
+
+      inst.write('\n' + ('  ' * indent) + line)
+
+      if line == '(':
+        indent += 1
+      
+      
