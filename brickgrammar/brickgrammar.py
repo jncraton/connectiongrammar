@@ -245,7 +245,7 @@ class Element():
 
   def generate(self):
     """ 
-    Generates a solid cube built to fill a given space
+    Generate child elements matching the grammar
   
     Algorithm:
 
@@ -256,7 +256,9 @@ class Element():
     #  print(sent)
     #return
 
-    for prod in self.grammar.productions(lhs=self.lhs):
+    productions = self.grammar.productions(lhs=self.lhs)
+
+    for prod in productions:
       new_children = []
 
       for rhs in prod.rhs():
@@ -264,7 +266,9 @@ class Element():
         self.children.append(new_children[-1])
 
       try:
-        self.root().current_working_shape()
+        # Check the shape, unless this is the only possible production
+        if len(productions) > 1:
+          self.root().current_working_shape()
       except CollisionError:
         for child in new_children:
           self.children.pop()
@@ -273,7 +277,8 @@ class Element():
          break
 
     for child in self.children:
-       child.generate()
+      if isinstance(child.lhs, Nonterminal):
+        child.generate()
 
 if __name__ == '__main__':
   build = Element() 
@@ -283,7 +288,7 @@ if __name__ == '__main__':
 
   cws = build.current_working_shape()
 
-  print(cws.ldraw)
+  print("Generated %d elements." % len(cws.ldraw.split('\n')))
 
   with open('test.ldr', 'w') as ldr:
     ldr.write(cws.ldraw)
