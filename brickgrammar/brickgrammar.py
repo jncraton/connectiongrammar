@@ -295,28 +295,33 @@ class Element():
     Processes the next element in the string
     """
 
-    i = 0
-
-    # TODO There's probably a cleaner way to handle this loop
-    # For ... range() doesn't work because len(sentence) grows
-    while(i < len(self.sentence)):
-      sym = self.sentence[i]
-      before = self.sentence[0:i]
-      after = self.sentence[i+1:]
-
-      productions = self.grammar.productions(lhs=sym)
-
-      for prod in productions:    
-        self.sentence = before + list(prod.rhs()) + after
-        try:
-          # Check the shape, unless this is the only possible production
-          if len(productions) > 1:
-            cws = self.current_working_shape()
-          i = -1
-          break
-        except CollisionError:
-          self.sentence = before + [sym] + after
-      i += 1
+    changes = True
+    while(changes):
+      changes = False
+      i = 0
+  
+      # TODO There's probably a cleaner way to handle this loop
+      # For ... range() doesn't work because len(sentence) grows
+      while(i < len(self.sentence)):
+        sym = self.sentence[i]
+        before = self.sentence[0:i]
+        after = self.sentence[i+1:]
+  
+        productions = self.grammar.productions(lhs=sym)
+  
+        for prod in productions:    
+          self.sentence = before + list(prod.rhs()) + after
+          try:
+            # Check the shape, unless this is the only possible production
+            if len(productions) > 1:
+              cws = self.current_working_shape()
+              changes = True
+              i += len(prod.rhs()) - 1
+              i = -1
+            break
+          except CollisionError:
+            self.sentence = before + [sym] + after
+        i += 1
 
 if __name__ == '__main__':
   build = Element() 
