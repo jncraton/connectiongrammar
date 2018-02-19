@@ -7,7 +7,7 @@ time:
 	time python3 brickgrammar/brickgrammar.py
 
 profile:
-	python3 -m cProfile -s cumtime brickgrammar/brickgrammar.py
+	python3 -m cProfile -s cumtime brickgrammar/brickgrammar.py | head -n 20
 
 test:
 	python3 -m doctest brickgrammar/brickgrammar.py

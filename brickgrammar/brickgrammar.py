@@ -1,6 +1,5 @@
 from nltk import CFG
 from nltk.grammar import Nonterminal
-from nltk.parse import generate
 from enum import Enum
 
 class CollisionError(BaseException): pass
@@ -82,7 +81,9 @@ class CurrentWorkingShape():
     position = (0,0,0)
 
     for op in operations:
-      if op == 'Place3024':
+      if not op:
+        pass
+      elif op == 'Place3024':
         self.fill_rect(position)
         self.append_ldraw(position, '3024')
       elif op == 'Place3022':
@@ -167,10 +168,11 @@ class Element():
         Antistud -> Pu D P1x1 Po
         Antistud -> 
 
-        PlateConnection -> Pu Pu U Stud Po Antistud Po
+        PlateConnection -> Antistud U Stud
+        PlateConnection -> 
         
         P2x2 -> Pu R B PlateConnection Po Pu L B PlateConnection Po Pu R F PlateConnection Po Pu L F PlateConnection Po Place3022
-        P1x1 -> PlateConnection Place3024
+        P1x1 -> Pu PlateConnection Po Place3024
         
         P2x2 -> Place3022
         P1x1 -> Place3024
@@ -187,6 +189,17 @@ class Element():
         Pu -> '('
         Po -> ')'
     """)
+
+    if not parent:
+      self.grammar.to_terminal = {}
+      
+      for prod in self.grammar.productions():
+        rhs = prod.rhs()
+
+        if len(rhs) == 0:
+          self.grammar.to_terminal[str(prod.lhs())] = ''
+        elif len(rhs) == 1:
+          self.grammar.to_terminal[str(prod.lhs())] = str(rhs[0])
 
     self.lhs = lhs or self.grammar.start()
     self.parent = parent
@@ -234,8 +247,7 @@ class Element():
     ret = []
 
     if isinstance(self.lhs, Nonterminal) and not self.children:
-      # Add the shortest sentence
-      ret += list(generate.generate(self.grammar, start=self.lhs, depth=3))[-1]
+      ret.append(self.grammar.to_terminal[self.lhs.symbol()])
 
     if isinstance(self.lhs, str):
       ret += [self.lhs]
@@ -254,15 +266,7 @@ class Element():
   def generate(self):
     """ 
     Generate child elements matching the grammar
-  
-    Algorithm:
-
-    1. Try production rules until one succeeds
     """
-
-    #for sent in generate.generate(self.grammar, depth=4):
-    #  print(sent)
-    #return
 
     productions = self.grammar.productions(lhs=self.lhs)
 
@@ -295,6 +299,7 @@ if __name__ == '__main__':
   cws = build.current_working_shape()
 
   print("Generated %d elements." % len(cws.ldraw.split('\n')))
+  print("Generated %d instructions." % len(build.terminal()))
 
   with open('test.ldr', 'w') as ldr:
     ldr.write(cws.ldraw)
