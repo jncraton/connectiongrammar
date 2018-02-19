@@ -286,7 +286,7 @@ class Element():
 
   def current_working_shape(self):
     cws = CurrentWorkingShape()
-    cws.add_filled_border(5,4,5,w=4)
+    cws.add_filled_border(5,4,5,w=3)
     cws.apply(self.terminal())
     return cws
 
@@ -317,7 +317,6 @@ class Element():
               cws = self.current_working_shape()
               changes = True
               i += len(prod.rhs()) - 1
-              i = -1
             break
           except CollisionError:
             self.sentence = before + [sym] + after
