@@ -231,6 +231,7 @@ class Element():
     self.lhs = lhs or self.grammar.start()
     self.parent = parent
     self.children = []
+    self.left = []
 
   def root(self):
     if self.parent:
@@ -271,7 +272,7 @@ class Element():
     ['Place3024']
     """
 
-    ret = []
+    ret = list(self.left)
 
     if isinstance(self.lhs, Nonterminal) and not self.children:
       ret.append(self.grammar.to_terminal[self.lhs.symbol()])
