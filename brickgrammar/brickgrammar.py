@@ -60,32 +60,43 @@ class CurrentWorkingShape():
     Applys a set of operations
     """
 
-    for op in operations:
-      if not op:
-        pass
-      elif op == 'Place3024':
-        self.fill_rect((2,1,2))
-        self.append_ldraw('3024')
-      elif op == 'Place3022':
-        self.position = (self.position[0] - 1,self.position[1],self.position[2] - 1)
-        self.fill_rect((4,1,4))
-        self.position = (self.position[0] + 1,self.position[1],self.position[2] + 1)
-        self.append_ldraw('3022')
-      elif op == 'AssertFilledAbove':
-        if (self.position[0], self.position[1] - 1, self.position[2]) not in self.positions:
-          raise CollisionError('Not filled')
-      elif op == 'AssertFilledBelow':
-        if (self.position[0], self.position[1] + 1, self.position[2]) not in self.positions:
-          raise CollisionError('Not filled')
-      elif op == '(': 
-        self.positions.append(self.position)
-      elif op == ')': 
-        self.position = self.positions.pop()
-      elif op.startswith('Move'):
-        delta = tuple(int(i) for i in op[5:-1].split(','))
-        self.move(delta)
-      else:
-        raise NotImplementedError('Op not implemented: ' + op)
+    original_shape = self.filled.copy()
+    original_positions = self.positions.copy()
+    original_position = self.position + () # This should create a copy
+
+    try:
+      for op in operations:
+        if not op:
+          pass
+        elif op == 'Place3024':
+          self.fill_rect((2,1,2))
+          self.append_ldraw('3024')
+        elif op == 'Place3022':
+          self.position = (self.position[0] - 1,self.position[1],self.position[2] - 1)
+          self.fill_rect((4,1,4))
+          self.position = (self.position[0] + 1,self.position[1],self.position[2] + 1)
+          self.append_ldraw('3022')
+        elif op == 'AssertFilledAbove':
+          if (self.position[0], self.position[1] - 1, self.position[2]) not in self.positions:
+            raise CollisionError('Not filled')
+        elif op == 'AssertFilledBelow':
+          if (self.position[0], self.position[1] + 1, self.position[2]) not in self.positions:
+            raise CollisionError('Not filled')
+        elif op == '(': 
+          self.positions.append(self.position)
+        elif op == ')': 
+          self.position = self.positions.pop()
+        elif op.startswith('Move'):
+          delta = tuple(int(i) for i in op[5:-1].split(','))
+          self.move(delta)
+        else:
+          raise NotImplementedError('Op not implemented: ' + op)
+    except CollisionError as e:
+      # If we failed to apply fully, rollback and raise exception
+      self.filled = original_shape
+      self.position = original_position
+      self.positions = original_positions
+      raise e
 
 class Element():
   """ 
