@@ -18,7 +18,7 @@ class CurrentWorkingShape():
     yellow = 14
     blue = 1
 
-    pos = (pos[0] * 20, pos[1] * 8, pos[2] * 20)
+    pos = (pos[0] * 10, pos[1] * 8, pos[2] * 10)
     
     self.ldraw += ("1 %d %d %d %d %s %s.dat\n" % (blue, pos[0], pos[1], pos[2], front, part))    
 
@@ -38,29 +38,7 @@ class CurrentWorkingShape():
           if abs(x) == xsize or abs(y) == ysize or abs(z) == zsize:
             self.filled.add((x,y,z))
 
-  def norm_pos(pos):
-    """ 
-    Normalizes a position
-
-    >>> CurrentWorkingShape.norm_pos((1,2,3))
-    (1, 2, 3)
-    >>> CurrentWorkingShape.norm_pos((1.0,2.0,3.0))
-    (1, 2, 3)
-    >>> CurrentWorkingShape.norm_pos((1.1,2.2,3.3))
-    Traceback (most recent call last):
-      ...
-    ValueError: 1.100000 is not an integer
-    """
-    
-    for i in pos:
-      if not float(i).is_integer():
-        raise ValueError('%f is not an integer' % i)
-
-    return tuple(int(i) for i in pos)
-
   def fill_space(self, pos):
-    pos = CurrentWorkingShape.norm_pos(pos)
-  
     if pos in self.filled:
       raise CollisionError('Cannot fill %s' % (pos,))
 
@@ -84,11 +62,11 @@ class CurrentWorkingShape():
       if not op:
         pass
       elif op == 'Place3024':
-        self.fill_rect(position)
+        self.fill_rect(position,(2,1,2))
         self.append_ldraw(position, '3024')
       elif op == 'Place3022':
-        p = (position[0] - .5,position[1],position[2] - .5,position[0] - .5)
-        self.fill_rect(p, (2,1,2))
+        p = (position[0] - 1,position[1],position[2] - 1)
+        self.fill_rect(p, (4,1,4))
         self.append_ldraw(position, '3022')
       elif op == 'AssertFilledAbove':
         if (position[0], position[1] - 1, position[2]) not in positions:
@@ -101,7 +79,7 @@ class CurrentWorkingShape():
       elif op == ')': 
         position = positions.pop()
       elif op.startswith('Move'):
-        args = tuple(float(i) for i in op[5:-1].split(','))
+        args = tuple(int(i) for i in op[5:-1].split(','))
         position = (position[0]+args[0], position[1]+args[1], position[2]+args[2])
       else:
         raise NotImplementedError('Op not implemented: ' + op)
@@ -182,10 +160,10 @@ class Element():
 
         U -> 'Move( 0,-1, 0)'
         D -> 'Move( 0, 1, 0)'
-        L -> 'Move(-.5,0, 0)'
-        R -> 'Move( .5,0, 0)'
-        B -> 'Move( 0, 0, .5)'
-        F -> 'Move( 0, 0,-.5 )'
+        L -> 'Move(-1, 0, 0)'
+        R -> 'Move( 1, 0, 0)'
+        B -> 'Move( 0, 0, 1)'
+        F -> 'Move( 0, 0,-1)'
         Pu -> '('
         Po -> ')'
     """)
@@ -259,7 +237,7 @@ class Element():
 
   def current_working_shape(self):
     cws = CurrentWorkingShape()
-    cws.add_filled_border(3,2,3)
+    cws.add_filled_border(6,2,6)
     cws.apply(self.terminal())
     return cws
 
