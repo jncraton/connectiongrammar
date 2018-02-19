@@ -23,6 +23,7 @@ class CurrentWorkingShape():
     pos = (self.position[0] * 10, self.position[1] * 8, self.position[2] * 10)
     
     self.ldraw += ("1 %d %d %d %d %s %s.dat\n" % (blue, pos[0], pos[1], pos[2], front, part))    
+    self.ldraw += "0 STEP\n"
 
   def add_filled_border(self,xsize,ysize,zsize,w=3):
     """
@@ -79,8 +80,13 @@ class CurrentWorkingShape():
         elif op == 'Place3003':
           self.position = (self.position[0] - 1,self.position[1]-2,self.position[2] - 1)
           self.fill_rect((4,3,4))
-          self.position = (self.position[0] + 1,self.position[1]-2,self.position[2] + 1)
+          self.position = (self.position[0] + 1,self.position[1]+2,self.position[2] + 1)
           self.append_ldraw('3003')
+        elif op == 'Place3005':
+          self.position = (self.position[0],self.position[1]-2,self.position[2])
+          self.fill_rect((1,3,1))
+          self.position = (self.position[0],self.position[1]+2,self.position[2])
+          self.append_ldraw('3005')
         elif op == 'AssertFilledAbove':
           if (self.position[0], self.position[1] - 1, self.position[2]) not in self.positions:
             raise CollisionError('Not filled')
@@ -154,27 +160,29 @@ class Element():
     else:
       self.grammar = CFG.fromstring("""
         Stud -> 'AssertFilledAbove'
-        Stud -> Pu R B B2x2 Po
         Stud -> Pu L B B2x2 Po
-        Stud -> Pu R F B2x2 Po
         Stud -> Pu L F B2x2 Po
-        Stud -> Pu R B P2x2 Po
-        Stud -> Pu L B P2x2 Po
-        Stud -> Pu R F P2x2 Po
-        Stud -> Pu L F P2x2 Po
-        Stud -> P1x1
+        Stud -> Pu R F B2x2 Po
+        Stud -> Pu R B B2x2 Po
+        #Stud -> Pu R B P2x2 Po
+        #Stud -> Pu L B P2x2 Po
+        #Stud -> Pu L F P2x2 Po
+        #Stud -> Pu R F P2x2 Po
+        #Stud -> B1x1
+        #Stud -> P1x1
         Stud -> 
 
         Antistud -> 'AssertFilledBelow'
-        Antistud -> Pu D D D R B B2x2 Po
         Antistud -> Pu D D D L B B2x2 Po
-        Antistud -> Pu D D D R F B2x2 Po
         Antistud -> Pu D D D L F B2x2 Po
-        Antistud -> Pu D R B P2x2 Po
-        Antistud -> Pu D L B P2x2 Po
-        Antistud -> Pu D R F P2x2 Po
-        Antistud -> Pu D L F P2x2 Po
-        Antistud -> Pu D P1x1 Po
+        Antistud -> Pu D D D R F B2x2 Po
+        Antistud -> Pu D D D R B B2x2 Po
+        #Antistud -> Pu D R B P2x2 Po
+        #Antistud -> Pu D L B P2x2 Po
+        #Antistud -> Pu D L F P2x2 Po
+        #Antistud -> Pu D R F P2x2 Po
+        #Antistud -> Pu D D D B1x1 Po
+        #Antistud -> Pu D P1x1 Po
         Antistud -> 
 
         PlateConnection -> Antistud U Stud
@@ -183,15 +191,18 @@ class Element():
         BrickConnection -> Antistud U U U Stud
         BrickConnection -> 
         
-        B2x2 -> Pu R B BrickConnection Po Pu L B BrickConnection Po Pu R F BrickConnection Po Pu L F BrickConnection Po Place3003
-        P2x2 -> Pu R B PlateConnection Po Pu L B PlateConnection Po Pu R F PlateConnection Po Pu L F PlateConnection Po Place3022
+        B2x2 -> Place3003 Pu L B BrickConnection Po Pu L F BrickConnection Po Pu R F BrickConnection Po Pu R B BrickConnection Po
+        P2x2 -> Place3022 Pu R B PlateConnection Po Pu L B PlateConnection Po Pu L F PlateConnection Po Pu R F PlateConnection Po
         
-        P1x1 -> Pu PlateConnection Po Place3024
+        B1x1 -> Place3005 Pu BrickConnection Po
+        P1x1 -> Place3024 Pu PlateConnection Po
         
         B2x2 -> Place3003
         P2x2 -> Place3022
+        B1x1 -> Place3005
         P1x1 -> Place3024
 
+        Place3005 -> 'Place3005'
         Place3003 -> 'Place3003'
         Place3022 -> 'Place3022'
         Place3024 -> 'Place3024'        
@@ -275,7 +286,7 @@ class Element():
 
   def current_working_shape(self):
     cws = CurrentWorkingShape()
-    cws.add_filled_border(3,6,3)
+    cws.add_filled_border(5,4,5,w=4)
     cws.apply(self.terminal())
     return cws
 
@@ -314,7 +325,7 @@ if __name__ == '__main__':
 
   cws = build.current_working_shape()
 
-  print("Generated %d elements." % (len(cws.ldraw.split('\n')) - 1))
+  print("Generated %d elements." % ((len(cws.ldraw.split('\n')) - 1) / 2))
   print("Generated %d instructions." % len(build.terminal()))
 
   with open('test.ldr', 'w') as ldr:
