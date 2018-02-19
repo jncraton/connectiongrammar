@@ -164,12 +164,12 @@ class Element():
         Stud -> Pu L F B2x2 Po
         Stud -> Pu R F B2x2 Po
         Stud -> Pu R B B2x2 Po
-        #Stud -> Pu R B P2x2 Po
-        #Stud -> Pu L B P2x2 Po
-        #Stud -> Pu L F P2x2 Po
-        #Stud -> Pu R F P2x2 Po
-        #Stud -> B1x1
-        #Stud -> P1x1
+        Stud -> Pu R B P2x2 Po
+        Stud -> Pu L B P2x2 Po
+        Stud -> Pu L F P2x2 Po
+        Stud -> Pu R F P2x2 Po
+        Stud -> B1x1
+        Stud -> P1x1
         Stud -> 
 
         Antistud -> 'AssertFilledBelow'
@@ -177,12 +177,12 @@ class Element():
         Antistud -> Pu D D D L F B2x2 Po
         Antistud -> Pu D D D R F B2x2 Po
         Antistud -> Pu D D D R B B2x2 Po
-        #Antistud -> Pu D R B P2x2 Po
-        #Antistud -> Pu D L B P2x2 Po
-        #Antistud -> Pu D L F P2x2 Po
-        #Antistud -> Pu D R F P2x2 Po
-        #Antistud -> Pu D D D B1x1 Po
-        #Antistud -> Pu D P1x1 Po
+        Antistud -> Pu D R B P2x2 Po
+        Antistud -> Pu D L B P2x2 Po
+        Antistud -> Pu D L F P2x2 Po
+        Antistud -> Pu D R F P2x2 Po
+        Antistud -> Pu D D D B1x1 Po
+        Antistud -> Pu D P1x1 Po
         Antistud -> 
 
         PlateConnection -> Antistud U Stud
