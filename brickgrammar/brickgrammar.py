@@ -164,12 +164,12 @@ class Element():
         Stud -> Pu L F B2x2 Po
         Stud -> Pu R F B2x2 Po
         Stud -> Pu R B B2x2 Po
-        Stud -> Pu R B P2x2 Po
-        Stud -> Pu L B P2x2 Po
-        Stud -> Pu L F P2x2 Po
-        Stud -> Pu R F P2x2 Po
-        Stud -> B1x1
-        Stud -> P1x1
+        #Stud -> Pu R B P2x2 Po
+        #Stud -> Pu L B P2x2 Po
+        #Stud -> Pu L F P2x2 Po
+        #Stud -> Pu R F P2x2 Po
+        #Stud -> B1x1
+        #Stud -> P1x1
         Stud -> 
 
         Antistud -> 'AssertFilledBelow'
@@ -177,12 +177,12 @@ class Element():
         Antistud -> Pu D D D L F B2x2 Po
         Antistud -> Pu D D D R F B2x2 Po
         Antistud -> Pu D D D R B B2x2 Po
-        Antistud -> Pu D R B P2x2 Po
-        Antistud -> Pu D L B P2x2 Po
-        Antistud -> Pu D L F P2x2 Po
-        Antistud -> Pu D R F P2x2 Po
-        Antistud -> Pu D D D B1x1 Po
-        Antistud -> Pu D P1x1 Po
+        #Antistud -> Pu D R B P2x2 Po
+        #Antistud -> Pu D L B P2x2 Po
+        #Antistud -> Pu D L F P2x2 Po
+        #Antistud -> Pu D R F P2x2 Po
+        #Antistud -> Pu D D D B1x1 Po
+        #Antistud -> Pu D P1x1 Po
         Antistud -> 
 
         PlateConnection -> Antistud U Stud
@@ -231,7 +231,7 @@ class Element():
     self.lhs = lhs or self.grammar.start()
     self.parent = parent
     self.children = []
-    self.left = []
+    self.sentence = [self.lhs]
 
   def root(self):
     if self.parent:
@@ -270,20 +270,19 @@ class Element():
     >>> e = Element(lhs=Nonterminal('P1x1'))
     >>> e.terminal()
     ['Place3024']
+    >>> e = Element(lhs=Nonterminal('Pu'))
+    >>> e.terminal()
+    ['(']
     """
 
-    ret = list(self.left)
+    def terminate(sym):
+      if isinstance(sym, Nonterminal):
+        return self.grammar.to_terminal[sym.symbol()]
+  
+      if isinstance(sym, str):
+        return sym
 
-    if isinstance(self.lhs, Nonterminal) and not self.children:
-      ret.append(self.grammar.to_terminal[self.lhs.symbol()])
-
-    if isinstance(self.lhs, str):
-      ret += [self.lhs]
-      
-    for child in self.children:
-      ret += child.terminal()
-
-    return [w for w in ret if len(w) > 0]
+    return [k for k in [terminate(w) for w in self.sentence] if len(k) > 0]
 
   def current_working_shape(self):
     cws = CurrentWorkingShape()
@@ -291,34 +290,33 @@ class Element():
     cws.apply(self.terminal())
     return cws
 
-  def generate(self):
+  def generate(self,i=0):
     """ 
-    Generate child elements matching the grammar
+    Processes the next element in the string
     """
 
-    productions = self.grammar.productions(lhs=self.lhs)
+    i = 0
 
-    for prod in productions:
-      new_children = []
+    # TODO There's probably a cleaner way to handle this loop
+    # For ... range() doesn't work because len(sentence) grows
+    while(i < len(self.sentence)):
+      sym = self.sentence[i]
+      before = self.sentence[0:i]
+      after = self.sentence[i+1:]
 
-      for rhs in prod.rhs():
-        new_children.append(Element(parent=self, lhs=rhs))
-        self.children.append(new_children[-1])
+      productions = self.grammar.productions(lhs=sym)
 
-      try:
-        # Check the shape, unless this is the only possible production
-        if len(productions) > 1:
-          cws = self.root().current_working_shape()
-      except CollisionError:
-        for child in new_children:
-          self.children.pop()
-          
-      if self.children:
-        break
-
-    for child in self.children:
-      if isinstance(child.lhs, Nonterminal):
-        child.generate()
+      for prod in productions:    
+        self.sentence = before + list(prod.rhs()) + after
+        try:
+          # Check the shape, unless this is the only possible production
+          if len(productions) > 1:
+            cws = self.current_working_shape()
+          i = -1
+          break
+        except CollisionError:
+          self.sentence = before + [sym] + after
+      i += 1
 
 if __name__ == '__main__':
   build = Element() 
