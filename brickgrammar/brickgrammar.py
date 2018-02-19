@@ -76,6 +76,11 @@ class CurrentWorkingShape():
           self.fill_rect((4,1,4))
           self.position = (self.position[0] + 1,self.position[1],self.position[2] + 1)
           self.append_ldraw('3022')
+        elif op == 'Place3003':
+          self.position = (self.position[0] - 1,self.position[1]-2,self.position[2] - 1)
+          self.fill_rect((4,3,4))
+          self.position = (self.position[0] + 1,self.position[1]-2,self.position[2] + 1)
+          self.append_ldraw('3003')
         elif op == 'AssertFilledAbove':
           if (self.position[0], self.position[1] - 1, self.position[2]) not in self.positions:
             raise CollisionError('Not filled')
@@ -149,6 +154,10 @@ class Element():
     else:
       self.grammar = CFG.fromstring("""
         Stud -> 'AssertFilledAbove'
+        Stud -> Pu R B B2x2 Po
+        Stud -> Pu L B B2x2 Po
+        Stud -> Pu R F B2x2 Po
+        Stud -> Pu L F B2x2 Po
         Stud -> Pu R B P2x2 Po
         Stud -> Pu L B P2x2 Po
         Stud -> Pu R F P2x2 Po
@@ -170,12 +179,16 @@ class Element():
         BrickConnection -> Antistud U U U Stud
         BrickConnection -> 
         
+        B2x2 -> Pu R B BrickConnection Po Pu L B BrickConnection Po Pu R F BrickConnection Po Pu L F BrickConnection Po Place3003
         P2x2 -> Pu R B PlateConnection Po Pu L B PlateConnection Po Pu R F PlateConnection Po Pu L F PlateConnection Po Place3022
+        
         P1x1 -> Pu PlateConnection Po Place3024
         
+        B2x2 -> Place3003
         P2x2 -> Place3022
         P1x1 -> Place3024
 
+        Place3003 -> 'Place3003'
         Place3022 -> 'Place3022'
         Place3024 -> 'Place3024'        
 
@@ -258,7 +271,7 @@ class Element():
 
   def current_working_shape(self):
     cws = CurrentWorkingShape()
-    cws.add_filled_border(6,2,6)
+    cws.add_filled_border(4,4,4)
     cws.apply(self.terminal())
     return cws
 
@@ -297,7 +310,7 @@ if __name__ == '__main__':
 
   cws = build.current_working_shape()
 
-  print("Generated %d elements." % len(cws.ldraw.split('\n')))
+  print("Generated %d elements." % (len(cws.ldraw.split('\n')) - 1))
   print("Generated %d instructions." % len(build.terminal()))
 
   with open('test.ldr', 'w') as ldr:
