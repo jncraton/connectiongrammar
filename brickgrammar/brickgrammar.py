@@ -157,11 +157,18 @@ class Element():
         Stud -> 
 
         Antistud -> 'AssertFilledBelow'
+        Antistud -> Pu D R B P2x2 Po
+        Antistud -> Pu D L B P2x2 Po
+        Antistud -> Pu D R F P2x2 Po
+        Antistud -> Pu D L F P2x2 Po
         Antistud -> Pu D P1x1 Po
         Antistud -> 
 
         PlateConnection -> Antistud U Stud
         PlateConnection -> 
+        
+        BrickConnection -> Antistud U U U Stud
+        BrickConnection -> 
         
         P2x2 -> Pu R B PlateConnection Po Pu L B PlateConnection Po Pu R F PlateConnection Po Pu L F PlateConnection Po Place3022
         P1x1 -> Pu PlateConnection Po Place3024
