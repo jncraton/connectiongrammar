@@ -10,6 +10,10 @@ class CurrentWorkingShape():
     self.position = (0,0,0)
     self.positions = []
     self.ldraw = ''
+    self.elements = set()
+
+  def check_element(self):
+    return not (self.position) in self.elements
 
   def append_ldraw(self, part):
     front = "1 0 0 0 1 0 0 0 1"
@@ -21,8 +25,10 @@ class CurrentWorkingShape():
     blue = 1
 
     pos = (self.position[0] * 10, self.position[1] * 8, self.position[2] * 10)
-    
-    self.ldraw += ("1 %d %d %d %d %s %s.dat\n" % (blue, pos[0], pos[1], pos[2], front, part))    
+
+    self.elements.add(self.position)
+
+    self.ldraw += ("1 %d %d %d %d %s %s.dat\n" % (blue, pos[0], pos[1], pos[2], front, part))
     self.ldraw += "0 STEP\n"
 
   def add_filled_border(self,xsize,ysize,zsize,w=3):
@@ -41,52 +47,77 @@ class CurrentWorkingShape():
           if abs(x) > xsize or abs(y) > ysize or abs(z) > zsize:
             self.filled.add((x,y,z))
 
-  def fill_space(self, pos):
-    if pos in self.filled:
-      raise CollisionError('Cannot fill %s' % (pos,))
+  def fill_space(self, pos, remove=False):
+    if remove:
+      self.filled.remove(pos)
+    else:
+      if pos in self.filled:
+        raise CollisionError('Cannot fill %s' % (pos,))
+      else:
+        self.filled.add(pos)
 
-    self.filled.add(pos)
-
-  def fill_rect(self, size=(1,1,1)):
+  def fill_rect(self, size=(1,1,1), remove=False):
     for x in range(0, size[0]):
       for y in range(0, size[1]):
         for z in range(0, size[2]):
-          self.fill_space((self.position[0] + x, self.position[1] - y, self.position[2] + z))
+          self.fill_space((self.position[0] + x, self.position[1] - y, self.position[2] + z), remove)
 
   def move(self, delta):
     self.position = (self.position[0]+delta[0], self.position[1]+delta[1], self.position[2]+delta[2])
+
+  def place_element(self, part, remove=False):
+    if self.check_element():
+      old_pos = self.position + ()
     
-  def apply(self, operations):
+      if part == '3024':
+        self.fill_rect((2,1,2), remove)
+      elif part == '3022':
+        self.position = (self.position[0] - 1,self.position[1],self.position[2] - 1)
+        self.fill_rect((4,1,4), remove)
+      elif part == '3003':
+        self.position = (self.position[0] - 1,self.position[1]-2,self.position[2] - 1)
+        self.fill_rect((4,3,4), remove)
+      elif part == '3005':
+        self.position = (self.position[0],self.position[1]-2,self.position[2])
+        self.fill_rect((1,3,1), remove)
+      else:
+        raise NotImplementedError('Part not implemented: ' + part)
+
+      if remove:
+        self.elements.remove(self.position)
+
+      self.append_ldraw(part)
+
+      self.position = old_pos
+      
+  def revert(self, before, rev_ops, after):
+    rev_ops = [o.replace('Place', 'Remove') for o in rev_ops]
+
+    self.apply(before, rev_ops, after)
+
+  def apply(self, before, ops, after):
     """
-    Applys a set of operations
+    Applys a list of operations
     """
 
+    self.position = (0,0,0)
+    self.positions = []
+
+    before = [b for b in before if 'Place' not in b]
+    after = [a for a in after if 'Place' not in a]
+
+    operations = before + ops + after
+
     original_shape = self.filled.copy()
-    original_positions = self.positions.copy()
-    original_position = self.position + () # This should create a copy
 
     try:
       for op in operations:
         if not op:
           pass
-        elif op == 'Place3024':
-          self.fill_rect((2,1,2))
-          self.append_ldraw('3024')
-        elif op == 'Place3022':
-          self.position = (self.position[0] - 1,self.position[1],self.position[2] - 1)
-          self.fill_rect((4,1,4))
-          self.position = (self.position[0] + 1,self.position[1],self.position[2] + 1)
-          self.append_ldraw('3022')
-        elif op == 'Place3003':
-          self.position = (self.position[0] - 1,self.position[1]-2,self.position[2] - 1)
-          self.fill_rect((4,3,4))
-          self.position = (self.position[0] + 1,self.position[1]+2,self.position[2] + 1)
-          self.append_ldraw('3003')
-        elif op == 'Place3005':
-          self.position = (self.position[0],self.position[1]-2,self.position[2])
-          self.fill_rect((1,3,1))
-          self.position = (self.position[0],self.position[1]+2,self.position[2])
-          self.append_ldraw('3005')
+        elif op[0:5] == 'Place':
+          self.place_element(op[5:])
+        elif op[0:6] == 'Remove':
+          self.place_element(op[6:],remove=True)
         elif op == 'AssertFilledAbove':
           if (self.position[0], self.position[1] - 1, self.position[2]) not in self.positions:
             raise CollisionError('Not filled')
@@ -105,8 +136,6 @@ class CurrentWorkingShape():
     except CollisionError as e:
       # If we failed to apply fully, rollback and raise exception
       self.filled = original_shape
-      self.position = original_position
-      self.positions = original_positions
       raise e
 
 class Element():
@@ -233,6 +262,9 @@ class Element():
     self.children = []
     self.sentence = [self.lhs]
 
+    self.cws = CurrentWorkingShape()
+    self.cws.add_filled_border(5,4,5,w=3)
+
   def root(self):
     if self.parent:
       return self.parent.root()
@@ -256,6 +288,13 @@ class Element():
 
     return ' '.join(ret)
 
+  def terminate(self, sym):
+    if isinstance(sym, Nonterminal):
+      return self.grammar.to_terminal[sym.symbol()]
+
+    if isinstance(sym, str):
+      return sym
+
   def terminal(self):
     """
     Returns the current element as a valid utterance
@@ -275,20 +314,21 @@ class Element():
     ['(']
     """
 
-    def terminate(sym):
-      if isinstance(sym, Nonterminal):
-        return self.grammar.to_terminal[sym.symbol()]
-  
-      if isinstance(sym, str):
-        return sym
-
-    return [k for k in [terminate(w) for w in self.sentence] if len(k) > 0]
+    return [k for k in [self.terminate(w) for w in self.sentence] if len(k) > 0]
 
   def current_working_shape(self):
     cws = CurrentWorkingShape()
     cws.add_filled_border(5,4,5,w=3)
     cws.apply(self.terminal())
     return cws
+
+  def apply(self, before, current):
+    idempotent_before = [self.terminate(op) for op in before if op[0:5] != 'Place']
+    current = [self.terminate(op) for op in current]
+
+    print(before, current)
+
+    self.cws.apply(before + current)
 
   def generate(self,i=0):
     """ 
@@ -314,11 +354,16 @@ class Element():
           try:
             # Check the shape, unless this is the only possible production
             if len(productions) > 1:
-              cws = self.current_working_shape()
+              #cws = self.current_working_shape()
+              #self.apply(before, list(prod.rhs()))
+              bt = [self.terminate(b) for b in before]
+              at = [self.terminate(a) for a in after]
+              self.cws.revert(bt, [self.terminate(sym)], at)
+              self.cws.apply(bt, [self.terminate(s) for s in prod.rhs()], at)
               changes = True
               i += len(prod.rhs()) - 1
             break
-          except CollisionError:
+          except CollisionError as e:
             self.sentence = before + [sym] + after
         i += 1
 
@@ -326,7 +371,7 @@ if __name__ == '__main__':
   build = Element() 
   build.generate()
 
-  cws = build.current_working_shape()
+  cws = build.cws
 
   print("Generated %d elements." % ((len(cws.ldraw.split('\n')) - 1) / 2))
   print("Generated %d instructions." % len(build.terminal()))
