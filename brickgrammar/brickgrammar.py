@@ -10,10 +10,6 @@ class CurrentWorkingShape():
     self.position = (0,0,0)
     self.positions = []
     self.ldraw = ''
-    self.elements = set()
-
-  def check_element(self):
-    return not (self.position) in self.elements
 
   def append_ldraw(self, part):
     front = "1 0 0 0 1 0 0 0 1"
@@ -25,8 +21,6 @@ class CurrentWorkingShape():
     blue = 1
 
     pos = (self.position[0] * 10, self.position[1] * 8, self.position[2] * 10)
-
-    self.elements.add(self.position)
 
     self.ldraw += ("1 %d %d %d %d %s %s.dat\n" % (blue, pos[0], pos[1], pos[2], front, part))
     self.ldraw += "0 STEP\n"
@@ -66,29 +60,25 @@ class CurrentWorkingShape():
     self.position = (self.position[0]+delta[0], self.position[1]+delta[1], self.position[2]+delta[2])
 
   def place_element(self, part, remove=False):
-    if self.check_element():
-      old_pos = self.position + ()
-    
-      if part == '3024':
-        self.fill_rect((2,1,2), remove)
-      elif part == '3022':
-        self.position = (self.position[0] - 1,self.position[1],self.position[2] - 1)
-        self.fill_rect((4,1,4), remove)
-      elif part == '3003':
-        self.position = (self.position[0] - 1,self.position[1]-2,self.position[2] - 1)
-        self.fill_rect((4,3,4), remove)
-      elif part == '3005':
-        self.position = (self.position[0],self.position[1]-2,self.position[2])
-        self.fill_rect((1,3,1), remove)
-      else:
-        raise NotImplementedError('Part not implemented: ' + part)
+    old_pos = self.position + ()
+  
+    if part == '3024':
+      self.fill_rect((2,1,2), remove)
+    elif part == '3022':
+      self.position = (self.position[0] - 1,self.position[1],self.position[2] - 1)
+      self.fill_rect((4,1,4), remove)
+    elif part == '3003':
+      self.position = (self.position[0] - 1,self.position[1]-2,self.position[2] - 1)
+      self.fill_rect((4,3,4), remove)
+    elif part == '3005':
+      self.position = (self.position[0],self.position[1]-2,self.position[2])
+      self.fill_rect((1,3,1), remove)
+    else:
+      raise NotImplementedError('Part not implemented: ' + part)
 
-      if remove:
-        self.elements.remove(self.position)
+    self.append_ldraw(part)
 
-      self.append_ldraw(part)
-
-      self.position = old_pos
+    self.position = old_pos
       
   def revert(self, before, rev_ops, after):
     rev_ops = [o.replace('Place', 'Remove') for o in rev_ops]
@@ -316,12 +306,6 @@ class Element():
 
     return [k for k in [self.terminate(w) for w in self.sentence] if len(k) > 0]
 
-  def current_working_shape(self):
-    cws = CurrentWorkingShape()
-    cws.add_filled_border(5,4,5,w=3)
-    cws.apply(self.terminal())
-    return cws
-
   def apply(self, before, current):
     idempotent_before = [self.terminate(op) for op in before if op[0:5] != 'Place']
     current = [self.terminate(op) for op in current]
@@ -354,8 +338,6 @@ class Element():
           try:
             # Check the shape, unless this is the only possible production
             if len(productions) > 1:
-              #cws = self.current_working_shape()
-              #self.apply(before, list(prod.rhs()))
               bt = [self.terminate(b) for b in before]
               at = [self.terminate(a) for a in after]
               self.cws.revert(bt, [self.terminate(sym)], at)
