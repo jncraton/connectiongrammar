@@ -24,20 +24,20 @@ class CurrentWorkingShape():
     
     self.ldraw += ("1 %d %d %d %d %s %s.dat\n" % (blue, pos[0], pos[1], pos[2], front, part))    
 
-  def add_filled_border(self,xsize,ysize,zsize):
+  def add_filled_border(self,xsize,ysize,zsize,w=3):
     """
     Creates a filled border around the center
 
     >>> cws = CurrentWorkingShape()
-    >>> cws.add_filled_border(2,2,2)
+    >>> cws.add_filled_border(2,2,2,w=1)
     >>> len(cws.filled)
-    98
+    91
     """
 
-    for x in range(-xsize, xsize + 1):
-      for y in range(-ysize, ysize + 1):
-        for z in range(-zsize, zsize + 1):
-          if abs(x) == xsize or abs(y) == ysize or abs(z) == zsize:
+    for x in range(-xsize - w, xsize + w):
+      for y in range(-ysize - w, ysize + w):
+        for z in range(-zsize - w, zsize + w):
+          if abs(x) > xsize or abs(y) > ysize or abs(z) > zsize:
             self.filled.add((x,y,z))
 
   def fill_space(self, pos):
@@ -166,6 +166,10 @@ class Element():
         Stud -> 
 
         Antistud -> 'AssertFilledBelow'
+        Antistud -> Pu D D D R B B2x2 Po
+        Antistud -> Pu D D D L B B2x2 Po
+        Antistud -> Pu D D D R F B2x2 Po
+        Antistud -> Pu D D D L F B2x2 Po
         Antistud -> Pu D R B P2x2 Po
         Antistud -> Pu D L B P2x2 Po
         Antistud -> Pu D R F P2x2 Po
@@ -271,7 +275,7 @@ class Element():
 
   def current_working_shape(self):
     cws = CurrentWorkingShape()
-    cws.add_filled_border(4,4,4)
+    cws.add_filled_border(3,6,3)
     cws.apply(self.terminal())
     return cws
 
@@ -292,13 +296,13 @@ class Element():
       try:
         # Check the shape, unless this is the only possible production
         if len(productions) > 1:
-          self.root().current_working_shape()
+          cws = self.root().current_working_shape()
       except CollisionError:
         for child in new_children:
           self.children.pop()
           
       if self.children:
-         break
+        break
 
     for child in self.children:
       if isinstance(child.lhs, Nonterminal):
