@@ -7,9 +7,11 @@ class CollisionError(BaseException): pass
 class CurrentWorkingShape():
   def __init__(self):
     self.filled = set()
+    self.position = (0,0,0)
+    self.positions = []
     self.ldraw = ''
 
-  def append_ldraw(self, pos, part):
+  def append_ldraw(self, part):
     front = "1 0 0 0 1 0 0 0 1"
     back = "-1 0 0 0 1 0 0 0 -1"
     left = "0 0 1 0 1 0 -1 0 0"
@@ -18,7 +20,7 @@ class CurrentWorkingShape():
     yellow = 14
     blue = 1
 
-    pos = (pos[0] * 10, pos[1] * 8, pos[2] * 10)
+    pos = (self.position[0] * 10, self.position[1] * 8, self.position[2] * 10)
     
     self.ldraw += ("1 %d %d %d %d %s %s.dat\n" % (blue, pos[0], pos[1], pos[2], front, part))    
 
@@ -44,43 +46,44 @@ class CurrentWorkingShape():
 
     self.filled.add(pos)
 
-  def fill_rect(self, pos, size=(1,1,1)):
+  def fill_rect(self, size=(1,1,1)):
     for x in range(0, size[0]):
       for y in range(0, size[1]):
         for z in range(0, size[2]):
-          self.fill_space((pos[0] + x, pos[1] - y, pos[2] + z))
-            
+          self.fill_space((self.position[0] + x, self.position[1] - y, self.position[2] + z))
+
+  def move(self, delta):
+    self.position = (self.position[0]+delta[0], self.position[1]+delta[1], self.position[2]+delta[2])
+    
   def apply(self, operations):
     """
     Applys a set of operations
     """
 
-    positions = []
-    position = (0,0,0)
-
     for op in operations:
       if not op:
         pass
       elif op == 'Place3024':
-        self.fill_rect(position,(2,1,2))
-        self.append_ldraw(position, '3024')
+        self.fill_rect((2,1,2))
+        self.append_ldraw('3024')
       elif op == 'Place3022':
-        p = (position[0] - 1,position[1],position[2] - 1)
-        self.fill_rect(p, (4,1,4))
-        self.append_ldraw(position, '3022')
+        self.position = (self.position[0] - 1,self.position[1],self.position[2] - 1)
+        self.fill_rect((4,1,4))
+        self.position = (self.position[0] + 1,self.position[1],self.position[2] + 1)
+        self.append_ldraw('3022')
       elif op == 'AssertFilledAbove':
-        if (position[0], position[1] - 1, position[2]) not in positions:
+        if (self.position[0], self.position[1] - 1, self.position[2]) not in self.positions:
           raise CollisionError('Not filled')
       elif op == 'AssertFilledBelow':
-        if (position[0], position[1] + 1, position[2]) not in positions:
+        if (self.position[0], self.position[1] + 1, self.position[2]) not in self.positions:
           raise CollisionError('Not filled')
       elif op == '(': 
-        positions.append(position)
+        self.positions.append(self.position)
       elif op == ')': 
-        position = positions.pop()
+        self.position = self.positions.pop()
       elif op.startswith('Move'):
-        args = tuple(int(i) for i in op[5:-1].split(','))
-        position = (position[0]+args[0], position[1]+args[1], position[2]+args[2])
+        delta = tuple(int(i) for i in op[5:-1].split(','))
+        self.move(delta)
       else:
         raise NotImplementedError('Op not implemented: ' + op)
 
@@ -233,7 +236,7 @@ class Element():
     for child in self.children:
       ret += child.terminal()
 
-    return ret
+    return [w for w in ret if len(w) > 0]
 
   def current_working_shape(self):
     cws = CurrentWorkingShape()
