@@ -82,11 +82,11 @@ class CurrentWorkingShape():
     else:
       raise NotImplementedError('Part not implemented: ' + part)
 
+    self.position = old_pos
     if remove:
       self.elements.remove((self.position, 1, part))
     else:
       self.elements.append((self.position, 1, part))
-    self.position = old_pos
             
   def revert(self, before, rev_ops):
     rev_ops = [o.replace('Place', 'Remove') for o in rev_ops]
