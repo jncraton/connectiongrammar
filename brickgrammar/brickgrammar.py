@@ -80,12 +80,12 @@ class CurrentWorkingShape():
 
     self.position = old_pos
       
-  def revert(self, before, rev_ops, after):
+  def revert(self, before, rev_ops):
     rev_ops = [o.replace('Place', 'Remove') for o in rev_ops]
 
-    self.apply(before, rev_ops, after)
+    self.apply(before, rev_ops)
 
-  def apply(self, before, ops, after):
+  def apply(self, before, ops):
     """
     Applys a list of operations
     """
@@ -93,12 +93,9 @@ class CurrentWorkingShape():
     self.position = (0,0,0)
     self.positions = []
 
-    before = [b for b in before if 'Place' not in b]
-    after = [a for a in after if 'Place' not in a]
+    operations = [b for b in before if 'Place' not in b] + ops
 
-    operations = before + ops + after
-
-    original_shape = self.filled.copy()
+    old = (self.filled.copy(), self.position + (), self.positions.copy())
 
     try:
       for op in operations:
@@ -125,7 +122,7 @@ class CurrentWorkingShape():
           raise NotImplementedError('Op not implemented: ' + op)
     except CollisionError as e:
       # If we failed to apply fully, rollback and raise exception
-      self.filled = original_shape
+      (self.filled, self.position, self.positions) = old
       raise e
 
 class Element():
@@ -187,7 +184,7 @@ class Element():
         #Stud -> Pu L B P2x2 Po
         #Stud -> Pu L F P2x2 Po
         #Stud -> Pu R F P2x2 Po
-        #Stud -> B1x1
+        Stud -> B1x1
         #Stud -> P1x1
         Stud -> 
 
@@ -200,7 +197,7 @@ class Element():
         #Antistud -> Pu D L B P2x2 Po
         #Antistud -> Pu D L F P2x2 Po
         #Antistud -> Pu D R F P2x2 Po
-        #Antistud -> Pu D D D B1x1 Po
+        Antistud -> Pu D D D B1x1 Po
         #Antistud -> Pu D P1x1 Po
         Antistud -> 
 
@@ -306,48 +303,35 @@ class Element():
 
     return [k for k in [self.terminate(w) for w in self.sentence] if len(k) > 0]
 
-  def apply(self, before, current):
-    idempotent_before = [self.terminate(op) for op in before if op[0:5] != 'Place']
-    current = [self.terminate(op) for op in current]
-
-    print(before, current)
-
-    self.cws.apply(before + current)
-
-  def generate(self,i=0):
+  def generate(self):
     """ 
-    Processes the next element in the string
+    Generate a matching sentence
     """
 
-    changes = True
-    while(changes):
-      changes = False
-      i = 0
-  
-      # TODO There's probably a cleaner way to handle this loop
-      # For ... range() doesn't work because len(sentence) grows
-      while(i < len(self.sentence)):
-        sym = self.sentence[i]
-        before = self.sentence[0:i]
-        after = self.sentence[i+1:]
-  
-        productions = self.grammar.productions(lhs=sym)
-  
-        for prod in productions:    
-          self.sentence = before + list(prod.rhs()) + after
-          try:
-            # Check the shape, unless this is the only possible production
-            if len(productions) > 1:
-              bt = [self.terminate(b) for b in before]
-              at = [self.terminate(a) for a in after]
-              self.cws.revert(bt, [self.terminate(sym)], at)
-              self.cws.apply(bt, [self.terminate(s) for s in prod.rhs()], at)
-              changes = True
-              i += len(prod.rhs()) - 1
-            break
-          except CollisionError as e:
-            self.sentence = before + [sym] + after
-        i += 1
+    i = 0
+
+    # TODO There's probably a cleaner way to handle this loop
+    # For ... range() doesn't work because len(sentence) grows
+    while(i < len(self.sentence)):
+      sym = self.sentence[i]
+      before = self.sentence[0:i]
+      after = self.sentence[i+1:]
+
+      productions = self.grammar.productions(lhs=sym)
+
+      for prod in productions:    
+        self.sentence = before + list(prod.rhs()) + after
+        try:
+          # Check the shape, unless this is the only possible production
+          if len(productions) > 1:
+            bt = [self.terminate(b) for b in before]
+            self.cws.revert(bt, [self.terminate(sym)])
+            self.cws.apply(bt, [self.terminate(s) for s in prod.rhs()])
+            i = len(before) - 1
+          break
+        except CollisionError as e:
+          self.sentence = before + [sym] + after
+      i += 1
 
 if __name__ == '__main__':
   build = Element() 
