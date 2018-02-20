@@ -10,8 +10,9 @@ class CurrentWorkingShape():
     self.position = (0,0,0)
     self.positions = []
     self.ldraw = ''
+    self.elements = [] # As (pos, color, part)
 
-  def append_ldraw(self, part):
+  def to_ldraw(self):
     front = "1 0 0 0 1 0 0 0 1"
     back = "-1 0 0 0 1 0 0 0 -1"
     left = "0 0 1 0 1 0 -1 0 0"
@@ -20,10 +21,15 @@ class CurrentWorkingShape():
     yellow = 14
     blue = 1
 
-    pos = (self.position[0] * 10, self.position[1] * 8, self.position[2] * 10)
+    ldraw = ""
 
-    self.ldraw += ("1 %d %d %d %d %s %s.dat\n" % (blue, pos[0], pos[1], pos[2], front, part))
-    self.ldraw += "0 STEP\n"
+    for el in self.elements:
+      pos = (el[0][0] * 10, el[0][1] * 8, el[0][2] * 10)
+  
+      ldraw += ("1 %d %d %d %d %s %s.dat\n" % (el[1], pos[0], pos[1], pos[2], front, el[2]))
+      ldraw += "0 STEP\n"
+
+    return ldraw
 
   def add_filled_border(self,xsize,ysize,zsize,w=3):
     """
@@ -76,10 +82,12 @@ class CurrentWorkingShape():
     else:
       raise NotImplementedError('Part not implemented: ' + part)
 
-    self.append_ldraw(part)
-
+    if remove:
+      self.elements.remove((self.position, 1, part))
+    else:
+      self.elements.append((self.position, 1, part))
     self.position = old_pos
-      
+            
   def revert(self, before, rev_ops):
     rev_ops = [o.replace('Place', 'Remove') for o in rev_ops]
 
@@ -339,11 +347,11 @@ if __name__ == '__main__':
 
   cws = build.cws
 
-  print("Generated %d elements." % ((len(cws.ldraw.split('\n')) - 1) / 2))
+  print("Generated %d elements." % len(cws.elements))
   print("Generated %d instructions." % len(build.terminal()))
 
   with open('test.ldr', 'w') as ldr:
-    ldr.write(cws.ldraw)
+    ldr.write(cws.to_ldraw())
 
   indent = 0
   with open('inst.txt', 'w') as inst:
