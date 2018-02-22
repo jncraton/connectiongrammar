@@ -258,7 +258,7 @@ class Element():
     self.sentence = [self.lhs]
 
     self.cws = CurrentWorkingShape()
-    self.cws.add_filled_border(5,4,5,w=3)
+    self.cws.add_filled_border(6,6,6,w=3)
 
   def root(self):
     if self.parent:
@@ -316,30 +316,33 @@ class Element():
     Generate a matching sentence
     """
 
-    i = 0
-
     # TODO There's probably a cleaner way to handle this loop
     # For ... range() doesn't work because len(sentence) grows
-    while(i < len(self.sentence)):
-      sym = self.sentence[i]
-      before = self.sentence[0:i]
-      after = self.sentence[i+1:]
-
-      productions = self.grammar.productions(lhs=sym)
-
-      for prod in productions:    
-        try:
-          # Check the shape, unless this is the only possible production
-          if len(productions) > 1:
-            bt = [self.terminate(b) for b in before]
-            self.cws.revert(bt, [self.terminate(sym)])
-            self.cws.apply(bt, [self.terminate(s) for s in prod.rhs()])
-            i = len(before) - 1
-          self.sentence = before + list(prod.rhs()) + after
-          break
-        except CollisionError as e:
-          pass
-      i += 1
+    changed = True
+    while(changed):
+      changed = False
+      i = 0
+      while(i < len(self.sentence)):
+        sym = self.sentence[i]
+        before = self.sentence[0:i]
+        after = self.sentence[i+1:]
+  
+        productions = self.grammar.productions(lhs=sym)
+  
+        for prod in productions:
+          try:
+            # Check the shape, unless this is the only possible production
+            if len(productions) > 1:
+              bt = [self.terminate(b) for b in before]
+              self.cws.revert(bt, [self.terminate(sym)])
+              self.cws.apply(bt, [self.terminate(s) for s in prod.rhs()])
+            i += len(prod.rhs()) - 1
+            self.sentence = before + list(prod.rhs()) + after
+            changed = True
+            break
+          except CollisionError as e:
+            pass
+        i += 1
 
 if __name__ == '__main__':
   build = Element() 
