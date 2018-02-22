@@ -192,7 +192,7 @@ class Element():
         #Stud -> Pu L B P2x2 Po
         #Stud -> Pu L F P2x2 Po
         #Stud -> Pu R F P2x2 Po
-        Stud -> B1x1
+        #Stud -> B1x1
         #Stud -> P1x1
         Stud -> 
 
@@ -205,7 +205,7 @@ class Element():
         #Antistud -> Pu D L B P2x2 Po
         #Antistud -> Pu D L F P2x2 Po
         #Antistud -> Pu D R F P2x2 Po
-        Antistud -> Pu D D D B1x1 Po
+        #Antistud -> Pu D D D B1x1 Po
         #Antistud -> Pu D P1x1 Po
         Antistud -> 
 
@@ -328,7 +328,6 @@ class Element():
       productions = self.grammar.productions(lhs=sym)
 
       for prod in productions:    
-        self.sentence = before + list(prod.rhs()) + after
         try:
           # Check the shape, unless this is the only possible production
           if len(productions) > 1:
@@ -336,9 +335,10 @@ class Element():
             self.cws.revert(bt, [self.terminate(sym)])
             self.cws.apply(bt, [self.terminate(s) for s in prod.rhs()])
             i = len(before) - 1
+          self.sentence = before + list(prod.rhs()) + after
           break
         except CollisionError as e:
-          self.sentence = before + [sym] + after
+          pass
       i += 1
 
 if __name__ == '__main__':
