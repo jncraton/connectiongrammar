@@ -9,7 +9,7 @@ from connectiongrammar import ConnectionGrammar
 if __name__ == '__main__':
   cws = shapebrick.CurrentWorkingShape()
 
-  r = 16
+  r = 12
   b = 3
   for x in range(-r - b, r + b):
     for y in range(-r - b, r + b):

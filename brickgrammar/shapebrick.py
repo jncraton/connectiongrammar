@@ -87,24 +87,25 @@ class CurrentWorkingShape(WorkingShape):
     old_pos = self.state + ()
   
     if part == '3024':
+      self.state = (self.state[0],self.state[1]-2,self.state[2], self.state[3])
       self.fill_rect((2,1,2), remove)
     elif part == '3022':
       self.state = (self.state[0] - 1,self.state[1],self.state[2] - 1, self.state[3])
       self.fill_rect((4,1,4), remove)
     elif part == '3003':
-      self.state = (self.state[0] - 1,self.state[1] - 2,self.state[2] - 1, self.state[3])
+      self.state = (self.state[0] - 1,self.state[1],self.state[2] - 1, self.state[3])
       self.fill_rect((4,3,4), remove)
     elif part == '3001':
-      self.state = (self.state[0] - 3,self.state[1] - 2,self.state[2] - 1, self.state[3])
+      self.state = (self.state[0] - 3,self.state[1],self.state[2] - 1, self.state[3])
       self.fill_rect((8,3,4), remove)
     elif part == '3004':
-      self.state = (self.state[0] - 1,self.state[1] - 2,self.state[2], self.state[3])
+      self.state = (self.state[0] - 1,self.state[1],self.state[2], self.state[3])
       self.fill_rect((4,3,2), remove)
     elif part == '3004r':
-      self.state = (self.state[0],self.state[1] - 2,self.state[2]-1, self.state[3])
+      self.state = (self.state[0],self.state[1],self.state[2]-1, self.state[3])
       self.fill_rect((2,3,4), remove)
     elif part == '3005':
-      self.state = (self.state[0],self.state[1] - 2,self.state[2], self.state[3])
+      self.state = (self.state[0],self.state[1],self.state[2], self.state[3])
       self.fill_rect((2,3,2), remove)
     else:
       raise NotImplementedError('Part not implemented: ' + str(part))
