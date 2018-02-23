@@ -4,6 +4,8 @@ from enum import Enum
 
 class CollisionError(BaseException): pass
 
+import functools
+
 class CurrentWorkingShape():
   def __init__(self):
     self.filled = set()
@@ -101,6 +103,10 @@ class CurrentWorkingShape():
 
     self.apply(before, rev_ops)
 
+  @functools.lru_cache()
+  def parse_op(op):
+    return None
+
   def apply(self, before, ops):
     """
     Applys a list of operations
@@ -109,20 +115,22 @@ class CurrentWorkingShape():
     self.position = (0,0,0)
     self.positions = []
 
-    operations = [b for b in before if 'Place' not in b] + ops
+    placement = False
 
     try:
-      for op in operations:
+      for op in before + ['TogglePlacement()'] + ops:
         if not op:
           pass
-        elif op[0:5] == 'Place':
-          self.place_element(op[5:])
-        elif op[0:6] == 'Remove':
-          self.place_element(op[6:],remove=True)
-        elif op == 'AssertFilledAbove':
+        elif op == 'TogglePlacement()':
+          placement = not placement
+        elif placement == True and op[0:5] == 'Place':
+          self.place_element(op[6:-1])
+        elif placement == True and op[0:6] == 'Remove':
+          self.place_element(op[7:-1],remove=True)
+        elif placement == True and op == 'AssertFilledAbove()':
           if (self.position[0], self.position[1] - 1, self.position[2]) not in self.positions:
             raise CollisionError('Not filled')
-        elif op == 'AssertFilledBelow':
+        elif placement == True and op == 'AssertFilledBelow()':
           if (self.position[0], self.position[1] + 1, self.position[2]) not in self.positions:
             raise CollisionError('Not filled')
         elif op == '(': 
@@ -133,7 +141,8 @@ class CurrentWorkingShape():
           delta = tuple(int(i) for i in op[5:-1].split(','))
           self.move(delta)
         else:
-          raise NotImplementedError('Op not implemented: ' + op)
+          if placement:
+            raise NotImplementedError('Op not implemented: ' + op)
     except CollisionError as e:
       raise e
 
@@ -187,7 +196,7 @@ class Element():
       self.grammar = parent.grammar
     else:
       self.grammar = CFG.fromstring("""
-        Stud -> 'AssertFilledAbove'
+        Stud -> 'AssertFilledAbove()'
         Stud -> Pu L B B2x2 Po
         Stud -> Pu L F B2x2 Po
         Stud -> Pu R F B2x2 Po
@@ -200,7 +209,7 @@ class Element():
         #Stud -> P1x1
         Stud -> 
 
-        Antistud -> 'AssertFilledBelow'
+        Antistud -> 'AssertFilledBelow()'
         Antistud -> Pu D D D L B B2x2 Po
         Antistud -> Pu D D D L F B2x2 Po
         Antistud -> Pu D D D R F B2x2 Po
@@ -219,21 +228,16 @@ class Element():
         BrickConnection -> Antistud U U U Stud
         BrickConnection -> 
         
-        B2x2 -> Place3003 Pu L B BrickConnection Po Pu L F BrickConnection Po Pu R F BrickConnection Po Pu R B BrickConnection Po
-        P2x2 -> Place3022 Pu R B PlateConnection Po Pu L B PlateConnection Po Pu L F PlateConnection Po Pu R F PlateConnection Po
+        B2x2 -> 'Place(3003)' Pu L B BrickConnection Po Pu L F BrickConnection Po Pu R F BrickConnection Po Pu R B BrickConnection Po
+        P2x2 -> 'Place(3022)' Pu R B PlateConnection Po Pu L B PlateConnection Po Pu L F PlateConnection Po Pu R F PlateConnection Po
         
-        B1x1 -> Place3005 Pu BrickConnection Po
-        P1x1 -> Place3024 Pu PlateConnection Po
+        B1x1 -> 'Place(3005)' Pu BrickConnection Po
+        P1x1 -> 'Place(3024)' Pu PlateConnection Po
         
-        B2x2 -> Place3003
-        P2x2 -> Place3022
-        B1x1 -> Place3005
-        P1x1 -> Place3024
-
-        Place3005 -> 'Place3005'
-        Place3003 -> 'Place3003'
-        Place3022 -> 'Place3022'
-        Place3024 -> 'Place3024'        
+        B2x2 -> 'Place(3003)'
+        P2x2 -> 'Place(3022)'
+        B1x1 -> 'Place(3005)'
+        P1x1 -> 'Place(3024)'
 
         U -> 'Move( 0,-1, 0)'
         D -> 'Move( 0, 1, 0)'
@@ -253,8 +257,8 @@ class Element():
 
         if len(rhs) == 0:
           self.grammar.to_terminal[str(prod.lhs())] = ''
-        elif len(rhs) == 1:
-          self.grammar.to_terminal[str(prod.lhs())] = str(rhs[0])
+        elif len(rhs) == 1 and isinstance(rhs[0], str):
+          self.grammar.to_terminal[str(prod.lhs())] = rhs[0]
 
     self.lhs = lhs or self.grammar.start()
     self.parent = parent
