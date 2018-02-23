@@ -1,16 +1,12 @@
 all: test main
 
 main:
-	python3 brickgrammar/brickgrammar.py
-
-time:
-	time python3 brickgrammar/brickgrammar.py
+	python3 brickgrammar/__main__.py
 
 profile: test
-	python3 -m cProfile -s cumtime brickgrammar/brickgrammar.py | head -n 20
+	python3 -m cProfile -s cumtime brickgrammar/__main__.py | head -n 20
 
 test:
-	python3 -m doctest brickgrammar/brickgrammar.py
 	python3 -m doctest brickgrammar/shape.py
 	python3 -m doctest brickgrammar/shapebrick.py
 	python3 -m doctest brickgrammar/connectiongrammar.py

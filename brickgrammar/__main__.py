@@ -10,10 +10,9 @@ if __name__ == '__main__':
   cws = shapebrick.CurrentWorkingShape()
   cws.add_filled_border(9,9,9,w=3)
 
-  with open('grammars/brick.gmr') as gfile:
-    grammer = ConnectionGrammar(grammar = CFG.fromstring(gfile.read()), cws = cws)
+  grammar = ConnectionGrammar(grammar = CFG.fromstring(open('grammars/brick.gmr').read()), cws = cws)
 
-  sentence = grammer.generate()
+  sentence = grammar.generate()
 
   print("Generated %d elements." % len(cws.elements))
   print("Generated %d instructions." % len(sentence))
