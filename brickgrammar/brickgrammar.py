@@ -104,7 +104,7 @@ class CurrentWorkingShape():
       self.state = (self.state[0] - 1,self.state[1] - 2,self.state[2], self.state[3])
       self.fill_rect((4,3,2), remove)
     elif part == '3004r':
-      self.state = (self.state[0],self.state[1] - 2,self.state[2], self.state[3] - 1)
+      self.state = (self.state[0],self.state[1] - 2,self.state[2]-1, self.state[3])
       self.fill_rect((2,3,4), remove)
     elif part == '3005':
       self.state = (self.state[0],self.state[1] - 2,self.state[2], self.state[3])
@@ -270,6 +270,8 @@ class Element():
 
         Stud -> Pu 'Move(-1,0,0)' B1x2 Po
         Stud -> Pu 'Move(1,0,0)' B1x2 Po
+        Stud -> Pu 'Move(0,0,1)' B2x1 Po
+        Stud -> Pu 'Move(0,0,-1)' B2x1 Po
         #Stud -> Pu R B P2x2 Po
         #Stud -> Pu L B P2x2 Po
         #Stud -> Pu L F P2x2 Po
@@ -291,6 +293,8 @@ class Element():
 
         Antistud -> Pu 'Move(-1,3,0)' B1x2 Po
         Antistud -> Pu 'Move(1,3,0)' B1x2 Po
+        Antistud -> Pu 'Move(0,3,1)' B2x1 Po
+        Antistud -> Pu 'Move(0,3,-1)' B2x1 Po
                         
         #Antistud -> Pu D R B P2x2 Po
         #Antistud -> Pu D L B P2x2 Po
@@ -312,6 +316,7 @@ class Element():
         B2x4 -> 'Place(3001)' Pu 'Rotate(180)' Pu 'Move(-3,0,1)' BrickConnection Po Pu 'Move(-3,0,-1)' BrickConnection Po Pu 'Move(3,0,-1)' BrickConnection Po Pu 'Move(3,0,1)' BrickConnection Po B2x2Connection Po
         B2x2 -> 'Place(3003)' Pu 'Rotate(180)' B2x2Connection Po
         B1x2 -> 'Place(3004)' Pu 'Rotate(180)' Pu 'Move(-1,0,0)' BrickConnection Po 'Move(1,0,0)' Pu BrickConnection Po Po
+        B2x1 -> 'Place(3004r)' Pu 'Rotate(180)' Pu 'Move(0,0,-1)' BrickConnection Po 'Move(0,0,1)' Pu BrickConnection Po Po
         P2x2 -> 'Place(3022)' Pu R B PlateConnection Po Pu L B PlateConnection Po Pu L F PlateConnection Po Pu R F PlateConnection Po
         
         B1x1 -> 'Place(3005)' Pu BrickConnection Po
