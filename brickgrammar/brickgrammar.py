@@ -6,7 +6,7 @@ from enum import Enum
 
 class CollisionError(BaseException): pass
 
-OP = Enum('OP', 'Place Remove TogglePlacement Move ( ) AssertFilledAbove AssertFilledBelow')
+OP = Enum('OP', 'Place Remove TogglePlacement Move ( ) AssertFilledAbove AssertFilledBelow Rotate')
 
 class CurrentWorkingShape():
   def __init__(self):
@@ -40,7 +40,7 @@ class CurrentWorkingShape():
 
     >>> cws = CurrentWorkingShape()
     >>> cws.add_filled_border(2,2,2,w=1)
-    >>> len(cws.filled)
+    >>> len(cws.voxels)
     91
     """
 
@@ -73,8 +73,12 @@ class CurrentWorkingShape():
       else:
         self.voxels.add(pos)
 
-  def move(self, delta):
-    self.state = (self.state[0]+delta[0], self.state[1]+delta[1], self.state[2]+delta[2],self.state[3])
+  def move(s, delta):
+    """
+    >>> CurrentWorkingShape.move((0, 0, 0, 1), (2, 2, 2))
+    (2, 2, 2, 1)
+    """
+    return (s[0]+delta[0], s[1]+delta[1], s[2]+delta[2],s[3])
 
   def place_element(self, part, remove=False):
     old_pos = self.state + ()
@@ -109,6 +113,8 @@ class CurrentWorkingShape():
       return (OP['Place'], op[6:-1])
     elif op[0:6] == 'Remove':
       return (OP['Remove'], op[7:-1])
+    elif op[0:6] == 'Rotate':
+      return (OP['Remove'], int(op[7:-1]))
     elif op[0:4] == 'Move':
       delta = tuple(int(i) for i in op[5:-1].split(','))
       return (OP['Move'], delta)
@@ -140,7 +146,9 @@ class CurrentWorkingShape():
       position = positions[-1]
       positions = positions[:-1]
     elif op[0] == OP.Move:
-      position = (position[0]+op[1][0], position[1]+op[1][1], position[2]+op[1][2], position[3])
+      position = CurrentWorkingShape.move(position, op[1])
+    elif op[0] == OP.Rotate:
+      position[3] = position[3] * -1
 
     return (position, positions)
 
@@ -174,7 +182,9 @@ class CurrentWorkingShape():
         elif op[0] == OP[')']: 
           self.state = self.states.pop()
         elif op[0] == OP.Move:
-          self.move(op[1])
+          self.state = CurrentWorkingShape.move(self.state, op[1])
+        elif op[0] == OP.Rotate:
+          self.state[3] = self.state[3] * -1
         else:
           if placement:
             raise NotImplementedError('Op not implemented: ' + str(op))
