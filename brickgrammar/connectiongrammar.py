@@ -105,3 +105,5 @@ class ConnectionGrammar():
             break
           except CollisionError as e:
             pass
+
+    return self.sentence

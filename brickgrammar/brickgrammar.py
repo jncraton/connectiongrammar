@@ -10,7 +10,7 @@ if __name__ == '__main__':
   cws = shapebrick.CurrentWorkingShape()
   cws.add_filled_border(9,9,9,w=3)
 
-  build = ConnectionGrammar(grammar = CFG.fromstring("""
+  grammer = ConnectionGrammar(grammar = CFG.fromstring("""
           Stud -> 'AssertFilledAbove()'
   
           Stud -> Pu 'Move(-3,0,1)' B2x4 Po
@@ -89,19 +89,18 @@ if __name__ == '__main__':
           Po -> ')'
       """), cws = cws
   ) 
-  build.generate()
 
-  cws = build.cws
+  sentence = grammer.generate()
 
   print("Generated %d elements." % len(cws.elements))
-  print("Generated %d instructions." % len(build.sentence))
+  print("Generated %d instructions." % len(sentence))
 
   with open('test.ldr', 'w') as ldr:
     ldr.write(cws.to_ldraw())
 
   indent = 0
   with open('inst.txt', 'w') as inst:
-    for line in [build.terminate(b) for b in build.sentence]:
+    for line in [grammar.terminate(b) for b in sentence]:
       if line == ')':
         indent -= 1
 
