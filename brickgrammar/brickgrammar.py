@@ -116,33 +116,58 @@ class CurrentWorkingShape():
     else:
       return (OP[op],)
 
+  @functools.lru_cache()
+  def calc_position(before):
+    """
+    >>> CurrentWorkingShape.calc_position(tuple())
+    ((0, 0, 0), ())
+    >>> CurrentWorkingShape.calc_position(('('))
+    ((0, 0, 0), ((0, 0, 0),))
+    >>> CurrentWorkingShape.calc_position(('(','Move(1,0,0)'))
+    ((1, 0, 0), ((0, 0, 0),))
+    >>> CurrentWorkingShape.calc_position(('(','Move(1,0,0)',')'))
+    ((0, 0, 0), ())
+    """
+    if len(before):
+      (position, positions) = CurrentWorkingShape.calc_position(before[0:-1])
+    else:
+      return ((0,0,0), tuple())
+
+    op = CurrentWorkingShape.parse_op(before[-1])
+
+    if op[0] == OP['(']: 
+      positions += (position,)
+    elif op[0] == OP[')']: 
+      position = positions[-1]
+      positions = positions[:-1]
+    elif op[0] == OP.Move:
+      position = (position[0]+op[1][0], position[1]+op[1][1], position[2]+op[1][2])
+
+    return (position, positions)
+
   def apply(self, before, ops, revert = []):
     """
     Applys a list of operations
     """
 
-    self.position = (0,0,0)
-    self.positions = []
-
-    placement = False
+    (self.position, self.positions) = CurrentWorkingShape.calc_position(tuple(before))
+    self.positions = list(self.positions)
 
     rev_ops = [o.replace('Place', 'Remove') for o in revert]
 
     try:
-      for op in before + ['TogglePlacement()'] + rev_ops + ops:
+      for op in rev_ops + ops:
         op = CurrentWorkingShape.parse_op(op)
         if op[0] == None:
           pass
-        elif op[0] == OP.TogglePlacement:
-          placement = not placement
-        elif placement == True and op[0] == OP.Place:
+        elif op[0] == OP.Place:
           self.place_element(op[1])
-        elif placement == True and op[0] == OP.Remove:
+        elif op[0] == OP.Remove:
           self.place_element(op[1],remove=True)
-        elif placement == True and op[0] == OP.AssertFilledAbove:
+        elif op[0] == OP.AssertFilledAbove:
           if (self.position[0], self.position[1] - 1, self.position[2]) not in self.positions:
             raise CollisionError('Not filled')
-        elif placement == True and op[0] == OP.AssertFilledBelow:
+        elif op[0] == OP.AssertFilledBelow:
           if (self.position[0], self.position[1] + 1, self.position[2]) not in self.positions:
             raise CollisionError('Not filled')
         elif op[0] == OP['(']: 
