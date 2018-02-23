@@ -10,11 +10,10 @@ OP = Enum('OP', 'Place Remove TogglePlacement Move ( ) AssertFilledAbove AssertF
 
 class CurrentWorkingShape():
   def __init__(self):
-    self.filled = set()
+    self.voxels = set()
     self.position = (0,0,0)
     self.positions = []
-    self.ldraw = ''
-    self.elements = [] # As (pos, color, part)
+    self.elements = []
 
   def to_ldraw(self):
     front = "1 0 0 0 1 0 0 0 1"
@@ -49,7 +48,7 @@ class CurrentWorkingShape():
       for y in range(-ysize - w, ysize + w):
         for z in range(-zsize - w, zsize + w):
           if abs(x) > xsize or abs(y) > ysize or abs(z) > zsize:
-            self.filled.add((x,y,z))
+            self.voxels.add((x,y,z))
 
   def fill_rect(self, size, remove=False):
     """
@@ -65,14 +64,14 @@ class CurrentWorkingShape():
       for y in range(0, size[1]):
         for z in range(0, size[2]):
           new_pos.append((self.position[0] + x, self.position[1] - y, self.position[2] + z))
-          if new_pos[-1] in self.filled and not remove:
+          if new_pos[-1] in self.voxels and not remove:
             raise CollisionError('Cannot fill %s' % (new_pos[-1],))
 
     for pos in new_pos:
       if remove:
-        self.filled.remove(pos)
+        self.voxels.remove(pos)
       else:
-        self.filled.add(pos)
+        self.voxels.add(pos)
 
   def move(self, delta):
     self.position = (self.position[0]+delta[0], self.position[1]+delta[1], self.position[2]+delta[2])
