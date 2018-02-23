@@ -97,7 +97,7 @@ class CurrentWorkingShape():
       self.state = (self.state[0],self.state[1] - 2,self.state[2], self.state[3])
       self.fill_rect((1,3,1), remove)
     else:
-      raise NotImplementedError('Part not implemented: ' + part)
+      raise NotImplementedError('Part not implemented: ' + str(part))
 
     self.state = old_pos
     if remove:
@@ -116,7 +116,7 @@ class CurrentWorkingShape():
     elif op[0:6] == 'Remove':
       return (OP['Remove'], op[7:-1])
     elif op[0:6] == 'Rotate':
-      return (OP['Remove'], int(op[7:-1]))
+      return (OP['Rotate'], int(op[7:-1]))
     elif op[0:4] == 'Move':
       delta = tuple(int(i) for i in op[5:-1].split(','))
       return (OP['Move'], delta)
@@ -150,7 +150,7 @@ class CurrentWorkingShape():
     elif op[0] == OP.Move:
       position = CurrentWorkingShape.move(position, op[1])
     elif op[0] == OP.Rotate:
-      position[3] = position[3] * -1
+      position = (position[0],position[1],position[2],position[3] * -1)
 
     return (position, positions)
 
@@ -186,7 +186,7 @@ class CurrentWorkingShape():
         elif op[0] == OP.Move:
           self.state = CurrentWorkingShape.move(self.state, op[1])
         elif op[0] == OP.Rotate:
-          self.state[3] = self.state[3] * -1
+          self.state = (self.state[0],self.state[1],self.state[2],self.state[3] * -1)
         else:
           if placement:
             raise NotImplementedError('Op not implemented: ' + str(op))
@@ -275,7 +275,7 @@ class Element():
         BrickConnection -> Antistud 'Move(0,-3,0)' Stud
         BrickConnection -> 
         
-        B2x2 -> 'Place(3003)' Pu 'Move(-1,0,1)' BrickConnection Po Pu 'Move(-1,0,-1)' BrickConnection Po Pu 'Move(1,0,-1)' BrickConnection Po Pu 'Move(1,0,1)' BrickConnection Po
+        B2x2 -> 'Place(3003)' Pu 'Rotate(180)' Pu 'Move(-1,0,1)' BrickConnection Po Pu 'Move(-1,0,-1)' BrickConnection Po Pu 'Move(1,0,-1)' BrickConnection Po Pu 'Move(1,0,1)' BrickConnection Po Po
         P2x2 -> 'Place(3022)' Pu R B PlateConnection Po Pu L B PlateConnection Po Pu L F PlateConnection Po Pu R F PlateConnection Po
         
         B1x1 -> 'Place(3005)' Pu BrickConnection Po
