@@ -219,7 +219,7 @@ class Element():
         #Stud -> Pu L B P2x2 Po
         #Stud -> Pu L F P2x2 Po
         #Stud -> Pu R F P2x2 Po
-        #Stud -> B1x1
+        Stud -> B1x1
         #Stud -> P1x1
         Stud -> 
 
@@ -232,7 +232,7 @@ class Element():
         #Antistud -> Pu D L B P2x2 Po
         #Antistud -> Pu D L F P2x2 Po
         #Antistud -> Pu D R F P2x2 Po
-        #Antistud -> Pu D D D B1x1 Po
+        Antistud -> Pu D D D B1x1 Po
         #Antistud -> Pu D P1x1 Po
         Antistud -> 
 
@@ -312,27 +312,6 @@ class Element():
     if isinstance(sym, str):
       return sym
 
-  def terminal(self):
-    """
-    Returns the current element as a valid utterance
-
-    All non-terminals are converted directly to terminals.
-
-    >>> e = Element()
-    >>> str(e)
-    'Stud'
-    >>> e.terminal()
-    []
-    >>> e = Element(lhs=Nonterminal('P1x1'))
-    >>> e.terminal()
-    ['Place3024']
-    >>> e = Element(lhs=Nonterminal('Pu'))
-    >>> e.terminal()
-    ['(']
-    """
-
-    return [k for k in [self.terminate(w) for w in self.sentence] if len(k) > 0]
-
   def generate(self):
     """ 
     Generate a matching sentence
@@ -373,7 +352,7 @@ if __name__ == '__main__':
   cws = build.cws
 
   print("Generated %d elements." % len(cws.elements))
-  print("Generated %d instructions." % len(build.terminal()))
+  print("Generated %d instructions." % len(build.sentence))
 
   with open('test.ldr', 'w') as ldr:
     ldr.write(cws.to_ldraw())
