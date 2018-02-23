@@ -93,6 +93,9 @@ class CurrentWorkingShape():
     elif part == '3003':
       self.state = (self.state[0] - 1,self.state[1] - 2,self.state[2] - 1, self.state[3])
       self.fill_rect((4,3,4), remove)
+    elif part == '3001':
+      self.state = (self.state[0] - 3,self.state[1] - 2,self.state[2] - 1, self.state[3])
+      self.fill_rect((8,3,4), remove)
     elif part == '3005':
       self.state = (self.state[0],self.state[1] - 2,self.state[2], self.state[3])
       self.fill_rect((1,3,1), remove)
@@ -244,6 +247,12 @@ class Element():
     else:
       self.grammar = CFG.fromstring("""
         Stud -> 'AssertFilledAbove()'
+
+        Stud -> Pu 'Move(-3,0,1)' B2x4 Po
+        Stud -> Pu 'Move(-3,0,-1)' B2x4 Po
+        Stud -> Pu 'Move(3,0,-1)' B2x4 Po
+        Stud -> Pu 'Move(3,0,1)' B2x4 Po
+
         Stud -> Pu 'Move(-1,0,1)' B2x2 Po
         Stud -> Pu 'Move(-1,0,-1)' B2x2 Po
         Stud -> Pu 'Move(1,0,-1)' B2x2 Po
@@ -257,10 +266,16 @@ class Element():
         Stud -> 
 
         Antistud -> 'AssertFilledBelow()'
+        Antistud -> Pu 'Move(-3,3,1)' B2x4 Po
+        Antistud -> Pu 'Move(-3,3,-1)' B2x4 Po
+        Antistud -> Pu 'Move(3,3,-1)' B2x4 Po
+        Antistud -> Pu 'Move(3,3,1)' B2x4 Po
+        
         Antistud -> Pu 'Move(-1,3,1)' B2x2 Po
         Antistud -> Pu 'Move(-1,3,-1)' B2x2 Po
         Antistud -> Pu 'Move(1,3,-1)' B2x2 Po
         Antistud -> Pu 'Move(1,3,1)' B2x2 Po
+        
         #Antistud -> Pu D R B P2x2 Po
         #Antistud -> Pu D L B P2x2 Po
         #Antistud -> Pu D L F P2x2 Po
@@ -269,18 +284,23 @@ class Element():
         #Antistud -> Pu D P1x1 Po
         Antistud -> 
 
+        B2x2Connection -> Pu 'Move(-1,0,1)' BrickConnection Po Pu 'Move(-1,0,-1)' BrickConnection Po Pu 'Move(1,0,-1)' BrickConnection Po Pu 'Move(1,0,1)' BrickConnection Po
+        B2x2Connection ->
+
         PlateConnection -> Antistud 'Move(0,-1,0)' Stud
         PlateConnection -> 
         
         BrickConnection -> Antistud 'Move(0,-3,0)' Stud
         BrickConnection -> 
         
-        B2x2 -> 'Place(3003)' Pu 'Rotate(180)' Pu 'Move(-1,0,1)' BrickConnection Po Pu 'Move(-1,0,-1)' BrickConnection Po Pu 'Move(1,0,-1)' BrickConnection Po Pu 'Move(1,0,1)' BrickConnection Po Po
+        B2x4 -> 'Place(3001)' Pu 'Rotate(180)' Pu 'Move(-3,0,1)' BrickConnection Po Pu 'Move(-3,0,-1)' BrickConnection Po Pu 'Move(3,0,-1)' BrickConnection Po Pu 'Move(3,0,1)' BrickConnection Po B2x2Connection Po
+        B2x2 -> 'Place(3003)' Pu 'Rotate(180)' B2x2Connection Po
         P2x2 -> 'Place(3022)' Pu R B PlateConnection Po Pu L B PlateConnection Po Pu L F PlateConnection Po Pu R F PlateConnection Po
         
         B1x1 -> 'Place(3005)' Pu BrickConnection Po
         P1x1 -> 'Place(3024)' Pu PlateConnection Po
         
+        B2x4 -> 'Place(3001)'
         B2x2 -> 'Place(3003)'
         P2x2 -> 'Place(3022)'
         B1x1 -> 'Place(3005)'
