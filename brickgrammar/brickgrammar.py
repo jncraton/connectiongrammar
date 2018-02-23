@@ -208,10 +208,10 @@ class Element():
     else:
       self.grammar = CFG.fromstring("""
         Stud -> 'AssertFilledAbove()'
-        Stud -> Pu L B B2x2 Po
-        Stud -> Pu L F B2x2 Po
-        Stud -> Pu R F B2x2 Po
-        Stud -> Pu R B B2x2 Po
+        Stud -> Pu 'Move(-1,0,1)' B2x2 Po
+        Stud -> Pu 'Move(-1,0,-1)' B2x2 Po
+        Stud -> Pu 'Move(1,0,-1)' B2x2 Po
+        Stud -> Pu 'Move(1,0,1)' B2x2 Po
         #Stud -> Pu R B P2x2 Po
         #Stud -> Pu L B P2x2 Po
         #Stud -> Pu L F P2x2 Po
@@ -221,25 +221,25 @@ class Element():
         Stud -> 
 
         Antistud -> 'AssertFilledBelow()'
-        Antistud -> Pu D D D L B B2x2 Po
-        Antistud -> Pu D D D L F B2x2 Po
-        Antistud -> Pu D D D R F B2x2 Po
-        Antistud -> Pu D D D R B B2x2 Po
+        Antistud -> Pu 'Move(-1,3,1)' B2x2 Po
+        Antistud -> Pu 'Move(-1,3,-1)' B2x2 Po
+        Antistud -> Pu 'Move(1,3,-1)' B2x2 Po
+        Antistud -> Pu 'Move(1,3,1)' B2x2 Po
         #Antistud -> Pu D R B P2x2 Po
         #Antistud -> Pu D L B P2x2 Po
         #Antistud -> Pu D L F P2x2 Po
         #Antistud -> Pu D R F P2x2 Po
-        Antistud -> Pu D D D B1x1 Po
+        Antistud -> Pu 'Move(0,3,0)' B1x1 Po
         #Antistud -> Pu D P1x1 Po
         Antistud -> 
 
-        PlateConnection -> Antistud U Stud
+        PlateConnection -> Antistud 'Move(0,-1,0)' Stud
         PlateConnection -> 
         
-        BrickConnection -> Antistud U U U Stud
+        BrickConnection -> Antistud 'Move(0,-3,0)' Stud
         BrickConnection -> 
         
-        B2x2 -> 'Place(3003)' Pu L B BrickConnection Po Pu L F BrickConnection Po Pu R F BrickConnection Po Pu R B BrickConnection Po
+        B2x2 -> 'Place(3003)' Pu 'Move(-1,0,1)' BrickConnection Po Pu 'Move(-1,0,-1)' BrickConnection Po Pu 'Move(1,0,-1)' BrickConnection Po Pu 'Move(1,0,1)' BrickConnection Po
         P2x2 -> 'Place(3022)' Pu R B PlateConnection Po Pu L B PlateConnection Po Pu L F PlateConnection Po Pu R F PlateConnection Po
         
         B1x1 -> 'Place(3005)' Pu BrickConnection Po
@@ -250,12 +250,6 @@ class Element():
         B1x1 -> 'Place(3005)'
         P1x1 -> 'Place(3024)'
 
-        U -> 'Move( 0,-1, 0)'
-        D -> 'Move( 0, 1, 0)'
-        L -> 'Move(-1, 0, 0)'
-        R -> 'Move( 1, 0, 0)'
-        B -> 'Move( 0, 0, 1)'
-        F -> 'Move( 0, 0,-1)'
         Pu -> '('
         Po -> ')'
     """)
@@ -355,7 +349,7 @@ if __name__ == '__main__':
 
   indent = 0
   with open('inst.txt', 'w') as inst:
-    for line in build.terminal():
+    for line in [build.terminate(b) for b in build.sentence]:
       if line == ')':
         indent -= 1
 
