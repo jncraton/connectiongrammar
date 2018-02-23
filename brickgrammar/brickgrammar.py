@@ -99,11 +99,6 @@ class CurrentWorkingShape():
       self.elements.remove((self.position, 1, part))
     else:
       self.elements.append((self.position, 1, part))
-            
-  def revert(self, before, rev_ops):
-    rev_ops = [o.replace('Place', 'Remove') for o in rev_ops]
-
-    self.apply(before, rev_ops)
 
   @functools.lru_cache()
   def parse_op(op):
@@ -121,7 +116,7 @@ class CurrentWorkingShape():
     else:
       return (OP[op],)
 
-  def apply(self, before, ops):
+  def apply(self, before, ops, revert = []):
     """
     Applys a list of operations
     """
@@ -131,8 +126,10 @@ class CurrentWorkingShape():
 
     placement = False
 
+    rev_ops = [o.replace('Place', 'Remove') for o in revert]
+
     try:
-      for op in before + ['TogglePlacement()'] + ops:
+      for op in before + ['TogglePlacement()'] + rev_ops + ops:
         op = CurrentWorkingShape.parse_op(op)
         if op[0] == None:
           pass
@@ -335,8 +332,7 @@ class Element():
             # Check the shape, unless this is the only possible production
             if len(productions) > 1:
               bt = [self.terminate(b) for b in before]
-              self.cws.revert(bt, [self.terminate(sym)])
-              self.cws.apply(bt, [self.terminate(s) for s in prod.rhs()])
+              self.cws.apply(bt, [self.terminate(s) for s in prod.rhs()], revert=[self.terminate(sym)])
             i += len(prod.rhs()) - 1
             self.sentence = before + list(prod.rhs()) + after
             changed = True
