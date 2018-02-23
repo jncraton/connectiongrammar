@@ -77,8 +77,10 @@ class CurrentWorkingShape():
     """
     >>> CurrentWorkingShape.move((0, 0, 0, 1), (2, 2, 2))
     (2, 2, 2, 1)
+    >>> CurrentWorkingShape.move((0, 0, 0, -1), (2, 2, 2))
+    (-2, 2, -2, -1)
     """
-    return (s[0]+delta[0], s[1]+delta[1], s[2]+delta[2],s[3])
+    return (s[0]+delta[0]*s[3], s[1]+delta[1], s[2]+delta[2]*s[3],s[3])
 
   def place_element(self, part, remove=False):
     old_pos = self.state + ()
