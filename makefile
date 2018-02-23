@@ -11,6 +11,9 @@ profile: test
 
 test:
 	python3 -m doctest brickgrammar/brickgrammar.py
+	python3 -m doctest brickgrammar/shape.py
+	python3 -m doctest brickgrammar/shapebrick.py
+	python3 -m doctest brickgrammar/connectiongrammar.py
 
 deps:
 	sudo pip3 install -r requirements.txt
