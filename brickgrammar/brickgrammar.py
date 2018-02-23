@@ -11,7 +11,7 @@ OP = Enum('OP', 'Place Remove TogglePlacement Move ( ) AssertFilledAbove AssertF
 class CurrentWorkingShape():
   def __init__(self):
     self.voxels = set()
-    self.state = (0,0,0)
+    self.state = (0,0,0,1)
     self.states = []
     self.elements = []
 
@@ -74,7 +74,7 @@ class CurrentWorkingShape():
         self.voxels.add(pos)
 
   def move(self, delta):
-    self.state = (self.state[0]+delta[0], self.state[1]+delta[1], self.state[2]+delta[2])
+    self.state = (self.state[0]+delta[0], self.state[1]+delta[1], self.state[2]+delta[2],self.state[3])
 
   def place_element(self, part, remove=False):
     old_pos = self.state + ()
@@ -82,13 +82,13 @@ class CurrentWorkingShape():
     if part == '3024':
       self.fill_rect((2,1,2), remove)
     elif part == '3022':
-      self.state = (self.state[0] - 1,self.state[1],self.state[2] - 1)
+      self.state = (self.state[0] - 1,self.state[1],self.state[2] - 1, self.state[3])
       self.fill_rect((4,1,4), remove)
     elif part == '3003':
-      self.state = (self.state[0] - 1,self.state[1] - 2,self.state[2] - 1)
+      self.state = (self.state[0] - 1,self.state[1] - 2,self.state[2] - 1, self.state[3])
       self.fill_rect((4,3,4), remove)
     elif part == '3005':
-      self.state = (self.state[0],self.state[1] - 2,self.state[2])
+      self.state = (self.state[0],self.state[1] - 2,self.state[2], self.state[3])
       self.fill_rect((1,3,1), remove)
     else:
       raise NotImplementedError('Part not implemented: ' + part)
@@ -119,18 +119,18 @@ class CurrentWorkingShape():
   def calc_position(before):
     """
     >>> CurrentWorkingShape.calc_position(tuple())
-    ((0, 0, 0), ())
+    ((0, 0, 0, 1), ())
     >>> CurrentWorkingShape.calc_position(('('))
-    ((0, 0, 0), ((0, 0, 0),))
+    ((0, 0, 0, 1), ((0, 0, 0, 1),))
     >>> CurrentWorkingShape.calc_position(('(','Move(1,0,0)'))
-    ((1, 0, 0), ((0, 0, 0),))
+    ((1, 0, 0, 1), ((0, 0, 0, 1),))
     >>> CurrentWorkingShape.calc_position(('(','Move(1,0,0)',')'))
-    ((0, 0, 0), ())
+    ((0, 0, 0, 1), ())
     """
     if len(before):
       (position, positions) = CurrentWorkingShape.calc_position(before[0:-1])
     else:
-      return ((0,0,0), tuple())
+      return ((0,0,0,1), tuple())
 
     op = CurrentWorkingShape.parse_op(before[-1])
 
@@ -140,7 +140,7 @@ class CurrentWorkingShape():
       position = positions[-1]
       positions = positions[:-1]
     elif op[0] == OP.Move:
-      position = (position[0]+op[1][0], position[1]+op[1][1], position[2]+op[1][2])
+      position = (position[0]+op[1][0], position[1]+op[1][1], position[2]+op[1][2], position[3])
 
     return (position, positions)
 
