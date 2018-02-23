@@ -1,18 +1,18 @@
+import functools
+
 from nltk import CFG
 from nltk.grammar import Nonterminal
 from enum import Enum
 
 class CollisionError(BaseException): pass
 
-import functools
-
 OP = Enum('OP', 'Place Remove TogglePlacement Move ( ) AssertFilledAbove AssertFilledBelow')
 
 class CurrentWorkingShape():
   def __init__(self):
     self.voxels = set()
-    self.position = (0,0,0)
-    self.positions = []
+    self.state = (0,0,0)
+    self.states = []
     self.elements = []
 
   def to_ldraw(self):
@@ -63,7 +63,7 @@ class CurrentWorkingShape():
     for x in range(0, size[0]):
       for y in range(0, size[1]):
         for z in range(0, size[2]):
-          new_pos.append((self.position[0] + x, self.position[1] - y, self.position[2] + z))
+          new_pos.append((self.state[0] + x, self.state[1] - y, self.state[2] + z))
           if new_pos[-1] in self.voxels and not remove:
             raise CollisionError('Cannot fill %s' % (new_pos[-1],))
 
@@ -74,30 +74,30 @@ class CurrentWorkingShape():
         self.voxels.add(pos)
 
   def move(self, delta):
-    self.position = (self.position[0]+delta[0], self.position[1]+delta[1], self.position[2]+delta[2])
+    self.state = (self.state[0]+delta[0], self.state[1]+delta[1], self.state[2]+delta[2])
 
   def place_element(self, part, remove=False):
-    old_pos = self.position + ()
+    old_pos = self.state + ()
   
     if part == '3024':
       self.fill_rect((2,1,2), remove)
     elif part == '3022':
-      self.position = (self.position[0] - 1,self.position[1],self.position[2] - 1)
+      self.state = (self.state[0] - 1,self.state[1],self.state[2] - 1)
       self.fill_rect((4,1,4), remove)
     elif part == '3003':
-      self.position = (self.position[0] - 1,self.position[1] - 2,self.position[2] - 1)
+      self.state = (self.state[0] - 1,self.state[1] - 2,self.state[2] - 1)
       self.fill_rect((4,3,4), remove)
     elif part == '3005':
-      self.position = (self.position[0],self.position[1] - 2,self.position[2])
+      self.state = (self.state[0],self.state[1] - 2,self.state[2])
       self.fill_rect((1,3,1), remove)
     else:
       raise NotImplementedError('Part not implemented: ' + part)
 
-    self.position = old_pos
+    self.state = old_pos
     if remove:
-      self.elements.remove((self.position, 1, part))
+      self.elements.remove((self.state, 1, part))
     else:
-      self.elements.append((self.position, 1, part))
+      self.elements.append((self.state, 1, part))
 
   @functools.lru_cache()
   def parse_op(op):
@@ -149,8 +149,8 @@ class CurrentWorkingShape():
     Applys a list of operations
     """
 
-    (self.position, self.positions) = CurrentWorkingShape.calc_position(tuple(before))
-    self.positions = list(self.positions)
+    (self.state, self.states) = CurrentWorkingShape.calc_position(tuple(before))
+    self.states = list(self.states)
 
     rev_ops = [o.replace('Place', 'Remove') for o in revert]
 
@@ -164,15 +164,15 @@ class CurrentWorkingShape():
         elif op[0] == OP.Remove:
           self.place_element(op[1],remove=True)
         elif op[0] == OP.AssertFilledAbove:
-          if (self.position[0], self.position[1] - 1, self.position[2]) not in self.positions:
+          if (self.state[0], self.state[1] - 1, self.state[2]) not in self.states:
             raise CollisionError('Not filled')
         elif op[0] == OP.AssertFilledBelow:
-          if (self.position[0], self.position[1] + 1, self.position[2]) not in self.positions:
+          if (self.state[0], self.state[1] + 1, self.state[2]) not in self.states:
             raise CollisionError('Not filled')
         elif op[0] == OP['(']: 
-          self.positions.append(self.position)
+          self.states.append(self.state)
         elif op[0] == OP[')']: 
-          self.position = self.positions.pop()
+          self.state = self.states.pop()
         elif op[0] == OP.Move:
           self.move(op[1])
         else:
