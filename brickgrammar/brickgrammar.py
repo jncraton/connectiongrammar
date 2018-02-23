@@ -296,7 +296,7 @@ class Element():
     self.sentence = [self.lhs]
 
     self.cws = CurrentWorkingShape()
-    self.cws.add_filled_border(6,6,6,w=3)
+    self.cws.add_filled_border(9,9,9,w=3)
 
   def root(self):
     if self.parent:
