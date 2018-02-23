@@ -310,30 +310,26 @@ class Element():
 
     # TODO There's probably a cleaner way to handle this loop
     # For ... range() doesn't work because len(sentence) grows
-    changed = True
-    while(changed):
-      changed = False
-      i = 0
-      while(i < len(self.sentence)):
-        sym = self.sentence[i]
-        before = self.sentence[0:i]
-        after = self.sentence[i+1:]
-  
-        productions = self.grammar.productions(lhs=sym)
-  
+    after = self.sentence
+    self.sentence = []
+    while(len(after) > 0):
+      sym = after[0]
+
+      productions = self.grammar.productions(lhs=sym)
+
+      if isinstance(sym, str):
+        self.sentence.append(sym)
+        after = after[1:]
+      else:
         for prod in productions:
           try:
             # Check the shape, unless this is the only possible production
             if len(productions) > 1:
-              bt = [self.terminate(b) for b in before]
-              self.cws.apply(bt, [self.terminate(s) for s in prod.rhs()], revert=[self.terminate(sym)])
-            i += len(prod.rhs()) - 1
-            self.sentence = before + list(prod.rhs()) + after
-            changed = True
+              self.cws.apply(self.sentence, [self.terminate(s) for s in prod.rhs()], revert=[self.terminate(sym)])
+            after = list(prod.rhs()) + after[1:]
             break
           except CollisionError as e:
             pass
-        i += 1
 
 if __name__ == '__main__':
   build = Element() 
