@@ -29,10 +29,11 @@ class CurrentWorkingShape():
     for el in self.elements:
       pos = (el[0][0] * 10, el[0][1] * 8, el[0][2] * 10)
 
-      if el[2] == '3004':
-        pos = (pos[0], pos[1], pos[2])
+      facing = front
+      if el[2][-1] == 'r':
+        facing = right
   
-      ldraw += ("1 %d %d %d %d %s %s.dat\n" % (el[1], pos[0], pos[1], pos[2], front, el[2]))
+      ldraw += ("1 %d %d %d %d %s %s.dat\n" % (el[1], pos[0], pos[1], pos[2], facing, el[2].replace('r','')))
       ldraw += "0 STEP\n"
 
     return ldraw
@@ -102,6 +103,9 @@ class CurrentWorkingShape():
     elif part == '3004':
       self.state = (self.state[0] - 1,self.state[1] - 2,self.state[2], self.state[3])
       self.fill_rect((4,3,2), remove)
+    elif part == '3004r':
+      self.state = (self.state[0],self.state[1] - 2,self.state[2], self.state[3] - 1)
+      self.fill_rect((2,3,4), remove)
     elif part == '3005':
       self.state = (self.state[0],self.state[1] - 2,self.state[2], self.state[3])
       self.fill_rect((2,3,2), remove)
@@ -315,6 +319,7 @@ class Element():
         
         B2x4 -> 'Place(3001)'
         B2x2 -> 'Place(3003)'
+        B2x1 -> 'Place(3004r)'
         B1x2 -> 'Place(3004)'
         P2x2 -> 'Place(3022)'
         B1x1 -> 'Place(3005)'
