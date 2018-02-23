@@ -90,7 +90,7 @@ class CurrentWorkingShape(WorkingShape):
       self.state = (self.state[0],self.state[1]-2,self.state[2], self.state[3])
       self.fill_rect((2,1,2), remove)
     elif part == '3022':
-      self.state = (self.state[0] - 1,self.state[1],self.state[2] - 1, self.state[3])
+      self.state = (self.state[0] - 1,self.state[1]-2,self.state[2] - 1, self.state[3])
       self.fill_rect((4,1,4), remove)
     elif part == '3003':
       self.state = (self.state[0] - 1,self.state[1],self.state[2] - 1, self.state[3])
