@@ -6,6 +6,8 @@ class CollisionError(BaseException): pass
 
 import functools
 
+OP = Enum('OP', 'Place Remove TogglePlacement Move ( ) AssertFilledAbove AssertFilledBelow')
+
 class CurrentWorkingShape():
   def __init__(self):
     self.filled = set()
@@ -105,7 +107,19 @@ class CurrentWorkingShape():
 
   @functools.lru_cache()
   def parse_op(op):
-    return None
+    if not op:
+      return (None,)
+    elif op[-2:] == '()':
+      return (OP[op[:-2]],)
+    elif op[0:5] == 'Place':
+      return (OP['Place'], op[6:-1])
+    elif op[0:6] == 'Remove':
+      return (OP['Remove'], op[7:-1])
+    elif op[0:4] == 'Move':
+      delta = tuple(int(i) for i in op[5:-1].split(','))
+      return (OP['Move'], delta)
+    else:
+      return (OP[op],)
 
   def apply(self, before, ops):
     """
@@ -119,30 +133,30 @@ class CurrentWorkingShape():
 
     try:
       for op in before + ['TogglePlacement()'] + ops:
-        if not op:
+        op = CurrentWorkingShape.parse_op(op)
+        if op[0] == None:
           pass
-        elif op == 'TogglePlacement()':
+        elif op[0] == OP.TogglePlacement:
           placement = not placement
-        elif placement == True and op[0:5] == 'Place':
-          self.place_element(op[6:-1])
-        elif placement == True and op[0:6] == 'Remove':
-          self.place_element(op[7:-1],remove=True)
-        elif placement == True and op == 'AssertFilledAbove()':
+        elif placement == True and op[0] == OP.Place:
+          self.place_element(op[1])
+        elif placement == True and op[0] == OP.Remove:
+          self.place_element(op[1],remove=True)
+        elif placement == True and op[0] == OP.AssertFilledAbove:
           if (self.position[0], self.position[1] - 1, self.position[2]) not in self.positions:
             raise CollisionError('Not filled')
-        elif placement == True and op == 'AssertFilledBelow()':
+        elif placement == True and op[0] == OP.AssertFilledBelow:
           if (self.position[0], self.position[1] + 1, self.position[2]) not in self.positions:
             raise CollisionError('Not filled')
-        elif op == '(': 
+        elif op[0] == OP['(']: 
           self.positions.append(self.position)
-        elif op == ')': 
+        elif op[0] == OP[')']: 
           self.position = self.positions.pop()
-        elif op.startswith('Move'):
-          delta = tuple(int(i) for i in op[5:-1].split(','))
-          self.move(delta)
+        elif op[0] == OP.Move:
+          self.move(op[1])
         else:
           if placement:
-            raise NotImplementedError('Op not implemented: ' + op)
+            raise NotImplementedError('Op not implemented: ' + str(op))
     except CollisionError as e:
       raise e
 
