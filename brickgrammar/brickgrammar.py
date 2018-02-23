@@ -47,20 +47,28 @@ class CurrentWorkingShape():
           if abs(x) > xsize or abs(y) > ysize or abs(z) > zsize:
             self.filled.add((x,y,z))
 
-  def fill_space(self, pos, remove=False):
-    if remove:
-      self.filled.remove(pos)
-    else:
-      if pos in self.filled:
-        raise CollisionError('Cannot fill %s' % (pos,))
-      else:
-        self.filled.add(pos)
+  def fill_rect(self, size, remove=False):
+    """
+    Fills a 3d rectange of voxels at the current position, but fails if
+    a collision occurs.
 
-  def fill_rect(self, size=(1,1,1), remove=False):
+    This operation can be viewed as one transaction. If it fails for 
+    any point, no changes are made.
+    """
+    new_pos = []
+  
     for x in range(0, size[0]):
       for y in range(0, size[1]):
         for z in range(0, size[2]):
-          self.fill_space((self.position[0] + x, self.position[1] - y, self.position[2] + z), remove)
+          new_pos.append((self.position[0] + x, self.position[1] - y, self.position[2] + z))
+          if new_pos[-1] in self.filled and not remove:
+            raise CollisionError('Cannot fill %s' % (new_pos[-1],))
+
+    for pos in new_pos:
+      if remove:
+        self.filled.remove(pos)
+      else:
+        self.filled.add(pos)
 
   def move(self, delta):
     self.position = (self.position[0]+delta[0], self.position[1]+delta[1], self.position[2]+delta[2])
@@ -74,10 +82,10 @@ class CurrentWorkingShape():
       self.position = (self.position[0] - 1,self.position[1],self.position[2] - 1)
       self.fill_rect((4,1,4), remove)
     elif part == '3003':
-      self.position = (self.position[0] - 1,self.position[1]-2,self.position[2] - 1)
+      self.position = (self.position[0] - 1,self.position[1] - 2,self.position[2] - 1)
       self.fill_rect((4,3,4), remove)
     elif part == '3005':
-      self.position = (self.position[0],self.position[1]-2,self.position[2])
+      self.position = (self.position[0],self.position[1] - 2,self.position[2])
       self.fill_rect((1,3,1), remove)
     else:
       raise NotImplementedError('Part not implemented: ' + part)
@@ -103,8 +111,6 @@ class CurrentWorkingShape():
 
     operations = [b for b in before if 'Place' not in b] + ops
 
-    old = (self.filled.copy(), self.position + (), self.positions.copy())
-
     try:
       for op in operations:
         if not op:
@@ -129,8 +135,6 @@ class CurrentWorkingShape():
         else:
           raise NotImplementedError('Op not implemented: ' + op)
     except CollisionError as e:
-      # If we failed to apply fully, rollback and raise exception
-      (self.filled, self.position, self.positions) = old
       raise e
 
 class Element():
