@@ -1,4 +1,4 @@
-# Spatial Grammar
+# Connection Grammar
 
 The field computational design synthesis involves using computer algorithm to create designs to meet a set of engineering requirements. There are many tools and algorithms available to aid in computational design synthesis[5]. Generative grammars are one broad class of solutions to this problem.
 
