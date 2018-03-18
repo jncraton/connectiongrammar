@@ -11,3 +11,4 @@ cg = connectiongrammar.ConnectionGrammar(
 
 sentence = cg.generate()
 print(sentence)
+print(placer.parse(sentence)[0])

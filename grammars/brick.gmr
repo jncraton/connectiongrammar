@@ -2,5 +2,8 @@ Stud -> B1x2
 Stud -> B1x1
 Stud ->
 
-B1x1 -> '(' 'Move(-1,-3,-1)' 'FillRect(2,3,2)' 'Place(3005)' Stud ')'
-B1x2 -> '(' 'Move(-1,-3,-2)' 'FillRect(2,3,4)' 'Place(3004)' Stud ')'
+Antistud -> '(' 'Move(0,3,0)' '(' 'Move(0,-3,-1)' 'FillRect(2,3,4)' 'Place(3004)' 'Move(0,0,-1)' Stud 'Move(0,0,2)' Stud 'Move(0,3,0)' Antistud 'Move(0,0,-2)' Antistud ')' ')'
+Antistud -> 
+
+B1x1 -> '(' 'Move(0,-3,0)' 'FillRect(2,3,2)' 'Place(3005)' Stud ')'
+B1x2 -> '(' 'Move(0,-3,-1)' 'FillRect(2,3,4)' 'Place(3004)' 'Move(0,0,-1)' Stud 'Move(0,0,2)' Stud 'Move(0,3,0)' Antistud 'Move(0,0,-2)' Antistud ')'
