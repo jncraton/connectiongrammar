@@ -86,9 +86,11 @@ class ConnectionGrammar():
       productions = self.grammar.productions(lhs=sentence[i])
 
       best = (0.0, None)
-
+                        
       for prod in productions:
-        # Check the shape, unless this is the only possible production
+        if len(prod) == 1 and isinstance(prod.rhs()[0], Nonterminal):
+          prod = self.grammar.productions(lhs=prod.rhs()[0])[0]
+
         test = sentence[0:i] + [self.terminate(s) for s in prod.rhs()] + [self.terminate(s) for s in sentence[i+1:]]
 
         fitness = self.fitness(' '.join(test))

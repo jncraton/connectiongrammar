@@ -43,7 +43,7 @@ def get_token(lexeme):
   elif lexeme[0:5] == 'Place':
     return (OP['Place'], lexeme[6:-1])
   elif lexeme[0:6] == 'Rotate':
-    return (OP['Rotate'], int(op[7:-1]))
+    return (OP['Rotate'], int(lexeme[7:-1]))
   elif lexeme[0:4] == 'Move':
     delta = tuple(int(i) for i in lexeme[5:-1].split(','))
     return (OP['Move'], delta)
