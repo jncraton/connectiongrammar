@@ -1,15 +1,16 @@
 all: test main
 
 main:
-	python3 brickgrammar/__main__.py
+	python3 connectiongrammar/__main__.py
 
 profile: test
-	python3 -m cProfile -s cumtime brickgrammar/__main__.py | head -n 20
+	python3 -m cProfile -s cumtime connectiongrammar/__main__.py | head -n 20
 
 test:
-	python3 -m doctest brickgrammar/shape.py
-	python3 -m doctest brickgrammar/shapebrick.py
-	python3 -m doctest brickgrammar/connectiongrammar.py
+	python3 -m doctest connectiongrammar/shape.py
+	python3 -m doctest connectiongrammar/shapebrick.py
+	python3 -m doctest connectiongrammar/connectiongrammar.py
+	python3 -m doctest connectiongrammar/placer.py
 
 deps:
 	sudo pip3 install -r requirements.txt

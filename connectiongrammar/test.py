@@ -9,13 +9,6 @@ import random
 
 from connectiongrammar import ConnectionGrammar
 
-def sphere(cws, r, b):
-  for x in range(-r - b, r + b):
-    for y in range(-r - b, r + b):
-      for z in range(-r - b, r + b):
-        if (x*x+y*y+z*z)**(1./2) > r:
-          cws.voxels.add((x,y,z))
-
 if __name__ == '__main__':
   cws = shapebrick.CurrentWorkingShape()
   #sphere(cws, 12, 3)

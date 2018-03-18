@@ -1,8 +1,6 @@
 from nltk import CFG
 from nltk.grammar import Nonterminal
 
-from shape import CollisionError
-
 class ConnectionGrammar():
   """ 
   Reperesents and element in a build 
@@ -48,7 +46,7 @@ class ConnectionGrammar():
   1. Check that the current graph creates a valid working shape.
   
   """
-  def __init__(self, grammar, cws):
+  def __init__(self, grammar, fitness):
     self.grammar = grammar
 
     self.grammar.to_terminal = {}
@@ -61,15 +59,7 @@ class ConnectionGrammar():
       elif len(rhs) == 1 and isinstance(rhs[0], str):
         self.grammar.to_terminal[str(prod.lhs())] = rhs[0]
 
-    self.sentence = [self.grammar.start()]
-
-    self.cws = cws
-
-  def root(self):
-    if self.parent:
-      return self.parent.root()
-    else:
-      return self
+    self.fitness = fitness
 
   def terminate(self, sym):
     if isinstance(sym, Nonterminal):
@@ -82,28 +72,32 @@ class ConnectionGrammar():
     """ 
     Generate a matching sentence
     """
+    sentence = [self.grammar.start()]
 
-    # TODO There's probably a cleaner way to handle this loop
-    # For ... range() doesn't work because len(sentence) grows
-    after = self.sentence
-    self.sentence = []
-    while(len(after) > 0):
-      sym = after[0]
+    def next_nonterm(sentence):
+      for i, sym in enumerate(sentence):
+        if isinstance(sym, Nonterminal):
+          return i
 
-      productions = self.grammar.productions(lhs=sym)
+      return None 
 
-      if isinstance(sym, str):
-        self.sentence.append(sym)
-        after = after[1:]
-      else:
-        for prod in productions:
-          try:
-            # Check the shape, unless this is the only possible production
-            if len(productions) > 1:
-              self.cws.apply(self.sentence, [self.terminate(s) for s in prod.rhs()], revert=[self.terminate(sym)])
-            after = list(prod.rhs()) + after[1:]
-            break
-          except CollisionError as e:
-            pass
+    i = next_nonterm(sentence)
+    while(i != None):
+      productions = self.grammar.productions(lhs=sentence[i])
 
-    return self.sentence
+      best = (0.0, None)
+
+      for prod in productions:
+        # Check the shape, unless this is the only possible production
+        test = sentence[0:i] + [self.terminate(s) for s in prod.rhs()] + [self.terminate(s) for s in sentence[i+1:]]
+
+        fitness = self.fitness(' '.join(test))
+
+        if fitness > best[0]:
+          best = (fitness, [s for s in prod.rhs()])
+
+      sentence = sentence[0:i] + list(best[1]) + sentence[i+1:]
+
+      i = next_nonterm(sentence)
+
+    return sentence
