@@ -7,8 +7,6 @@ profile: test
 	python3 -m cProfile -s cumtime connectiongrammar/__main__.py | head -n 20
 
 test:
-	python3 -m doctest connectiongrammar/shape.py
-	python3 -m doctest connectiongrammar/shapebrick.py
 	python3 -m doctest connectiongrammar/connectiongrammar.py
 	python3 -m doctest connectiongrammar/placer.py
 
