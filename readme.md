@@ -2,6 +2,8 @@
 
 The `spacialgrammar` package provides a way to interact with spacial grammars in a Python environment.
 
+The field computational design synthesis involves using computer algorithm to create designs to meet a set of engineering requirements. There are many tools and algorithms available to aid in computational design synthesis[5]. Generative grammars are one broad class of solutions to this problem.
+
 Grammars can be designed to fill space in various ways. This package is particularly well suited for managing interconnected objects in 3D space. 
 
 The system operates in two parts. A context-free grammar serves to model possible interconnections between sub-objects. While context-free grammars are suitable for modelling possible connections, they do not have a concept of global state and cannot "see" the rest of the generated shape. A second layer fitness function, modeling a user-defined ruleset, is required to generate graphs that adhere to specific global parameters. This is similar to the methods used in other work [1][2]. In the case of simple interconnected shapes, a 3D collision space is a suitable fitness function to ensure a physically valid shape. Additional rules can be added to this layer to ensure that a generated shape is suitable in other ways. For example, rules could be added for thermal disipation to model behavior of various shapes for use as a heat exchanger.
@@ -32,3 +34,5 @@ This sort of system is familiar to most people. Using this for demonstration eli
 [3] McCormack, Jon. "Interactive evolution of L-system grammars for computer graphics modelling." Complex Systems: from biology to computation 2 (1993).
 
 [4] Christiansen, Godtfred. 1961. Toy Building Brick. U.S. Patent 3,005,282, filed July 28, 1958, and issued October 24, 1961.
+
+[5] Chakrabarti, Amaresh, Kristina Shea, Robert Stone, Jonathan Cagan, Matthew Campbell, Noe Vargas Hernandez, and Kristin L. Wood. "Computer-based design synthesis research: an overview." Journal of Computing and Information Science in Engineering 11, no. 2 (2011): 021003.
