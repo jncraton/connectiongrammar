@@ -89,9 +89,9 @@ class VolumetricImage:
     """
     new_pos = []
   
-    for x in range(0, size[0]):
+    for x in range(-int(size[0]/2), int(size[0]/2)):
       for y in range(0, size[1]):
-        for z in range(0, size[2]):
+        for z in range(-int(size[0]/2), int(size[0]/2)):
           new_pos.append((pos[0] + x, pos[1] + y, pos[2] + z))
           if new_pos[-1] in self.voxels:
             raise CollisionError('Cannot fill %s' % (new_pos[-1],))
@@ -142,6 +142,29 @@ def parse(text, start_voxels=None):
       raise NotImplementedError('Op not implemented: ' + str(op))
 
   return (elements, img)
+
+def to_ldraw(els):
+  front = "1 0 0 0 1 0 0 0 1"
+  back = "-1 0 0 0 1 0 0 0 -1"
+  left = "0 0 1 0 1 0 -1 0 0"
+  right = "0 0 -1 0 1 0 1 0 0"
+  color = 0
+  yellow = 14
+  blue = 1
+
+  ldraw = ""
+
+  for el in els:
+    pos = (el[0][0] * 10, el[0][1] * 8, el[0][2] * 10)
+
+    facing = front
+    if el[2][-1] == 'r':
+      facing = right
+
+    ldraw += ("1 %d %d %d %d %s %s.dat\n" % (el[1], pos[0], pos[1], pos[2], facing, el[2].replace('r','')))
+    ldraw += "0 STEP\n"
+
+  return ldraw
 
 def fitness(text):
   try:

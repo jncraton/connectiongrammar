@@ -11,4 +11,7 @@ cg = connectiongrammar.ConnectionGrammar(
 
 sentence = cg.generate()
 print(sentence)
-print(placer.parse(sentence)[0])
+elements = placer.parse(sentence)[0]
+
+with open('test.ldr','w') as outf:
+  outf.write(placer.to_ldraw(elements))

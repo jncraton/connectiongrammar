@@ -1,10 +1,14 @@
-Stud -> B1x2
-Stud -> 'Rotate(90)' B1x2
-Stud -> B1x1
+Stud -> '(' 'Move(-1,-3,0)' B1x2 ')'
+Stud -> '(' 'Move(1,-3,0)' B1x2 ')'
+Stud -> '(' 'Move(0,-3,0)' B1x1 ')'
 Stud ->
 
-Antistud -> '(' 'Move(0,3,0)' '(' 'Move(0,-3,-1)' 'FillRect(2,3,4)' 'Place(3004)' 'Move(0,0,-1)' Stud 'Move(0,0,2)' Stud 'Move(0,3,0)' Antistud 'Move(0,0,-2)' Antistud ')' ')'
+Antistud -> '(' 'Move(-1,0,0)' B1x2 ')'
+Antistud -> '(' 'Move(1,0,0)' B1x2 ')'
+Antistud -> '(' B1x1 ')'
 Antistud -> 
 
-B1x1 -> '(' 'Move(0,-3,0)' 'FillRect(2,3,2)' 'Place(3005)' Stud ')'
-B1x2 -> '(' 'Move(0,-3,-1)' 'FillRect(2,3,4)' 'Place(3004)' 'Move(0,0,-1)' Stud 'Move(0,0,2)' Stud 'Move(0,3,0)' Antistud 'Move(0,0,-2)' Antistud ')'
+B1x1 -> 'FillRect(2,3,2)' 'Place(3005)' BrickConnection
+B1x2 -> '('  'FillRect(4,3,2)' 'Place(3004)' 'Move(-1,0,0)' BrickConnection 'Move(2,0,0)' BrickConnection ')'
+
+BrickConnection -> '(' Stud 'Move(0,3,0)' Antistud ')' |
