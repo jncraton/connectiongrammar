@@ -1,3 +1,5 @@
+Init -> 'PlaceBoundingSphere(10)' Stud
+
 Stud -> '(' 'Rotate(0)' 'Move(-1,-3,-1)' B2x2 ')'
 
 Stud -> '(' 'Rotate(90)' 'Move(-1,-3,0)' B1x2 ')'

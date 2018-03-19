@@ -20,7 +20,7 @@ from nltk import CFG
 
 import connectiongrammar
 
-OP = enum.Enum('OP', 'Place Move FillRect Rotate ( )')
+OP = enum.Enum('OP', 'PlaceBoundingSphere Place Move FillRect Rotate ( )')
 
 def rotation_matrix(dir, ldraw_string=False):
   """ Gets a rotation matrix from a simple cardinal direction
@@ -65,6 +65,8 @@ def get_token(lexeme):
     return (None,)
   elif lexeme[-2:] == '()':
     return (OP[lexeme[:-2]],)
+  elif lexeme[0:19] == 'PlaceBoundingSphere':
+    return (OP['PlaceBoundingSphere'], int(lexeme[20:-1]))
   elif lexeme[0:5] == 'Place':
     return (OP['Place'], lexeme[6:-1])
   elif lexeme[0:6] == 'Rotate':
@@ -83,7 +85,7 @@ def lex(text):
   """ Convers a text into a list of tokens 
 
   >>> list(lex("( Place(3005) )"))
-  [(<OP.(: 5>,), (<OP.Place: 1>, '3005'), (<OP.): 6>,)]
+  [(<OP.(: 6>,), (<OP.Place: 2>, '3005'), (<OP.): 7>,)]
   """
   if isinstance(text, str):
     text = text.split()
@@ -164,17 +166,16 @@ def bounding_sphere(r, b):
   return voxels
 
 @functools.lru_cache()
-def parse(text, start_voxels=None):
+def parse(text):
   """ Returns the model for a text
    
   >>> parse("FillRect(2,3,2) Place(3005)")[0]
   [((0, 0, 0, 0), 1, '3005')]
 
   >>> len(parse("FillRect(2,3,2) Place(3005)")[1].voxels)
-  2689
+  12
   """
-  img = VolumetricImage(start_voxels or bounding_sphere(7, 1))
-  img.voxels = img.voxels.copy() # Prevent cache issues
+  img = VolumetricImage()
 
   state = (0,0,0,0)
   states = []
@@ -183,6 +184,8 @@ def parse(text, start_voxels=None):
   for op in lex(text):
     if op[0] == None:
       pass
+    elif op[0] == OP.PlaceBoundingSphere:
+      img.voxels = bounding_sphere(op[1],1).copy()
     elif op[0] == OP.Place:
       elements.append((state, 1, op[1]))
     elif op[0] == OP['(']: 
@@ -197,6 +200,9 @@ def parse(text, start_voxels=None):
       img.fill_rect(state, op[1])
     else:
       raise NotImplementedError('Op not implemented: ' + str(op))
+
+    if len(img.voxels) == 0:
+      img.voxels = bounding_sphere(7,1).copy()
 
   return (elements, img)
 
