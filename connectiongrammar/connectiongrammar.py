@@ -111,4 +111,4 @@ class ConnectionGrammar():
 
       i = next_nonterm(sentence)
 
-    return sentence
+    return tuple(sentence)

@@ -78,6 +78,7 @@ def get_token(lexeme):
   else:
     return (OP[lexeme],)
 
+@functools.lru_cache()
 def lex(text):
   """ Convers a text into a list of tokens 
 
@@ -150,6 +151,7 @@ class VolumetricImage:
     for pos in new_pos:
       self.voxels.add(pos)
 
+@functools.lru_cache()
 def bounding_sphere(r, b):
   voxels = set()
   
@@ -161,14 +163,18 @@ def bounding_sphere(r, b):
 
   return voxels
 
+@functools.lru_cache()
 def parse(text, start_voxels=None):
-  """ Returns the volumetric image for a text 
+  """ Returns the model for a text
+   
   >>> parse("FillRect(2,3,2) Place(3005)")[0]
   [((0, 0, 0, 0), 1, '3005')]
+
   >>> len(parse("FillRect(2,3,2) Place(3005)")[1].voxels)
   2689
   """
   img = VolumetricImage(start_voxels or bounding_sphere(7, 1))
+  img.voxels = img.voxels.copy() # Prevent cache issues
 
   state = (0,0,0,0)
   states = []
