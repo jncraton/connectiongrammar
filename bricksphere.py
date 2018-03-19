@@ -10,7 +10,6 @@ cg = connectiongrammar.ConnectionGrammar(
 )
 
 sentence = cg.generate()
-print(sentence)
 elements = placer.parse(sentence)[0]
 
 with open('test.ldr','w') as outf:
