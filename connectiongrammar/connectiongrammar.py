@@ -54,19 +54,26 @@ class ConnectionGrammar():
     for prod in self.grammar.productions():
       rhs = prod.rhs()
 
-      if len(rhs) == 0:
-        self.grammar.to_terminal[str(prod.lhs())] = ''
-      elif len(rhs) == 1 and isinstance(rhs[0], str):
-        self.grammar.to_terminal[str(prod.lhs())] = rhs[0]
+      if all([isinstance(s, str) for s in rhs]):
+        self.grammar.to_terminal[str(prod.lhs())] = rhs
 
     self.fitness = fitness
 
   def terminate(self, sym):
-    if isinstance(sym, Nonterminal):
-      return self.grammar.to_terminal[sym.symbol()]
-
     if isinstance(sym, str):
-      return sym
+      return [sym]
+
+    if isinstance(sym, Nonterminal):
+      try:
+        return self.grammar.to_terminal[sym.symbol()]
+      except KeyError:
+        prods = self.grammar.productions(lhs=sym)
+        if len(prods) != 1:
+          raise ValueError
+        syms = [self.terminate(s) for s in prods[0].rhs()]
+        syms = [s for s in syms if s]
+        
+        return sum(syms, [])
 
   def generate(self):
     """ 
@@ -88,10 +95,12 @@ class ConnectionGrammar():
       best = (0.0, None)
                         
       for prod in productions:
-        if len(prod) == 1 and isinstance(prod.rhs()[0], Nonterminal):
-          prod = self.grammar.productions(lhs=prod.rhs()[0])[0]
+        test = list(prod.rhs()) + sentence[i+1:]
 
-        test = sentence[0:i] + [self.terminate(s) for s in prod.rhs()] + [self.terminate(s) for s in sentence[i+1:]]
+        test = [self.terminate(s) for s in test]
+        test = [a for b in test for a in b if a] # This flattens the list
+
+        test = sentence[0:i] + test;
 
         fitness = self.fitness(' '.join(test))
 
