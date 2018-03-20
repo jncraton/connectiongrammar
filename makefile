@@ -10,6 +10,3 @@ profile: test
 test:
 	python3 -m doctest connectiongrammar/connectiongrammar.py
 	python3 -m doctest connectiongrammar/placer.py
-
-deps:
-	pip3 install -r requirements.txt
