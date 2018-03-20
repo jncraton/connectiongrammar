@@ -22,12 +22,13 @@ import connectiongrammar
 
 OP = enum.Enum('OP', 'PlaceBoundingSphere Place Move FillRect Rotate ( )')
 
+@functools.lru_cache()
 def rotation_matrix(dir, ldraw_string=False):
   """ Gets a rotation matrix from a simple cardinal direction
   >>> rotation_matrix(0)
-  [[1, 0, 0], [0, 1, 0], [0, 0, 1]]
+  ((1, 0, 0), (0, 1, 0), (0, 0, 1))
   >>> rotation_matrix(2)
-  [[-1, 0, 0], [0, 1, 0], [0, 0, -1]]
+  ((-1, 0, 0), (0, 1, 0), (0, 0, -1))
   """
   matricies = [ #front,right,back,left
     "1 0 0 0 1 0 0 0 1", #identity matrix
@@ -40,11 +41,11 @@ def rotation_matrix(dir, ldraw_string=False):
     return matricies[dir]
   else:
     items = [int(i) for i in matricies[dir].split()]
-    return [
-      items[0:3],
-      items[3:6],
-      items[6:9],
-    ]
+    return tuple([
+      tuple(items[0:3]),
+      tuple(items[3:6]),
+      tuple(items[6:9]),
+    ])
 
 
 @functools.lru_cache()
@@ -92,20 +93,21 @@ def lex(text):
   
   return map(get_token, text)
 
+@functools.lru_cache()
 def apply_rotation(v, mat):
   """ Applies a rotation matrix to a vector 
 
-  >>> apply_rotation([1,2,3],[[1,0,0], [0,1,0], [0,0,1]])
-  [1, 2, 3]
-  >>> apply_rotation([1,2,3],[[0,0,-1], [0,1,0], [1,0,0]])
-  [-3, 2, 1]
+  >>> apply_rotation((1,2,3),((1,0,0), (0,1,0), (0,0,1)))
+  (1, 2, 3)
+  >>> apply_rotation((1,2,3),((0,0,-1), (0,1,0), (1,0,0)))
+  (-3, 2, 1)
   """
   if isinstance(mat, int):
     mat = rotation_matrix(mat)
   
-  return [mat[i][0] * v[0] +\
+  return tuple([mat[i][0] * v[0] +\
           mat[i][1] * v[1] +\
-          mat[i][2] * v[2] for i in range(0, len(v))]
+          mat[i][2] * v[2] for i in range(0, len(v))])
 
 def move(s, delta):
   """
@@ -125,6 +127,15 @@ def move(s, delta):
 
   return (s[0]+rot_delta[0], s[1]+rot_delta[1], s[2]+rot_delta[2],s[3])
 
+@functools.lru_cache()
+def fill_bounds(size, rot):
+  bounds = [abs(i) for i in apply_rotation(size,rot)]
+
+  bounds[0] = (-int(bounds[0]/2),int(bounds[0]/2))
+  bounds[2] = (-int(bounds[2]/2),int(bounds[2]/2))
+
+  return tuple(bounds)
+
 class CollisionError(BaseException): pass
 
 class VolumetricImage:
@@ -139,13 +150,13 @@ class VolumetricImage:
     This operation can be viewed as one transaction. If it fails for 
     any point, no changes are made.
     """
-    size = [abs(i) for i in apply_rotation(size,pos[3])]
+    bounds = fill_bounds(size, pos[3])
     
     new_pos = []
 
-    for x in range(-int(size[0]/2), int(size[0]/2)):
+    for x in range(bounds[0][0], bounds[0][1]):
       for y in range(0, size[1]):
-        for z in range(-int(size[2]/2), int(size[2]/2)):
+        for z in range(bounds[2][0], bounds[2][1]):
           new_pos.append((pos[0] + x, pos[1] + y, pos[2] + z))
           if new_pos[-1] in self.voxels:
             raise CollisionError('Cannot fill %s' % (new_pos[-1],))

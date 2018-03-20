@@ -5,7 +5,7 @@ main:
 
 profile: test
 	python3 -m cProfile -s cumtime bricksphere.py > profile.txt
-	head profile.txt -n 20
+	head profile.txt -n 40
 
 test:
 	python3 -m doctest connectiongrammar/connectiongrammar.py
