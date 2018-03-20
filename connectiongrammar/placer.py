@@ -142,7 +142,7 @@ class VolumetricImage:
   def __init__(self, voxels = set()):
     self.voxels = voxels
 
-  def fill_rect(self, pos, size):
+  def fill_rect(self, pos, size, dry_run=False):
     """
     Fills a 3d rectange of voxels at the current position, but fails if
     a collision occurs.
@@ -152,18 +152,15 @@ class VolumetricImage:
     """
     bounds = fill_bounds(size, pos[3])
     
-    new_pos = []
-
     for x in range(bounds[0][0], bounds[0][1]):
       for y in range(0, size[1]):
         for z in range(bounds[2][0], bounds[2][1]):
-          new_pos.append((pos[0] + x, pos[1] + y, pos[2] + z))
-          if new_pos[-1] in self.voxels:
+          new_pos = (pos[0] + x, pos[1] + y, pos[2] + z)
+          if new_pos in self.voxels:
             raise CollisionError('Cannot fill %s' % (new_pos[-1],))
+          if not dry_run:
+            self.voxels.add(new_pos)
   
-    for pos in new_pos:
-      self.voxels.add(pos)
-
 @functools.lru_cache()
 def bounding_sphere(r, b):
   voxels = set()
@@ -238,6 +235,36 @@ def parse(ops):
 
   return (elements, img, state, states)
 
+def check(img,state,states,ops):
+  if isinstance(ops, str):
+    ops = ops.split()
+
+  for op in ops:
+    states = states.copy()
+
+    op = get_token(op)
+    
+    if op[0] == None:
+      pass
+    elif op[0] == OP.PlaceBoundingSphere:
+      img.voxels = bounding_sphere(op[1],1).copy()
+    elif op[0] == OP.Place:
+      pass
+    elif op[0] == OP['(']: 
+      states.append(state)
+    elif op[0] == OP[')']: 
+      state = states.pop()
+    elif op[0] == OP.Move:
+      state = move(state, op[1])
+    elif op[0] == OP.Rotate:
+      state = (state[0],state[1],state[2],(state[3] + int(op[1]/90)) % 4)
+    elif op[0] == OP.FillRect:
+      img.fill_rect(state, op[1], dry_run=True)
+    else:
+      raise NotImplementedError('Op not implemented: ' + str(op))
+
+  return True
+
 def to_ldraw(els):
   color = 0
   yellow = 14
@@ -255,9 +282,10 @@ def to_ldraw(els):
 
   return ldraw
 
-def fitness(text):
+def fitness(valid_ops, new_ops):
   try:
-    parse(text)
+    (_, img, state, states) = parse(valid_ops)
+    check(img, state, states, new_ops)
     return 1.0
   except CollisionError:
     return 0.0

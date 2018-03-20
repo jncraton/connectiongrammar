@@ -56,7 +56,7 @@ class ConnectionGrammar():
         test = [self.terminate(s) for s in test]
         test = [a for b in test for a in b if a] # This flattens the list
 
-        fitness = self.fitness(' '.join(sentence[0:i] + test))
+        fitness = self.fitness(tuple(sentence[0:i]), tuple(test))
 
         if fitness > best[0]:
           best = (fitness, [s for s in prod.rhs()])
