@@ -177,7 +177,7 @@ def bounding_sphere(r, b):
   return voxels
 
 @functools.lru_cache(maxsize=1024)
-def parse(text):
+def parse(ops):
   """ Returns the model for a text
    
   >>> parse("FillRect(2,3,2) Place(3005)")[0]
@@ -196,8 +196,6 @@ def parse(text):
   >>> shape[2]
   (2, 0, 0, 0)
   """
-  ops = text
-  
   if isinstance(ops, str):
     ops = ops.split()
 
