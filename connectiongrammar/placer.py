@@ -8,7 +8,7 @@ Implements a basic 3d object placer and fitness function
 >>> sentence = cg.generate()
 >>> ' '.join(sentence)
 '( Move(0,-3,0) FillRect(2,3,2) Place(3005) ( Move(0,-3,0) FillRect(2,3,2) Place(3005) ) )'
->>> elements = parse(sentence)[0]
+>>> elements = parse(' '.join(sentence))[0]
 >>> len(elements)
 2
 """
@@ -176,7 +176,7 @@ def bounding_sphere(r, b):
 
   return voxels
 
-@functools.lru_cache()
+@functools.lru_cache(maxsize=10000)
 def parse(text):
   """ Returns the model for a text
    
@@ -185,14 +185,37 @@ def parse(text):
 
   >>> len(parse("FillRect(2,3,2) Place(3005)")[1].voxels)
   12
+  
+  >>> parse.cache_clear()
+  >>> shape = parse("Move(1,0,0)")
+  >>> parse.cache_info().hits
+  0
+  >>> shape = parse("Move(1,0,0) Move(1,0,0)")
+  >>> parse.cache_info().hits
+  1
+  >>> shape[2]
+  (2, 0, 0, 0)
   """
-  img = VolumetricImage()
+  ops = text
+  
+  if isinstance(ops, str):
+    ops = ops.split()
 
-  state = (0,0,0,0)
-  states = []
-  elements = []
+  if len(ops) == 0:
+    elements = []
+    img = VolumetricImage()
+    state = (0,0,0,0)
+    states = []    
+  else:
+    (elements, img_orig, state, states) = parse(' '.join(ops[:-1]))
+        
+    elements = elements.copy()
+    img = VolumetricImage()
+    img.voxels = img_orig.voxels.copy()
+    states = states.copy()
 
-  for op in lex(text):
+    op = get_token(ops[-1])
+    
     if op[0] == None:
       pass
     elif op[0] == OP.PlaceBoundingSphere:
@@ -215,7 +238,7 @@ def parse(text):
     if len(img.voxels) == 0:
       img.voxels = bounding_sphere(7,1).copy()
 
-  return (elements, img)
+  return (elements, img, state, states)
 
 def to_ldraw(els):
   color = 0
@@ -236,7 +259,7 @@ def to_ldraw(els):
 
 def fitness(text):
   try:
-    (elements, img) = parse(text)
+    parse(text)
     return 1.0
   except CollisionError:
     return 0.0
