@@ -37,9 +37,9 @@ class ConnectionGrammar():
     """
     sentence = [self.grammar.start()]
 
-    def next_nonterm(sentence):
-      for i, sym in enumerate(sentence):
-        if isinstance(sym, Nonterminal):
+    def next_nonterm(sentence,start=0):
+      for i in range(start,len(sentence)):
+        if isinstance(sentence[i], Nonterminal):
           return i
 
       return None 
@@ -63,6 +63,6 @@ class ConnectionGrammar():
 
       sentence = sentence[0:i] + list(best[1]) + sentence[i+1:]
 
-      i = next_nonterm(sentence)
+      i = next_nonterm(sentence,start=i)
 
     return tuple(sentence)
