@@ -13,9 +13,3 @@ test:
 
 deps:
 	sudo pip3 install -r requirements.txt
-	sudo dpkg -i ldview-4.2-ubuntu-16.04.amd64.deb
-	wget http://www.ldraw.org/library/updates/complete.zip
-	rm -rf ~/ldraw
-	mkdir ~/ldraw
-	unzip complete.zip -d ~/ldraw
-	rm complete.zip

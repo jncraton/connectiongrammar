@@ -2,4 +2,5 @@ language: python
 os:
     - linux
 script:
+    - make deps
     - make test
