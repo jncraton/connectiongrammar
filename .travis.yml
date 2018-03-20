@@ -1,0 +1,5 @@
+language: python
+os:
+    - linux
+script:
+    - make test
