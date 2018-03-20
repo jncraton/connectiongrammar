@@ -12,4 +12,4 @@ test:
 	python3 -m doctest connectiongrammar/placer.py
 
 deps:
-	sudo pip3 install -r requirements.txt
+	pip3 install -r requirements.txt
