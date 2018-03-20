@@ -95,7 +95,7 @@ class ConnectionGrammar():
       best = (0.0, None)
                         
       for prod in productions:
-        test = list(prod.rhs()) + sentence[i+1:]
+        test = list(prod.rhs())
 
         test = [self.terminate(s) for s in test]
         test = [a for b in test for a in b if a] # This flattens the list

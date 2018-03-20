@@ -176,7 +176,7 @@ def bounding_sphere(r, b):
 
   return voxels
 
-@functools.lru_cache(maxsize=10000)
+@functools.lru_cache(maxsize=1024)
 def parse(text):
   """ Returns the model for a text
    
@@ -207,7 +207,7 @@ def parse(text):
     state = (0,0,0,0)
     states = []    
   else:
-    (elements, img_orig, state, states) = parse(' '.join(ops[:-1]))
+    (elements, img_orig, state, states) = parse(tuple(ops[:-1]))
         
     elements = elements.copy()
     img = VolumetricImage()
