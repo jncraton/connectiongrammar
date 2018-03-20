@@ -189,7 +189,7 @@ def parse(ops):
   0
   >>> shape = parse("Move(1,0,0) Move(1,0,0)")
   >>> parse.cache_info().hits
-  1
+  0
   >>> shape[2]
   (2, 0, 0, 0)
   """
@@ -202,13 +202,8 @@ def parse(ops):
     state = (0,0,0,0)
     states = []    
   else:
-    (elements, img_orig, state, states) = parse(tuple(ops[:-1]))
+    (elements, img, state, states) = parse(tuple(ops[:-1]))
         
-    elements = elements.copy()
-    img = VolumetricImage()
-    img.voxels = img_orig.voxels.copy()
-    states = states.copy()
-
     op = get_token(ops[-1])
     
     if op[0] == None:
@@ -232,6 +227,8 @@ def parse(ops):
 
     if len(img.voxels) == 0:
       img.voxels = bounding_sphere(7,1).copy()
+
+  parse.cache_clear()
 
   return (elements, img, state, states)
 

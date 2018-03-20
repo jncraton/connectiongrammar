@@ -1,4 +1,4 @@
-Init -> 'PlaceBoundingSphere(9)' Stud
+Init -> 'PlaceBoundingSphere(15)' Stud
 
 Stud -> '(' 'Rotate(0)' 'Move(-1,-3,-1)' B2x2 ')'
 
@@ -7,15 +7,14 @@ Stud -> '(' 'Rotate(180)' 'Move(-1,-3,0)' B1x2 ')'
 Stud -> '(' 'Rotate(270)' 'Move(-1,-3,0)' B1x2 ')'
 Stud -> '(' 'Move(-1,-3,0)' B1x2 ')'
 
-#Stud -> '(' 'Move(-1,-3,0)' B1x2 ')'
-#Stud -> '(' 'Move(0,-3,0)' B1x1 ')'
+Stud -> '(' 'Move(0,-3,0)' B1x1 ')'
 Stud ->
 
 Antistud -> '(' 'Rotate(90)' 'Move(-1,0,0)' B1x2 ')'
 Antistud -> '(' 'Rotate(180)' 'Move(-1,0,0)' B1x2 ')'
 Antistud -> '(' 'Rotate(270)' 'Move(-1,0,0)' B1x2 ')'
 Antistud -> '(' 'Move(-1,0,0)' B1x2 ')'
-#Antistud -> '(' B1x1 ')'
+Antistud -> '(' B1x1 ')'
 Antistud -> 
 
 B2x2 -> '(' 'FillRect(4,3,4)' 'Place(3003)' 'Move(-1,0,-1)' BrickConnection 'Move(2,0,0)' BrickConnection 'Move(0,0,2)' BrickConnection 'Move(-2,0,0)' ')'
