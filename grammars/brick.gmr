@@ -1,24 +1,46 @@
-Init -> 'PlaceBoundingSphere(18)' Stud
+Init -> 'PlaceBoundingSphere(12)' Stud
 
-Stud -> '(' 'Rotate(0)' 'Move(-1,-3,-1)' B2x2 ')'
+Stud -> '(' 'Move(-3,-3,-1)' B2x4 ')'
+Stud -> '(' 'Move(-2,0,0)' 'Rotate(90)' 'Move(-3,-3,-1)' B2x4 ')'
+Stud -> '(' 'Move(-2,0,0)' 'Rotate(270)' 'Move(-3,-3,-1)' B2x4 ')'
+Stud -> '(' 'Move(-2,0,0)' 'Rotate(180)' 'Move(-3,-3,-1)' B2x4 ')'
 
-Stud -> '(' 'Rotate(90)' 'Move(-1,-3,0)' B1x2 ')'
-Stud -> '(' 'Rotate(180)' 'Move(-1,-3,0)' B1x2 ')'
-Stud -> '(' 'Rotate(270)' 'Move(-1,-3,0)' B1x2 ')'
+Stud -> '(' 'Move(-1,-3,-1)' B2x2 ')'
+Stud -> '(' 'Rotate(90)' 'Move(-1,-3,-1)' B2x2 ')'
+Stud -> '(' 'Rotate(180)' 'Move(-1,-3,-1)' B2x2 ')'
+Stud -> '(' 'Rotate(270)' 'Move(-1,-3,-1)' B2x2 ')'
+
 Stud -> '(' 'Move(-1,-3,0)' B1x2 ')'
+Stud -> '(' 'Rotate(90)' 'Move(-1,-3,0)' B1x2 ')'
+Stud -> '(' 'Rotate(270)' 'Move(-1,-3,0)' B1x2 ')'
+Stud -> '(' 'Rotate(180)' 'Move(-1,-3,0)' B1x2 ')'
 
 Stud -> '(' 'Move(0,-3,0)' B1x1 ')'
 Stud ->
 
+Antistud -> '(' 'Move(-3,0,-1)' B2x4 ')'
+Antistud -> '(' 'Move(-2,0,0)' 'Rotate(90)' 'Move(-3,0,-1)' B2x4 ')'
+Antistud -> '(' 'Move(-2,0,0)' 'Rotate(270)' 'Move(-3,0,-1)' B2x4 ')'
+Antistud -> '(' 'Move(-2,0,0)' 'Rotate(180)' 'Move(-3,0,-1)' B2x4 ')'
+
+Antistud -> '(' 'Move(-1,0,-1)' B2x2 ')'
+Antistud -> '(' 'Rotate(90)' 'Move(-1,0,-1)' B2x2 ')'
+Antistud -> '(' 'Rotate(270)' 'Move(-1,0,-1)' B2x2 ')'
+Antistud -> '(' 'Rotate(180)' 'Move(-1,0,-1)' B2x2 ')'
+
+Antistud -> '(' 'Move(-1,0,0)' B1x2 ')'
 Antistud -> '(' 'Rotate(90)' 'Move(-1,0,0)' B1x2 ')'
 Antistud -> '(' 'Rotate(180)' 'Move(-1,0,0)' B1x2 ')'
 Antistud -> '(' 'Rotate(270)' 'Move(-1,0,0)' B1x2 ')'
-Antistud -> '(' 'Move(-1,0,0)' B1x2 ')'
 Antistud -> '(' B1x1 ')'
 Antistud -> 
 
-B2x2 -> '(' 'FillRect(4,3,4)' 'Place(3003)' 'Move(-1,0,-1)' BrickConnection 'Move(2,0,0)' BrickConnection 'Move(0,0,2)' BrickConnection 'Move(-2,0,0)' ')'
-B1x2 -> '('  'FillRect(4,3,2)' 'Place(3004)' 'Move(-1,0,0)' BrickConnection 'Move(2,0,0)' BrickConnection ')'
+B2x4 -> 'FillRect(8,3,4)' 'Place(3001)' BrickConnection2x4
+B2x2 -> 'FillRect(4,3,4)' 'Place(3003)' BrickConnection2x2
+B1x2 -> 'FillRect(4,3,2)' 'Place(3004)' BrickConnection1x2
 B1x1 -> 'FillRect(2,3,2)' 'Place(3005)' BrickConnection
 
 BrickConnection -> '(' Stud 'Move(0,3,0)' Antistud ')' |
+BrickConnection1x2 -> '(' 'Move(-1,0,0)' BrickConnection 'Move(2,0,0)' BrickConnection ')'
+BrickConnection2x2 -> '(' 'Move(0,0,-1)' BrickConnection1x2 'Move(0,0,2)' BrickConnection1x2 ')'
+BrickConnection2x4 -> '(' 'Move(-2,0,0)' BrickConnection2x2 'Move(4,0,0)' BrickConnection2x2 ')'
