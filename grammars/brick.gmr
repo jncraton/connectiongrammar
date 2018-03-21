@@ -1,5 +1,7 @@
 Init -> 'PlaceBoundingSphere(12)' Stud
 
+Stud -> 'AssertFilledStud()'
+
 Stud -> '(' 'Move(-3,-3,-1)' B2x4 ')'
 Stud -> '(' 'Move(-2,0,0)' 'Rotate(90)' 'Move(-3,-3,-1)' B2x4 ')'
 Stud -> '(' 'Move(-2,0,0)' 'Rotate(270)' 'Move(-3,-3,-1)' B2x4 ')'
