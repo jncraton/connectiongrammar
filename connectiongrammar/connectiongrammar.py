@@ -60,6 +60,8 @@ class ConnectionGrammar():
 
         if fitness > best[0]:
           best = (fitness, [s for s in prod.rhs()])
+          if fitness >= 1:
+            break
 
       sentence = sentence[0:i] + list(best[1]) + sentence[i+1:]
 
