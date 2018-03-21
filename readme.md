@@ -1,5 +1,7 @@
 # Connection Grammar
 
+[![Build Status](https://travis-ci.com/jncraton/connectiongrammar.svg?token=yQJxZLQNAHqWRpN2k3wf&branch=master)](https://travis-ci.com/jncraton/connectiongrammar)
+
 The field computational design synthesis involves using computer algorithm to create designs to meet a set of engineering requirements. There are many tools and algorithms available to aid in computational design synthesis[5]. Generative grammars are one broad class of solutions to this problem.
 
 This package provides a way to develop text grammars that represent a language of interconnected 3D objects in a Python environment.
