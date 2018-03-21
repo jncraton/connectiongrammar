@@ -1,3 +1,5 @@
+import functools
+
 from nltk import CFG
 from nltk.grammar import Nonterminal
 
@@ -15,6 +17,7 @@ class ConnectionGrammar():
       if all([isinstance(s, str) for s in rhs]):
         self.grammar.to_terminal[str(prod.lhs())] = rhs
 
+  @functools.lru_cache()
   def terminate(self, sym):
     if isinstance(sym, str):
       return [sym]
