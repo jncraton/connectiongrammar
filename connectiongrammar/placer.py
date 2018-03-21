@@ -20,7 +20,7 @@ from nltk import CFG
 
 import connectiongrammar
 
-OP = enum.Enum('OP', 'PlaceBoundingSphere Place Move FillRect Rotate ( ) AssertFilledStud')
+OP = enum.Enum('OP', 'PlaceBoundingSphere Place Move FillRect Rotate ( ) AssertFilled')
 
 @functools.lru_cache()
 def rotation_matrix(dir, ldraw_string=False):
@@ -223,14 +223,12 @@ def parse(ops):
       state = (state[0],state[1],state[2],(state[3] + int(op[1]/90)) % 4)
     elif op[0] == OP.FillRect:
       img.fill_rect(state, op[1])
-    elif op[0] == OP.AssertFilledStud:
-      state = move(state, (0,-1,0))
+    elif op[0] == OP.AssertFilled:
       try:
         img.fill_rect(state, (2,1,2), dry_run=True)
         raise AssertionError
       except CollisionError:
         pass
-      state = move(state, (0,1,0))
     else:
       raise NotImplementedError('Op not implemented: ' + str(op))
 
@@ -266,14 +264,12 @@ def check(img,state,states,ops):
       state = (state[0],state[1],state[2],(state[3] + int(op[1]/90)) % 4)
     elif op[0] == OP.FillRect:
       img.fill_rect(state, op[1], dry_run=True)
-    elif op[0] == OP.AssertFilledStud:
-      state = move(state, (0,-1,0))
+    elif op[0] == OP.AssertFilled:
       try:
         img.fill_rect(state, (2,1,2), dry_run=True)
         raise AssertionError
       except CollisionError:
         pass
-      state = move(state, (0,1,0))
     else:
       raise NotImplementedError('Op not implemented: ' + str(op))
 
