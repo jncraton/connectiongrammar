@@ -187,7 +187,7 @@ def parse(ops):
 
   >>> len(parse("FillRect(2,3,2) Place(3005)")[1].voxels)
   12
-  
+
   >>> parse.cache_clear()
   >>> shape = parse("Move(1,0,0)")
   >>> parse.cache_info().hits
@@ -195,59 +195,35 @@ def parse(ops):
   >>> shape = parse("Move(1,0,0) Move(1,0,0)")
   >>> parse.cache_info().hits
   0
-  >>> shape[2]
+  >>> shape = parse("Move(1,0,0) Move(1,0,0)")
+  >>> parse.cache_info().hits
+  1
+  >>> parse("Move(1,0,0) Move(1,0,0)")[2][0]
   (2, 0, 0, 0)
   """
-
   if isinstance(ops, str):
     ops = ops.split()
 
   if len(ops) == 0:
     elements = []
     img = VolumetricImage()
-    state = (0,0,0,0)
-    states = []    
+    states = [(0,0,0,0)]
   else:
-    (elements, img, state, states) = parse(tuple(ops[:-1]))
-        
-    op = get_token(ops[-1])
-    
-    if op[0] == None:
-      pass
-    elif op[0] == OP.PlaceBoundingSphere:
-      img.voxels = bounding_sphere(op[1],1).copy()
-    elif op[0] == OP.Place:
-      elements.append((state, 1, op[1]))
-    elif op[0] == OP['(']: 
-      states.append(state)
-    elif op[0] == OP[')']: 
-      state = states.pop()
-    elif op[0] == OP.Move:
-      state = move(state, op[1])
-    elif op[0] == OP.Rotate:
-      state = (state[0],state[1],state[2],(state[3] + int(op[1]/90)) % 4)
-    elif op[0] == OP.FillRect:
-      img.fill_rect(state, op[1])
-    elif op[0] == OP.AssertFilled:
-      try:
-        img.fill_rect(state, (2,1,2), dry_run=True)
-        raise AssertionError
-      except CollisionError:
-        pass
-    else:
-      raise NotImplementedError('Op not implemented: ' + str(op))
+    (elements, img, states) = parse(tuple(ops[:-1]))
 
-    if len(img.voxels) == 0:
-      img.voxels = bounding_sphere(7,1).copy()
+    elements += exec_ops(img, states, tuple([ops[-1]]))
 
-  return (elements, img, state, states)
+  return (elements, img, states)
 
-def check(img,state,states,ops):
+def exec_ops(img,states,ops,dry_run=False):
   if isinstance(ops, str):
     ops = ops.split()
 
+  elements = []
+
   for op in ops:
-    states = states.copy()
+    if dry_run:
+      states = states.copy()
 
     op = get_token(op)
     
@@ -256,27 +232,31 @@ def check(img,state,states,ops):
     elif op[0] == OP.PlaceBoundingSphere:
       img.voxels = bounding_sphere(op[1],1).copy()
     elif op[0] == OP.Place:
-      pass
+      elements.append((states[-1], 1, op[1]))
     elif op[0] == OP['(']: 
-      states.append(state)
+      states.append(states[-1])
     elif op[0] == OP[')']: 
-      state = states.pop()
+      states.pop()
     elif op[0] == OP.Move:
-      state = move(state, op[1])
+      states[-1] = move(states[-1], op[1])
     elif op[0] == OP.Rotate:
-      state = (state[0],state[1],state[2],(state[3] + int(op[1]/90)) % 4)
+      states[-1] = (states[-1][0],states[-1][1],states[-1][2],(states[-1][3] + int(op[1]/90)) % 4)
     elif op[0] == OP.FillRect:
-      img.fill_rect(state, op[1], dry_run=True)
+      img.fill_rect(states[-1], op[1], dry_run=dry_run)
     elif op[0] == OP.AssertFilled:
       try:
-        img.fill_rect(state, (2,1,2), dry_run=True)
+        img.fill_rect(states[-1], (2,1,2), dry_run=dry_run)
         raise AssertionError
       except CollisionError:
         pass
     else:
       raise NotImplementedError('Op not implemented: ' + str(op))
 
-  return True
+    if len(img.voxels) == 0:
+      # If we didn't set bounds in our first op, create a small bounding sphere
+      img.voxels = bounding_sphere(7,1).copy()
+
+  return elements
 
 def to_ldraw(els):
   color = 0
@@ -297,8 +277,8 @@ def to_ldraw(els):
 
 def fitness(valid_ops, new_ops):
   try:
-    (_, img, state, states) = parse(valid_ops)
-    check(img, state, states, new_ops)
+    (_, img, states) = parse(valid_ops)
+    exec_ops(img, states, new_ops, dry_run=True)
     return 1.0
-  except (CollisionError, AssertionError):
+  except (CollisionError, AssertionError) as e:
     return 0.0
