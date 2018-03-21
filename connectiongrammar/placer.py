@@ -254,7 +254,7 @@ def exec_ops(img,states,ops,dry_run=False):
 
     if len(img.voxels) == 0:
       # If we didn't set bounds in our first op, create a small bounding sphere
-      img.voxels = bounding_sphere(7,1).copy()
+      img.voxels = bounding_sphere(8,1).copy()
 
   return elements
 
