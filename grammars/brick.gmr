@@ -1,4 +1,4 @@
-Init -> 'PlaceBoundingSphere(18)' Stud
+Init -> 'PlaceBoundingSphere(14)' 'PlaceBoundingSphere(23)' 'Move(0,15,0)' Antistud
 
 Stud -> '(' 'Move(0,-1,0)' 'AssertFilled()' ')'
 

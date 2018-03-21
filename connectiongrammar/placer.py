@@ -15,6 +15,7 @@ Implements a basic 3d object placer and fitness function
 
 import functools
 import enum
+import math
 
 from nltk import CFG
 
@@ -161,14 +162,13 @@ class VolumetricImage:
           if not dry_run:
             self.voxels.add(new_pos)
   
-@functools.lru_cache()
 def bounding_sphere(r, b):
   voxels = set()
   
   for x in range(-r - b, r + b):
     for y in range(-r - b, r + b):
       for z in range(-r - b, r + b):
-        if (x*x+y*y+z*z) > r*r:
+        if math.ceil((x*x+y*y+z*z)**(1/2)) == r:
           voxels.add((x,y,z))
 
   return voxels
@@ -230,7 +230,7 @@ def exec_ops(img,states,ops,dry_run=False):
     if op[0] == None:
       pass
     elif op[0] == OP.PlaceBoundingSphere:
-      img.voxels = bounding_sphere(op[1],1).copy()
+      img.voxels = img.voxels.union(bounding_sphere(op[1],1))
     elif op[0] == OP.Place:
       elements.append((states[-1], 1, op[1]))
     elif op[0] == OP['(']: 
