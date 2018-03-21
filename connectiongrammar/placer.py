@@ -173,9 +173,14 @@ def bounding_sphere(r, b):
 
   return voxels
 
-@functools.lru_cache(maxsize=1024)
+@functools.lru_cache(maxsize=1)
 def parse(ops):
   """ Returns the model for a text
+
+  Note that we cache the last complete parse as a speed optimization.
+
+  Our default fitness function takes advantage of this to never re-run
+  the entire set op operations but instead just checks the new ones
    
   >>> parse("FillRect(2,3,2) Place(3005)")[0]
   [((0, 0, 0, 0), 1, '3005')]
@@ -234,8 +239,6 @@ def parse(ops):
 
     if len(img.voxels) == 0:
       img.voxels = bounding_sphere(7,1).copy()
-
-  parse.cache_clear()
 
   return (elements, img, state, states)
 

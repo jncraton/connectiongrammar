@@ -4,7 +4,7 @@ main:
 	python3 connectiongrammar/__main__.py
 
 profile:
-	python3 -m cProfile -s cumtime bricksphere.py > profile.txt
+	python3 -m cProfile -s tottime bricksphere.py > profile.txt
 	head profile.txt -n 20
 
 test:
