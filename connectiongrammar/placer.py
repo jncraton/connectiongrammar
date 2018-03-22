@@ -21,7 +21,7 @@ from nltk import CFG
 
 import connectiongrammar
 
-OP = enum.Enum('OP', 'PlaceBoundingSphere Place Move FillRect Rotate ( ) AssertFilled')
+OP = enum.Enum('OP', 'PlaceBoundingSphere Place Move FillRect Rotate ( ) AssertFilled PlaceBoundingBox')
 
 @functools.lru_cache()
 def rotation_matrix(dir, ldraw_string=False):
@@ -69,6 +69,8 @@ def get_token(lexeme):
     return (OP[lexeme[:-2]],)
   elif lexeme[0:19] == 'PlaceBoundingSphere':
     return (OP['PlaceBoundingSphere'], int(lexeme[20:-1]))
+  elif lexeme[0:16] == 'PlaceBoundingBox':
+    return (OP['PlaceBoundingBox'], tuple(int(i) for i in lexeme[17:-1].split(',')))
   elif lexeme[0:5] == 'Place':
     return (OP['Place'], lexeme[6:-1])
   elif lexeme[0:6] == 'Rotate':
@@ -86,8 +88,8 @@ def get_token(lexeme):
 def lex(text):
   """ Convers a text into a list of tokens 
 
-  >>> list(lex("( Place(3005) )"))
-  [(<OP.(: 6>,), (<OP.Place: 2>, '3005'), (<OP.): 7>,)]
+  >>> [t[0].name for t in lex("( Place(3005) )")]
+  ['(', 'Place', ')']
   """
   if isinstance(text, str):
     text = text.split()
@@ -173,6 +175,32 @@ def bounding_sphere(r, b):
 
   return voxels
 
+def bounding_box(size, center=(0,0,0)):
+  """ Creates a bounding box centered around the current point 
+
+  >>> len(bounding_box((1,2,3)))
+  90
+  >>> (1,2,3) in bounding_box((1,2,3))
+  True
+  >>> (-1,-2,-3) in bounding_box((1,2,3))
+  True
+  >>> (-1,0,0) in bounding_box((1,2,3))
+  True
+  >>> (0,1,1) in bounding_box((1,2,3),(1,1,1))
+  True
+  """
+  voxels = set()
+
+  (xsize, ysize, zsize) = size
+
+  for x in range(-xsize, xsize + 1):
+    for y in range(-ysize, ysize + 1):
+      for z in range(-zsize, zsize + 1):
+        if abs(x) == xsize or abs(y) == ysize or abs(z) == zsize:
+          voxels.add((center[0]+x,center[1]+y,center[2]+z))
+
+  return voxels
+
 @functools.lru_cache(maxsize=1)
 def parse(ops):
   """ Returns the model for a text
@@ -231,6 +259,8 @@ def exec_ops(img,states,ops,dry_run=False):
       pass
     elif op[0] == OP.PlaceBoundingSphere:
       img.voxels = img.voxels.union(bounding_sphere(op[1],1))
+    elif op[0] == OP.PlaceBoundingBox:
+      img.voxels = img.voxels.union(bounding_box(op[1],states[-1]))
     elif op[0] == OP.Place:
       elements.append((states[-1], 1, op[1]))
     elif op[0] == OP['(']: 
