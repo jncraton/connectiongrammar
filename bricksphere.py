@@ -4,8 +4,11 @@ from connectiongrammar import connectiongrammar, placer
 
 from nltk import CFG
 
+gmr_text = open('grammars/dish_constraints.gmr').read()
+gmr_text += open('grammars/brick.gmr').read()
+
 cg = connectiongrammar.ConnectionGrammar(
-  grammar = CFG.fromstring(open('grammars/brick.gmr').read()),
+  grammar = CFG.fromstring(gmr_text),
   fitness = placer.fitness
 )
 
