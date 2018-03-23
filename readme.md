@@ -29,6 +29,23 @@ This package and basic algorithm could be used to model many kinds of interconne
 
 This sort of system is familiar to most people. Using this for demonstration eliminates the need to describe external domain knowledge as part of an explaining this methodology. It also has the convienient side-effect of being a cheap physical object that can be quickly physcially assembled for debugging and problem solving issues.
 
+Here's a very simple example of a grammar that could be used to create a simple brick structure:
+
+    Stud -> 'Move(0,-3,0)' 'Place("Brick1x1")' Stud
+
+Adding a simple fitness function to return perfect fitness unless we have more than 3 bricks in the model would allow this to successfully generate the following placement program (with whitespace adjustments for readabiltiy):
+
+    Move(0,-3,0)
+      Place("Brick1x1")
+      Move(0,-3,0)
+        Place("Brick1x1")
+        Move(0,-3,0)
+          Place("Brick1x1")
+
+Executing this program would create a stack of three bricks on top of one another as shown:
+
+
+
 Despite its simple appearance, blocks of this nature to provide enough interesting behavior to demonstrate the complexity that can be generated using context-free grammars. For example, blocks may only be stacked, so in order to move laterally multiple blocks must be stacked in an interconnected pattern.
 
 [1] Martin, Jess. "Procedural house generation: A method for dynamically generating floor plans." In Symposium on interactive 3D Graphics and Games, vol. 2. 2006.
