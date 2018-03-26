@@ -52,25 +52,39 @@ Adding a simple fitness function to return perfect fitness unless we have more t
     Move(0,-1,0)
     Place("Brick1x1")
 
-Here's the process for that output string:
+Here are the generation steps for that output string:
 
 1. Stud
+    - Fitness: 1.0
 2. Move(0,-1,0) Place("Brick1x1") Stud
+    - Fitness: 1.0
 3. Move(0,-1,0) Place("Brick1x1") Move(0,-1,0) Place("Brick1x1") Stud
-4. Move(0,-1,0) Place("Brick1x1") Move(0,-1,0) Place("Brick1x1") Move(0,-1,0) Place("Brick1x1") Stud
-5. Move(0,-1,0) Place("Brick1x1") Move(0,-1,0) Place("Brick1x1") Move(0,-1,0) Place("Brick1x1")
+    - Fitness: 1.0
+5. Move(0,-1,0) Place("Brick1x1") Move(0,-1,0) Place("Brick1x1") Move(0,-1,0) Place("Brick1x1") Stud
+    - Fitness: 1.0
+6. Move(0,-1,0) Place("Brick1x1") Move(0,-1,0) Place("Brick1x1") Move(0,-1,0) Place("Brick1x1") Move(0,-1,0) Place("Brick1x1") Stud
+    - Fitness: 0.0
+    - Our element list now contains more than three elements, so it fails our simple fitness test.
+    - Therefore, we don't apply this production rule and instead try the next one.
+7. Move(0,-1,0) Place("Brick1x1") Move(0,-1,0) Place("Brick1x1") Move(0,-1,0) Place("Brick1x1")
+    - Fitness: 1.0
+    - We now have only terminals, so we have generated a complete valid program.
 
-Let's step through this program. The only state we need to consider is the current postion and the list of placed elements:
+Now that we have the program generated, let's step through this program. The only state we need to consider is the current postion and the list of placed elements:
 
 Start state
 
     position = (0,0,0)
     elements = []
+    
+    fitness() would return 1.0
 
 `Move(0,-1,0)`
 
     position = (0,-1,0)
     elements = []
+    
+    fitness() would return 1.0
 
 `Place("Brick1x1")`
 
@@ -78,6 +92,8 @@ Start state
     elements = [
       ("Brick1x1",0,-1,0),
     ]
+    
+    fitness() would return 1.0
 
 ![](examples/1x1stack01.png)
 
@@ -87,6 +103,8 @@ Start state
     elements = [
       ("Brick1x1",0,-1,0),
     ]
+    
+    fitness() would return 1.0
 
 `Place("Brick1x1")`
 
@@ -95,6 +113,8 @@ Start state
       ("Brick1x1",0,-1,0),
       ("Brick1x1",0,-2,0),
     ]
+    
+    fitness() would return 1.0
 
 ![](examples/1x1stack02.png)
 
@@ -105,6 +125,8 @@ Start state
       ("Brick1x1",0,-1,0),
       ("Brick1x1",0,-2,0),
     ]
+    
+    fitness() would return 1.0
 
 `Place("Brick1x1")`
 
@@ -114,6 +136,8 @@ Start state
       ("Brick1x1",0,-2,0),
       ("Brick1x1",0,-3,0),
     ]
+    
+    fitness() would return 1.0
 
 ![](examples/1x1stack03.png)
 
