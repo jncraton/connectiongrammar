@@ -177,7 +177,7 @@ Let's begin by significantly expanding our grammar. We'll need two main addition
 1. The ability to add bounds to our geometery. We will implement this via a new `PlaceBoundingBox` operation.
 2. The ability for placed elements to actually consume space. We will implement this via a new `FillRect` operation.
 
-We will also used a greatly expanded grammar for element placement to demonstrate some of the power of this system. The grammars used can be found in the /grammar directory. Here is an example grammar that includes 1x1, 1x2, 2x2, and 2x4 bricks and implements both stud and antistud connections:
+We will also use a greatly expanded grammar for element placement to demonstrate some of the power of this system. The grammars used can be found in the /grammar directory. Here is an example grammar that includes 1x1, 1x2, 2x2, and 2x4 bricks and implements both stud and antistud connections:
 
 ```
 Stud -> '(' 'Move(-3,-3,-1)' B2x4 ')'
@@ -229,6 +229,10 @@ BrickConnection2x4 -> '(' 'Move(-2,0,0)' BrickConnection2x2 'Move(4,0,0)' BrickC
 Let's run that grammar inside a bounding box:
 
 ![](examples/box.gif)
+
+We can see that the grammar is able to fill the entire bounding box with bricks in legally connected structure. Let's try a bounding sphere to see if we are able to fill a structure that doesn't align quite so nicely to our axis-aligned voxel world:
+
+![](examples/sphere.gif)
 
 Alternative Approaches
 ----------------------
