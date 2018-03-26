@@ -226,15 +226,15 @@ BrickConnection2x2 -> '(' 'Move(0,0,-1)' BrickConnection1x2 'Move(0,0,2)' BrickC
 BrickConnection2x4 -> '(' 'Move(-2,0,0)' BrickConnection2x2 'Move(4,0,0)' BrickConnection2x2 ')'
 ```
 
-Let's run that grammar inside a bounding box:
+Let's run expand that grammar inside a bounding box:
 
 ![](examples/box.gif)
 
-We can see that the grammar is able to fill the entire bounding box with bricks in legally connected structure. Let's try a bounding sphere to see if we are able to fill a structure that doesn't align quite so nicely to our axis-aligned voxel world:
+We can see that the grammar is able to fill the entire bounding box with bricks in a legally connected structure. Let's try a bounding sphere to see if we are able to fill a structure that doesn't align quite so nicely to our axis-aligned voxel world:
 
 ![](examples/sphere.gif)
 
-By combining bounding boxes and bounding spheres, we can build some fairly complex shapes:
+That works fine as well. By combining bounding boxes and bounding spheres, we can build some fairly complex shapes, such as this dish:
 
 ![](examples/dish-render.png)
 
