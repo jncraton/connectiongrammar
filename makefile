@@ -1,7 +1,4 @@
-all: test main
-
-main:
-	python3 connectiongrammar/__main__.py
+all: test
 
 profile:
 	python3 -m cProfile -s tottime bricksphere.py > profile.txt
