@@ -35,10 +35,14 @@ This sort of system is familiar to most people. Using this for demonstration eli
 
 Despite its simple appearance, blocks of this nature to provide enough interesting behavior to demonstrate the complexity that can be generated using context-free grammars. For example, blocks may only be stacked, so in order to move laterally multiple blocks must be stacked in an interconnected pattern.
 
-Example
--------
+Brick Stacking Example
+----------------------
 
-Here's a very simple example grammar that could be used to generate instructions for a simple brick tower:
+This system can be used to generate a stack of bricks.
+
+### Program Generation
+
+The following is a simple grammar that could be used to generate instructions for a simple brick tower:
 
     Stud -> 'Move(0,-1,0)' 'Place("Brick1x1")' Stud
     Stud -> ɛ
@@ -66,6 +70,8 @@ Adding a simple fitness function to return perfect fitness unless we have more t
     - 3 Elements
     - Fitness: 1.0
     - We now have only terminals, so we have generated a complete valid program.
+
+### Program Execution
 
 Now that we have the program generated, let's step through the program execution. The only state we need to consider is the current postion and the list of placed elements:
 
@@ -100,12 +106,58 @@ Now that we have the program generated, let's step through the program execution
     
     ![](examples/1x1stack03.png)
 
-The above example represents the basic concept, but is simplification of the complete system. In addition to the above instructions, this system also implements `Rotate` to adjust the direction of the head. `Move` is relative to head direction, and head direction also determines the orientation of placed objects. Positions are also represented on a stack and can be pushed and popped in order to simplify program design.
+Rotation and Translation Example
+--------------------------------
+
+The stacking example represents some of the basic concepts, but it is a simplification of the complete system. In addition to the above instructions, this system also implements `Rotate` to adjust the direction of the head. `Move` instructions adjust position relative to head direction, and `Place` instructions use head direction also determine the orientation of placed objects. Positions are also stored on a stack and can be pushed and popped in order to simplify grammar and program design.
 
 The state of a running program consists of:
 
 1. A stack of head positions. This is initialized with one position at the origin. A position is represented as a 4-tuple (x, y, z, rotation_matrix). The rotation matrix is a standard 3x3 3D transformation matrix.
 2. A list of elements. Elements are represented as a 3-tuple of (position, color, name).
+
+Rotation and translation are important, as connections between these building block and many other physical objects depend on connections being made at specific locations and orientations. This applies in many contexts including screws lining up with associated holes in a connected part and surface-mount PCB connectors properly aligning with their mate. Including rotation and translation in our system allows us to model complex connection types in 3D space.
+ 
+### Program Generation
+
+Consider the following grammar that includes translation in the xz plane as well as head rotation:
+
+    Stud -> 'Move(-2,0,0)' 'Rotate(90)' 'Move(-3,-3,-1)' 'Place(3001)' 'Move(-3,0,-1)' Stud
+    Stud -> ɛ
+
+Using the same simple fitness function as before to limit us to three elements, this grammar will generate the following placement program:
+
+```
+Move(-2,0,0)
+Rotate(90)
+Move(-3,-3,-1)
+Place(3001)
+Move(-3,0,-1)
+Move(-2,0,0)
+Rotate(90)
+Move(-3,-3,-1)
+Place(3001)
+Move(-3,0,-1)
+Move(-2,0,0)
+Rotate(90)
+Move(-3,-3,-1)
+Place(3001)
+Move(-3,0,-1)
+```
+
+Steping through the program will generate the following:
+
+1. Execute `Move(-2,0,0) Rotate(90) Move(-3,-3,-1) Place("Brick2x4") Move(-3,0,-1)`
+
+![](examples/rotation_translation01.png)
+
+2. Execute `Move(-2,0,0) Rotate(90) Move(-3,-3,-1) Place("Brick2x4") Move(-3,0,-1)`
+
+![](examples/rotation_translation02.png)
+
+3. Execute `Move(-2,0,0) Rotate(90) Move(-3,-3,-1) Place("Brick2x4") Move(-3,0,-1)`
+
+![](examples/rotation_translation03.png)
 
 [1] Martin, Jess. "Procedural house generation: A method for dynamically generating floor plans." In Symposium on interactive 3D Graphics and Games, vol. 2. 2006.
 
