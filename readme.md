@@ -54,19 +54,25 @@ Adding a simple fitness function to return perfect fitness unless we have more t
 
 Here are the generation steps for that output string:
 
-1. Stud
+1. `Stud`
+    - 0 Elements
     - Fitness: 1.0
-2. Move(0,-1,0) Place("Brick1x1") Stud
+2. `Move(0,-1,0) Place("Brick1x1") Stud`
+    - 1 Element
     - Fitness: 1.0
-3. Move(0,-1,0) Place("Brick1x1") Move(0,-1,0) Place("Brick1x1") Stud
+3. `Move(0,-1,0) Place("Brick1x1") Move(0,-1,0) Place("Brick1x1") Stud`
+    - 2 Elements
     - Fitness: 1.0
-5. Move(0,-1,0) Place("Brick1x1") Move(0,-1,0) Place("Brick1x1") Move(0,-1,0) Place("Brick1x1") Stud
+5. `Move(0,-1,0) Place("Brick1x1") Move(0,-1,0) Place("Brick1x1") Move(0,-1,0) Place("Brick1x1") Stud`
+    - 3 Elements
     - Fitness: 1.0
-6. Move(0,-1,0) Place("Brick1x1") Move(0,-1,0) Place("Brick1x1") Move(0,-1,0) Place("Brick1x1") Move(0,-1,0) Place("Brick1x1") Stud
+6. `Move(0,-1,0) Place("Brick1x1") Move(0,-1,0) Place("Brick1x1") Move(0,-1,0) Place("Brick1x1") Move(0,-1,0) Place("Brick1x1") Stud`
+    - 4 Elements
     - Fitness: 0.0
     - Our element list now contains more than three elements, so it fails our simple fitness test.
     - Therefore, we don't apply this production rule and instead try the next one.
-7. Move(0,-1,0) Place("Brick1x1") Move(0,-1,0) Place("Brick1x1") Move(0,-1,0) Place("Brick1x1")
+7.` Move(0,-1,0) Place("Brick1x1") Move(0,-1,0) Place("Brick1x1") Move(0,-1,0) Place("Brick1x1")`
+    - 3 Elements
     - Fitness: 1.0
     - We now have only terminals, so we have generated a complete valid program.
 
