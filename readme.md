@@ -72,61 +72,27 @@ Now that we have the program generated, let's step through the program execution
 1. Program initialization
     - position = (0,0,0)
     - elements = []
-    - fitness() would return 1.0
 2. Execute `Move(0,-1,0)`
     - position = (0,-1,0)
     - elements = []
-    - fitness() would return 1.0
 3. Execute `Place("Brick1x1")`
     - position = (0,-1,0)
     - elements = [("Brick1x1",0,-1,0)]
-    - fitness() would return 1.0
-
-![](examples/1x1stack01.png)
-
-`Move(0,-2,0)`
-
-    position = (0,-2,0)
-    elements = [
-      ("Brick1x1",0,-1,0),
-    ]
-    
-    fitness() would return 1.0
-
-`Place("Brick1x1")`
-
-    position = (0,-2,0)
-    elements = [
-      ("Brick1x1",0,-1,0),
-      ("Brick1x1",0,-2,0),
-    ]
-    
-    fitness() would return 1.0
-
-![](examples/1x1stack02.png)
-
-`Move(0,-1,0)`
-
-    position = (0,-3,0)
-    elements = [
-      ("Brick1x1",0,-1,0),
-      ("Brick1x1",0,-2,0),
-    ]
-    
-    fitness() would return 1.0
-
-`Place("Brick1x1")`
-
-    position = (0,-3,0)
-    elements = [
-      ("Brick1x1",0,-1,0),
-      ("Brick1x1",0,-2,0),
-      ("Brick1x1",0,-3,0),
-    ]
-    
-    fitness() would return 1.0
-
-![](examples/1x1stack03.png)
+    - Rendered output: ![](examples/1x1stack01.png)
+4. Execute `Move(0,-2,0)`
+    - position = (0,-2,0)
+    - elements = [("Brick1x1",0,-1,0)]
+5. Execute `Place("Brick1x1")`
+    - position = (0,-2,0)
+    - elements = [("Brick1x1",0,-1,0), ("Brick1x1",0,-2,0)]
+    - Rendered output: ![](examples/1x1stack02.png)
+6. Execute `Move(0,-1,0)`
+    - position = (0,-3,0)
+    - elements = [("Brick1x1",0,-1,0), ("Brick1x1",0,-2,0)]
+7. Execute `Place("Brick1x1")`
+    - position = (0,-3,0)
+    - elements = [("Brick1x1",0,-1,0), ("Brick1x1",0,-2,0), ("Brick1x1",0,-3,0)]
+    - Final rendered output: ![](examples/1x1stack03.png)
 
 The above example represents the basic concept, but is simplification of the complete system. In addition to the above instructions, this system also implements `Rotate` to adjust the direction of the head. `Move` is relative to head direction, and head direction also determines the orientation of placed objects. Positions are also represented on a stack and can be pushed and popped in order to simplify program design.
 
