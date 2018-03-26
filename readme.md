@@ -234,6 +234,10 @@ We can see that the grammar is able to fill the entire bounding box with bricks 
 
 ![](examples/sphere.gif)
 
+By combining bounding boxes and bounding spheres, we can build some fairly complex shapes:
+
+![](examples/dish-render.png)
+
 Alternative Approaches
 ----------------------
 
