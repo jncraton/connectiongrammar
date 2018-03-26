@@ -16,6 +16,10 @@ Specifically, the context-free grammar generates a language that can be seen as 
 
 > The  concept  is  based  on  the idea of an imaginary turtle that walks, turns and draws according to instructions given. At any time the turtle has a current position in  3-space  and  a  heading  vector  (the  forward  direction  of movement). Individual letters in a string are treated as commands. Different  letters  change  position  or  heading,  record  vertices  in  a polygon,  apply  pre-defined  surfaces  to  the  current  position  and orientation, change colour, etc.   The  concept  is  based  on  the idea of an imaginary turtle that walks, turns and draws according to instructions given. At any time the turtle has a current position in  3-space  and  a  heading  vector  (the  forward  direction  of movement). Individual letters in a string are treated as commands. Different  letters  change  position  or  heading,  record  vertices  in  a  polygon,  apply  pre-defined  surfaces  to  the  current  position  and orientation, change colour, etc.
 
+A picture is worth a thousand words, so here is a graphical explaination from [7]:
+
+![](turtle-interpretation.png)
+
 The system operates in two parts. While context-free grammars are suitable for modelling possible connections, they do not have a concept of global state and cannot "see" the rest of the generated objects. The context-free grammar production rules serve to model possible interconnections between sub-objects. A second layer fitness function, modeling a user-defined global ruleset, is required to generate object graphs that adhere to specific global parameters. This is similar to the methods used in other work [1][2]. In the case of simple interconnected shapes, a 3D collision space is a suitable fitness function to ensure a physically valid shape. Additional rules can be added to this layer to ensure that a generated shape is suitable in other ways. For example, rules could be added for thermal disipation to model behavior of various shapes for use as a heat exchanger.
 
 The grammar has one special constraint place upon it. Every non-terminal must be able to be converted to a terminal via a single production rule. This allows the grammar to be checked against the fitness function after each production rule application. The algorithm for fitting a model to the fitness function is as follows:
@@ -170,3 +174,5 @@ Steping through the program will generate the following:
 [5] Chakrabarti, Amaresh, Kristina Shea, Robert Stone, Jonathan Cagan, Matthew Campbell, Noe Vargas Hernandez, and Kristin L. Wood. "Computer-based design synthesis research: an overview." Journal of Computing and Information Science in Engineering 11, no. 2 (2011): 021003.
 
 [6] Stiny, George, and James Gips. "Shape Grammars and the Generative Specification of Painting and Sculpture." In IFIP Congress (2), vol. 2, no. 3. 1971.
+
+[7] Bie, Dongyang, Jie Zhao, Xiaolu Wang, and Yanhe Zhu. "A distributed self-reconfiguration method combining cellular automata and L-systems." In Robotics and Biomimetics (ROBIO), 2015 IEEE International Conference on, pp. 60-65. IEEE, 2015.
