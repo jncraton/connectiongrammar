@@ -238,6 +238,17 @@ That works fine as well. By combining bounding boxes and bounding spheres, we ca
 
 ![](examples/dish-render.png)
 
+Height Map Example
+------------------
+
+We can get creative with our fitness function in order to create all kinds of novel structures. For example, we could build a topographical map of an area by building a fitness function from a height map such as this one:
+
+![](examples/uk-heightmap.png)
+
+The fitness function is then able to generate a program to build the following with addition of altitude-based coloring rules:
+
+![](examples/uk.jpg)
+
 Alternative Approaches
 ----------------------
 
