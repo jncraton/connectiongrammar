@@ -43,18 +43,9 @@ Here's a very simple example grammar that could be used to generate instructions
     Stud -> 'Move(0,-1,0)' 'Place("Brick1x1")' Stud
     Stud -> ɛ
 
-Adding a simple fitness function to return perfect fitness unless we have more than 3 bricks in the model would allow this to successfully generate the following placement program:
+Adding a simple fitness function to return perfect fitness unless we have more than 3 bricks in the model will allow us to generate a placement program. Here are the steps for the generation process:
 
-    Move(0,-1,0)
-    Place("Brick1x1")
-    Move(0,-1,0)
-    Place("Brick1x1")
-    Move(0,-1,0)
-    Place("Brick1x1")
-
-Here are the generation steps for that output string:
-
-1. `Stud`
+1. `Stud` (Start symbol in our grammar)
     - 0 Elements
     - Fitness: 1.0
 2. `Move(0,-1,0) Place("Brick1x1") Stud`
@@ -76,30 +67,20 @@ Here are the generation steps for that output string:
     - Fitness: 1.0
     - We now have only terminals, so we have generated a complete valid program.
 
-Now that we have the program generated, let's step through this program. The only state we need to consider is the current postion and the list of placed elements:
+Now that we have the program generated, let's step through the program execution. The only state we need to consider is the current postion and the list of placed elements:
 
-Start state
-
-    position = (0,0,0)
-    elements = []
-    
-    fitness() would return 1.0
-
-`Move(0,-1,0)`
-
-    position = (0,-1,0)
-    elements = []
-    
-    fitness() would return 1.0
-
-`Place("Brick1x1")`
-
-    position = (0,-1,0)
-    elements = [
-      ("Brick1x1",0,-1,0),
-    ]
-    
-    fitness() would return 1.0
+1. Program initialization
+    - position = (0,0,0)
+    - elements = []
+    - fitness() would return 1.0
+2. Execute `Move(0,-1,0)`
+    - position = (0,-1,0)
+    - elements = []
+    - fitness() would return 1.0
+3. Execute `Place("Brick1x1")`
+    - position = (0,-1,0)
+    - elements = [("Brick1x1",0,-1,0)]
+    - fitness() would return 1.0
 
 ![](examples/1x1stack01.png)
 
