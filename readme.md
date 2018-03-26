@@ -31,33 +31,73 @@ This sort of system is familiar to most people. Using this for demonstration eli
 
 Here's a very simple example of a grammar that could be used to create a simple brick structure:
 
-    Stud -> 'Move(0,-3,0)' 'Place("Brick1x1")' Stud
+    Stud -> 'Move(0,-1,0)' 'Place("Brick1x1")' Stud
 
-Adding a simple fitness function to return perfect fitness unless we have more than 3 bricks in the model would allow this to successfully generate the following placement program (with whitespace adjustments for readabiltiy):
+Adding a simple fitness function to return perfect fitness unless we have more than 3 bricks in the model would allow this to successfully generate the following placement program:
 
-    Move(0,-3,0)
-      Place("Brick1x1")
-      Move(0,-3,0)
-        Place("Brick1x1")
-        Move(0,-3,0)
-          Place("Brick1x1")
+    Move(0,-1,0)
+    Place("Brick1x1")
+    Move(0,-1,0)
+    Place("Brick1x1")
+    Move(0,-1,0)
+    Place("Brick1x1")
 
-Executing this program would create a stack of three bricks on top of one another as shown:
+Let's step through this program. The only state we need to consider is the current postion and the list of placed elements:
 
-Move(0,-3,0)
+Start state
+
+  position = (0,0,0)
+  elements = []
+
+Move(0,-1,0)
+
+  position = (0,-1,0)
+  elements = []
+
 Place("Brick1x1")
+
+  position = (0,-1,0)
+  elements = [
+    ("Brick1x1",0,-1,0)
+  ]
 
 ![](examples/1x1stack01.png)
 
-Move(0,-3,0)
+Move(0,-2,0)
+
+  position = (0,-2,0)
+  elements = [
+    ("Brick1x1",0,-1,0)
+  ]
+
 Place("Brick1x1")
+
+  position = (0,-2,0)
+  elements = [
+    ("Brick1x1",0,-1,0)
+    ("Brick1x1",0,-2,0)
+  ]
 
 ![](examples/1x1stack02.png)
 
-Move(0,-3,0)
+Move(0,-1,0)
+
+  position = (0,-3,0)
+  elements = [
+    ("Brick1x1",0,-1,0)
+    ("Brick1x1",0,-2,0)
+  ]
+
 Place("Brick1x1")
 
-![](examples/1x1stack03.png)
+  position = (0,-3,0)
+  elements = [
+    ("Brick1x1",0,-1,0)
+    ("Brick1x1",0,-2,0)
+    ("Brick1x1",0,-3,0)
+  ]
+
+![](examples/1x1stack02.png)
 
 Despite its simple appearance, blocks of this nature to provide enough interesting behavior to demonstrate the complexity that can be generated using context-free grammars. For example, blocks may only be stacked, so in order to move laterally multiple blocks must be stacked in an interconnected pattern.
 
