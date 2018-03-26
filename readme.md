@@ -71,7 +71,7 @@ Here are the generation steps for that output string:
     - Fitness: 0.0
     - Our element list now contains more than three elements, so it fails our simple fitness test.
     - Therefore, we don't apply this production rule and instead try the next one.
-7.` Move(0,-1,0) Place("Brick1x1") Move(0,-1,0) Place("Brick1x1") Move(0,-1,0) Place("Brick1x1")`
+7. `Move(0,-1,0) Place("Brick1x1") Move(0,-1,0) Place("Brick1x1") Move(0,-1,0) Place("Brick1x1")`
     - 3 Elements
     - Fitness: 1.0
     - We now have only terminals, so we have generated a complete valid program.
