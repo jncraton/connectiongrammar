@@ -49,12 +49,12 @@ Start state
     position = (0,0,0)
     elements = []
 
-Move(0,-1,0)
+`Move(0,-1,0)`
 
     position = (0,-1,0)
     elements = []
 
-Place("Brick1x1")
+`Place("Brick1x1")`
 
     position = (0,-1,0)
     elements = [
@@ -63,14 +63,14 @@ Place("Brick1x1")
 
 ![](examples/1x1stack01.png)
 
-Move(0,-2,0)
+`Move(0,-2,0)`
 
     position = (0,-2,0)
     elements = [
       ("Brick1x1",0,-1,0),
     ]
 
-Place("Brick1x1")
+`Place("Brick1x1")`
 
     position = (0,-2,0)
     elements = [
@@ -80,7 +80,7 @@ Place("Brick1x1")
 
 ![](examples/1x1stack02.png)
 
-Move(0,-1,0)
+`Move(0,-1,0)`
 
     position = (0,-3,0)
     elements = [
@@ -88,7 +88,7 @@ Move(0,-1,0)
       ("Brick1x1",0,-2,0),
     ]
 
-Place("Brick1x1")
+`Place("Brick1x1")`
 
     position = (0,-3,0)
     elements = [
