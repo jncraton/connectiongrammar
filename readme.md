@@ -3,33 +3,35 @@ Connection Grammar
 
 [![Build Status](https://travis-ci.com/jncraton/connectiongrammar.svg?token=yQJxZLQNAHqWRpN2k3wf&branch=master)](https://travis-ci.com/jncraton/connectiongrammar)
 
+This package provides a way to develop text grammars that represent a language of interconnected 3D objects in a Python environment.
+
 Overview
 --------
 
 The field computational design synthesis involves using computer algorithm to create designs to meet a set of engineering requirements. There are many tools and algorithms available to aid in computational design synthesis[5]. Generative grammars are one broad class of solutions to this problem.
 
-This package provides a way to develop text grammars that represent a language of interconnected 3D objects in a Python environment.
+This project uses a context-free grammar to generate a language that issues commands to a 3D object printer. It moves and rotates an imaginary print head and issues requests to place objects. This is similar to the "turtle interpretation" for L-systems desribed in [3]:
 
-One approach in using grammars to represent physical objects is to have the grammar operate on literal shapes[6]. These systems are referred to as shape grammars. This package does not implement shape grammars. Instead, it uses a text grammar to build a language that is interpretted to build up a set of objects.
-
-Specifically, the context-free grammar generates a language that can be seen as issuing commands to a 3D object printer. It moves and rotates an imaginary print head and issues requests to place objects. This grammar is bracketed to enable pusing and popping of print head position. This is similar to the "turtle interpretation" for L-systems desribed in [3]:
-
-> The  concept  is  based  on  the idea of an imaginary turtle that walks, turns and draws according to instructions given. At any time the turtle has a current position in  3-space  and  a  heading  vector  (the  forward  direction  of movement). Individual letters in a string are treated as commands. Different  letters  change  position  or  heading,  record  vertices  in  a polygon,  apply  pre-defined  surfaces  to  the  current  position  and orientation, change colour, etc.   The  concept  is  based  on  the idea of an imaginary turtle that walks, turns and draws according to instructions given. At any time the turtle has a current position in  3-space  and  a  heading  vector  (the  forward  direction  of movement). Individual letters in a string are treated as commands. Different  letters  change  position  or  heading,  record  vertices  in  a  polygon,  apply  pre-defined  surfaces  to  the  current  position  and orientation, change colour, etc.
+> The  concept  is  based  on  the idea of an imaginary turtle that walks, turns and draws according to instructions given. At any time the turtle has a current position in  3-space  and  a  heading  vector  (the  forward  direction  of movement). Individual letters in a string are treated as commands. Different  letters  change  position  or  heading,  record  vertices  in  a polygon,  apply  pre-defined  surfaces  to  the  current  position  and orientation, change colour, etc.
 
 A picture is worth a thousand words, so here is a graphical explaination from [7]:
 
 ![](turtle-interpretation.png)
 
-The system operates in two parts. While context-free grammars are suitable for modelling possible connections, they do not have a concept of global state and cannot "see" the rest of the generated objects. The context-free grammar production rules serve to model possible interconnections between sub-objects. A second layer fitness function, modeling a user-defined global ruleset, is required to generate object graphs that adhere to specific global parameters. This is similar to the methods used in other work [1][2]. In the case of simple interconnected shapes, a 3D collision space is a suitable fitness function to ensure a physically valid shape. Additional rules can be added to this layer to ensure that a generated shape is suitable in other ways. For example, rules could be added for thermal disipation to model behavior of various shapes for use as a heat exchanger.
+While context-free grammars are suitable for modelling possible connections, they do not have a concept of global state and cannot "see" the rest of the generated objects. A second layer fitness function, modeling a user-defined global ruleset, is required to generate object graphs that adhere to specific global parameters. This is similar to the methods used in other work [1][2]. In the case of simple interconnected shapes, a 3D collision space may be a suitable fitness function to ensure a physically valid shape. Additional rules can be added to ensure that a generated shape is suitable in other ways. For example, rules could be added for thermal disipation to model behavior of various shapes for use as a heat exchanger.
 
-The grammar has one special constraint place upon it. Every non-terminal must be able to be converted to a terminal via a single production rule. This allows the grammar to be checked against the fitness function after each production rule application. The algorithm for fitting a model to the fitness function is as follows:
+The algorithm for fitting a model to the fitness function is as follows:
 
-1. Go to the left-most non-terminal.
-2. Generate a text by applying first production rule that we have not tried yet.
-3. Check the generated text against our fitness function and store the result.
-4. Repeat back to (2) for each production rule.
-5. Apply the production rule that returned the highest fitness (first rule wins in case of a tie).
-6. Repeat back to (1) until the string contains only terminals.
+1. Initialize a list of symbols containing only the start symbol.
+2. Find the left-most non-terminal symbol.
+3. Generate a new text by applying a production rule that we have not tried yet.
+4. Check the generated text against our fitness function and store the result.
+5. Repeat back to (3) for each production rule.
+6. Apply the production rule that returned the highest fitness (first rule wins in case of a tie).
+7. Repeat back to (2) until the string contains only terminals.
+
+Examples
+--------
 
 This package and basic algorithm could be used to model many kinds of interconnected structures. For demonstration purposes, I will explore interconnected stud-and-tube-based building blocks such as [4]:
 
@@ -162,6 +164,11 @@ Steping through the program will generate the following:
 3. Execute `Move(-2,0,0) Rotate(90) Move(-3,-3,-1) Place("Brick2x4") Move(-3,0,-1)`
 
 ![](examples/rotation_translation03.png)
+
+Alternative Approaches
+----------------------
+
+One alternative approach in using grammars to represent physical objects is to have the grammar operate on literal shapes[6]. These systems are referred to as shape grammars. This package does not implement shape grammars. Instead, it uses a text grammar to build a language that is interpretted to build up a set of objects. A shape grammar could be applied to solve these issues and may lead to simplifications of the algorithms.
 
 [1] Martin, Jess. "Procedural house generation: A method for dynamically generating floor plans." In Symposium on interactive 3D Graphics and Games, vol. 2. 2006.
 
