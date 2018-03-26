@@ -4,8 +4,8 @@ from connectiongrammar import connectiongrammar, placer
 
 from nltk import CFG
 
-gmr_text = open('grammars/example_constraints.gmr').read()
-gmr_text += open('grammars/rotate_translate_example.gmr').read()
+gmr_text = open('grammars/box_constraints.gmr').read()
+gmr_text += open('grammars/brick.gmr').read()
 
 cg = connectiongrammar.ConnectionGrammar(
   grammar = CFG.fromstring(gmr_text),
@@ -15,5 +15,5 @@ cg = connectiongrammar.ConnectionGrammar(
 sentence = cg.generate()
 elements = placer.parse(sentence)[0]
 
-with open('example_rotation_translation.ldr','w') as outf:
+with open('box_example.ldr','w') as outf:
   outf.write(placer.to_ldraw(elements))

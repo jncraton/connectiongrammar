@@ -165,6 +165,71 @@ Steping through the program will generate the following:
 
 ![](examples/rotation_translation03.png)
 
+Non-trivial fitness function example
+------------------------------------
+
+The previous examples have used a trivial fitness function that could simply be replaced by "generate a string from the grammar of length n". A non-trivial fitness function should actually use to properties of the generated object to determine fitness.
+
+One example would be a fitness function that validates legal collision-free element placement. This can be implemented using any physics simulator, but for simplicity we will simply use an axis-aligned bounding box (AABB) voxel system[8].
+
+Let's begin by significantly expanding our grammar. We'll need two main additions:
+
+1. The ability to add bounds to our geometery. We will implement this via a new `PlaceBoundingBox` operation.
+2. The ability for placed elements to actually consume space. We will implement this via a new `FillRect` operation.
+
+We will also used a greatly expanded grammar for element placement to demonstrate some of the power of this system. The grammars used can be found in the /grammar directory. Here is an example grammar that includes 1x1, 1x2, 2x2, and 2x4 bricks and implements both stud and antistud connections:
+
+```
+Stud -> '(' 'Move(-3,-3,-1)' B2x4 ')'
+Stud -> '(' 'Move(-2,0,0)' 'Rotate(90)' 'Move(-3,-3,-1)' B2x4 ')'
+Stud -> '(' 'Move(-2,0,0)' 'Rotate(270)' 'Move(-3,-3,-1)' B2x4 ')'
+Stud -> '(' 'Move(-2,0,0)' 'Rotate(180)' 'Move(-3,-3,-1)' B2x4 ')'
+
+Stud -> '(' 'Move(-1,-3,-1)' B2x2 ')'
+Stud -> '(' 'Rotate(90)' 'Move(-1,-3,-1)' B2x2 ')'
+Stud -> '(' 'Rotate(180)' 'Move(-1,-3,-1)' B2x2 ')'
+Stud -> '(' 'Rotate(270)' 'Move(-1,-3,-1)' B2x2 ')'
+
+Stud -> '(' 'Move(-1,-3,0)' B1x2 ')'
+Stud -> '(' 'Rotate(90)' 'Move(-1,-3,0)' B1x2 ')'
+Stud -> '(' 'Rotate(270)' 'Move(-1,-3,0)' B1x2 ')'
+Stud -> '(' 'Rotate(180)' 'Move(-1,-3,0)' B1x2 ')'
+
+Stud -> '(' 'Move(0,-3,0)' B1x1 ')'
+Stud ->
+
+Antistud -> '(' 'Move(-3,0,-1)' B2x4 ')'
+Antistud -> '(' 'Move(-2,0,0)' 'Rotate(90)' 'Move(-3,0,-1)' B2x4 ')'
+Antistud -> '(' 'Move(-2,0,0)' 'Rotate(270)' 'Move(-3,0,-1)' B2x4 ')'
+Antistud -> '(' 'Move(-2,0,0)' 'Rotate(180)' 'Move(-3,0,-1)' B2x4 ')'
+
+Antistud -> '(' 'Move(-1,0,-1)' B2x2 ')'
+Antistud -> '(' 'Rotate(90)' 'Move(-1,0,-1)' B2x2 ')'
+Antistud -> '(' 'Rotate(270)' 'Move(-1,0,-1)' B2x2 ')'
+Antistud -> '(' 'Rotate(180)' 'Move(-1,0,-1)' B2x2 ')'
+
+Antistud -> '(' 'Move(-1,0,0)' B1x2 ')'
+Antistud -> '(' 'Rotate(90)' 'Move(-1,0,0)' B1x2 ')'
+Antistud -> '(' 'Rotate(180)' 'Move(-1,0,0)' B1x2 ')'
+Antistud -> '(' 'Rotate(270)' 'Move(-1,0,0)' B1x2 ')'
+Antistud -> '(' B1x1 ')'
+Antistud -> 
+
+B2x4 -> 'FillRect(8,3,4)' 'Place(3001)' BrickConnection2x4
+B2x2 -> 'FillRect(4,3,4)' 'Place(3003)' BrickConnection2x2
+B1x2 -> 'FillRect(4,3,2)' 'Place(3004)' BrickConnection1x2
+B1x1 -> 'FillRect(2,3,2)' 'Place(3005)' BrickConnection
+
+BrickConnection -> '(' Stud 'Move(0,3,0)' Antistud ')' |
+BrickConnection1x2 -> '(' 'Move(-1,0,0)' BrickConnection 'Move(2,0,0)' BrickConnection ')'
+BrickConnection2x2 -> '(' 'Move(0,0,-1)' BrickConnection1x2 'Move(0,0,2)' BrickConnection1x2 ')'
+BrickConnection2x4 -> '(' 'Move(-2,0,0)' BrickConnection2x2 'Move(4,0,0)' BrickConnection2x2 ')'
+```
+
+Let's run that grammar inside a bounding box:
+
+![](examples/box.gif)
+
 Alternative Approaches
 ----------------------
 
@@ -186,3 +251,5 @@ References
 [6] Stiny, George, and James Gips. "Shape Grammars and the Generative Specification of Painting and Sculpture." In IFIP Congress (2), vol. 2, no. 3. 1971.
 
 [7] Bie, Dongyang, Jie Zhao, Xiaolu Wang, and Yanhe Zhu. "A distributed self-reconfiguration method combining cellular automata and L-systems." In Robotics and Biomimetics (ROBIO), 2015 IEEE International Conference on, pp. 60-65. IEEE, 2015.
+
+[8] Jiménez, Pablo, Federico Thomas, and Carme Torras. "3D collision detection: a survey." Computers & Graphics 25, no. 2 (2001): 269-285.
