@@ -37,18 +37,18 @@ This package and basic algorithm could be used to model many kinds of interconne
 
 ![](christiansen1961.jpg)
 
-This sort of system is familiar to most people. Using this for demonstration eliminates the need to describe external domain knowledge as part of an explaining this methodology. It also has the convienient side-effect of being a cheap physical object that can be quickly physcially assembled for debugging and problem solving issues.
+This sort of system is familiar to most people. Using this for demonstration eliminates the need to describe external domain knowledge as part of an explaining this methodology. It also has the convienient side-effect of being a cheap physical object that can be quickly assembled for debugging and problem solving.
 
 Despite its simple appearance, blocks of this nature to provide enough interesting behavior to demonstrate the complexity that can be generated using context-free grammars. For example, blocks may only be stacked, so in order to move laterally multiple blocks must be stacked in an interconnected pattern.
 
 Brick Stacking Example
 ----------------------
 
-This system can be used to generate a stack of bricks.
+Trivially, this system can be used to generate a stack of bricks. This simplistic example provides a good starting point for demonstration purposes.
 
 ### Program Generation
 
-The following is a simple grammar that could be used to generate instructions for a simple brick tower:
+The following is a simple grammar that could be used to generate instructions for a basic brick tower:
 
     Stud -> 'Move(0,-1,0)' 'Place("Brick1x1")' Stud
     Stud -> ɛ
