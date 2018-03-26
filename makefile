@@ -7,3 +7,6 @@ profile:
 test:
 	python3 -m doctest connectiongrammar/connectiongrammar.py
 	python3 -m doctest connectiongrammar/placer.py
+
+castle:
+	python3 run_grammars.py castle_wall_constraints brick tile close
