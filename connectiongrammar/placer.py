@@ -21,7 +21,9 @@ from nltk import CFG
 
 import connectiongrammar
 
-OP = enum.Enum('OP', 'PlaceBoundingSphere Place Move FillRect Rotate ( ) AssertFilled PlaceBoundingBox')
+OP = enum.Enum('OP', 'PlaceBoundingSphere Place Move FillRect Rotate ( ) AssertFilled PlaceBoundingBox SetColor')
+
+default_color = 1
 
 @functools.lru_cache()
 def rotation_matrix(dir, ldraw_string=False):
@@ -49,7 +51,7 @@ def rotation_matrix(dir, ldraw_string=False):
     ])
 
 
-@functools.lru_cache()
+@functools.lru_cache(maxsize=1024)
 def get_token(lexeme):
   """ Convert lexems to (name, arg) pairs 
 
@@ -75,6 +77,8 @@ def get_token(lexeme):
     return (OP['Place'], lexeme[6:-1])
   elif lexeme[0:6] == 'Rotate':
     return (OP['Rotate'], int(lexeme[7:-1]))
+  elif lexeme[0:8] == 'SetColor':
+    return (OP['SetColor'], int(lexeme[9:-1]))
   elif lexeme[0:4] == 'Move':
     delta = tuple(int(i) for i in lexeme[5:-1].split(','))
     return (OP['Move'], delta)
@@ -262,7 +266,7 @@ def exec_ops(img,states,ops,dry_run=False):
     elif op[0] == OP.PlaceBoundingBox:
       img.voxels = img.voxels.union(bounding_box(op[1],states[-1]))
     elif op[0] == OP.Place:
-      elements.append((states[-1], 1, op[1]))
+      elements.append((states[-1], default_color, op[1]))
     elif op[0] == OP['(']: 
       states.append(states[-1])
     elif op[0] == OP[')']: 
@@ -271,6 +275,9 @@ def exec_ops(img,states,ops,dry_run=False):
       states[-1] = move(states[-1], op[1])
     elif op[0] == OP.Rotate:
       states[-1] = (states[-1][0],states[-1][1],states[-1][2],(states[-1][3] + int(op[1]/90)) % 4)
+    elif op[0] == OP.SetColor:
+      global default_color
+      default_color = op[1]
     elif op[0] == OP.FillRect:
       img.fill_rect(states[-1], op[1], dry_run=dry_run)
     elif op[0] == OP.AssertFilled:
@@ -289,7 +296,6 @@ def exec_ops(img,states,ops,dry_run=False):
   return elements
 
 def to_ldraw(els):
-  color = 0
   yellow = 14
   blue = 1
 

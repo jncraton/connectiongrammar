@@ -238,6 +238,11 @@ That works fine as well. By combining bounding boxes and bounding spheres, we ca
 
 ![](examples/dish-render.png)
 
+Castle Example
+--------------
+
+Now let's try to actually make something that looks like a real-world object. Castle walls are recognizable, so let's start there.
+
 Height Map Example
 ------------------
 
