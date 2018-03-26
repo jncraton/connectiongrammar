@@ -5,4 +5,4 @@ Stud -> '(' 'Rotate(270)' 'Move(-1,-1,0)' T1x2 ')'
 Stud -> '(' 'Move(0,-1,0)' T1x1 ')'
 
 T1x1 -> 'FillRect(2,1,2)' 'Place(3070b)'
-T1x2 -> 'FillRect(4,1,2)' 'Place(3069b)'
+T1x2 -> 'FillRect(4,1,2)' 'Place(3069b)' '(' 'Move(-1,1,0)' Antistud 'Move(2,1,0)' ')'
