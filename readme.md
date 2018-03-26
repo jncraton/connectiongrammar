@@ -165,8 +165,8 @@ Steping through the program will generate the following:
 
 ![](examples/rotation_translation03.png)
 
-Non-trivial fitness function example
-------------------------------------
+Complex Fitness Function Example
+--------------------------------
 
 The previous examples have used a trivial fitness function that could simply be replaced by "generate a string from the grammar of length n". A non-trivial fitness function should actually use to properties of the generated object to determine fitness.
 
