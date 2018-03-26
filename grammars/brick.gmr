@@ -37,11 +37,6 @@ Antistud -> '(' 'Rotate(180)' 'Move(-1,0,0)' B1x2 ')'
 Antistud -> '(' 'Rotate(270)' 'Move(-1,0,0)' B1x2 ')'
 Antistud -> '(' B1x1 ')'
 
-B2x4 -> 'FillRect(8,3,4)' 'Place(3001)' BrickConnection2x4
-B2x2 -> 'FillRect(4,3,4)' 'Place(3003)' BrickConnection2x2
-B1x2 -> 'FillRect(4,3,2)' 'Place(3004)' BrickConnection1x2
-B1x1 -> 'FillRect(2,3,2)' 'Place(3005)' BrickConnection
-
 BrickConnection -> '(' Stud 'Move(0,3,0)' Antistud ')' |
 BrickConnection1x2 -> '(' 'Move(-1,0,0)' BrickConnection 'Move(2,0,0)' BrickConnection ')'
 BrickConnection2x2 -> '(' 'Move(0,0,-1)' BrickConnection1x2 'Move(0,0,2)' BrickConnection1x2 ')'
