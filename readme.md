@@ -1,6 +1,10 @@
-# Connection Grammar
+Connection Grammar
+==================
 
 [![Build Status](https://travis-ci.com/jncraton/connectiongrammar.svg?token=yQJxZLQNAHqWRpN2k3wf&branch=master)](https://travis-ci.com/jncraton/connectiongrammar)
+
+Overview
+--------
 
 The field computational design synthesis involves using computer algorithm to create designs to meet a set of engineering requirements. There are many tools and algorithms available to aid in computational design synthesis[5]. Generative grammars are one broad class of solutions to this problem.
 
@@ -29,9 +33,15 @@ This package and basic algorithm could be used to model many kinds of interconne
 
 This sort of system is familiar to most people. Using this for demonstration eliminates the need to describe external domain knowledge as part of an explaining this methodology. It also has the convienient side-effect of being a cheap physical object that can be quickly physcially assembled for debugging and problem solving issues.
 
-Here's a very simple example of a grammar that could be used to create a simple brick structure:
+Despite its simple appearance, blocks of this nature to provide enough interesting behavior to demonstrate the complexity that can be generated using context-free grammars. For example, blocks may only be stacked, so in order to move laterally multiple blocks must be stacked in an interconnected pattern.
+
+Example
+-------
+
+Here's a very simple example grammar that could be used to generate instructions for a simple brick tower:
 
     Stud -> 'Move(0,-1,0)' 'Place("Brick1x1")' Stud
+    Stud -> ɛ
 
 Adding a simple fitness function to return perfect fitness unless we have more than 3 bricks in the model would allow this to successfully generate the following placement program:
 
@@ -41,6 +51,14 @@ Adding a simple fitness function to return perfect fitness unless we have more t
     Place("Brick1x1")
     Move(0,-1,0)
     Place("Brick1x1")
+
+Here's the process for that output string:
+
+1. Stud
+2. Move(0,-1,0) Place("Brick1x1") Stud
+3. Move(0,-1,0) Place("Brick1x1") Move(0,-1,0) Place("Brick1x1") Stud
+4. Move(0,-1,0) Place("Brick1x1") Move(0,-1,0) Place("Brick1x1") Move(0,-1,0) Place("Brick1x1") Stud
+5. Move(0,-1,0) Place("Brick1x1") Move(0,-1,0) Place("Brick1x1") Move(0,-1,0) Place("Brick1x1")
 
 Let's step through this program. The only state we need to consider is the current postion and the list of placed elements:
 
@@ -99,7 +117,12 @@ Start state
 
 ![](examples/1x1stack03.png)
 
-Despite its simple appearance, blocks of this nature to provide enough interesting behavior to demonstrate the complexity that can be generated using context-free grammars. For example, blocks may only be stacked, so in order to move laterally multiple blocks must be stacked in an interconnected pattern.
+The above example represents the basic concept, but is simplification of the complete system. In addition to the above instructions, this system also implements `Rotate` to adjust the direction of the head. `Move` is relative to head direction, and head direction also determines the orientation of placed objects. Positions are also represented on a stack and can be pushed and popped in order to simplify program design.
+
+The state of a running program consists of:
+
+1. A stack of head positions. This is initialized with one position at the origin. A position is represented as a 4-tuple (x, y, z, rotation_matrix). The rotation matrix is a standard 3x3 3D transformation matrix.
+2. A list of elements. Elements are represented as a 3-tuple of (position, color, name).
 
 [1] Martin, Jess. "Procedural house generation: A method for dynamically generating floor plans." In Symposium on interactive 3D Graphics and Games, vol. 2. 2006.
 
