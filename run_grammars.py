@@ -18,5 +18,7 @@ cg = connectiongrammar.ConnectionGrammar(
 sentence = cg.generate()
 elements = placer.parse(sentence)[0]
 
+print("Generated model with %d elements" % (len(elements),))
+
 with open('output.ldr','w') as outf:
   outf.write(placer.to_ldraw(elements))
