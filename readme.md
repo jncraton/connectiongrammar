@@ -247,7 +247,7 @@ Castle Example
 
 Now let's try to actually make something that looks like a real-world object. Castle walls are easily recognizable, so let's start there.
 
-We can build a basic wall by simply filling in a bounding box. We can add some medieval-style battlements to the top by prefilling the regular spaces at the the top of the wall. We can also clean up the studded look on top by adding a few tiles to our grammar:
+We can build a basic wall by simply filling in a narrow bounding box. We can add some medieval-style battlements to the top by adding additional bounding boxes at the top in regular intervals of the wall. We can also clean up the studded look on top by adding a few tiles to our grammar:
 
 ```
 Stud -> '(' 'Move(-1,-1,0)' T1x2 ')'
@@ -260,11 +260,11 @@ T1x1 -> 'FillRect(2,1,2)' 'Place(3070b)'
 T1x2 -> 'FillRect(4,1,2)' 'Place(3069b)' '(' 'Move(-1,1,0)' Antistud 'Move(2,1,0)' ')'
 ```
 
-This produces a nice looking, though quite boring, wall:
+This produces a fine looking, though admittedly boring, wall:
 
 ![](examples/castle1.png)
 
-Let's see if we can add some interest by apply a probabilistic context-free grammar using some new rules:
+Let's see if we can add some interest by applying new probabilistic grammar rules:
 
 ```
 B1x2 -> 'FillRect(4,3,2)' 'SetColor(378)' 'Place(3004)' 'SetColor(71)' BrickConnection1x2 [.1]
@@ -282,18 +282,18 @@ Each rule now has an associated probaility that indicates how frequently it shou
 
 ![](examples/castle-pcfg.png)
 
-That's obviously not an inspired work of creative genius, but it does provide much more interest than the plain wall. This type of probabilistic rule-based design could be applied to many areas of product development and design to create new product alterations.
+That's much more interesting than the plain wall. This type of probabilistic rule-based design could be applied to many areas of product development and design to create new product alterations.
 
 Augmented Design Example
 ------------------------
 
-One of the beautiful attributes of a grammar-based methodology is that is allows us to store the entire state of the design in an expandable connection grammar utterance. We can move back and forth between human CAD design and computer procedural generation.
+One of the beautiful attributes of a grammar-based methodology is that is allows us to store the entire state of the design in an expandable connection grammar utterance. This allows us to easily move back and forth between human CAD design and computer procedural generation.
 
-Let's say that I have a particular design in mind for an aspect of a product that is tedious to model as a grammar but trivial to model with traditional CAD tools. A designer can simply create a section of the design in a CAD tool, convert it to a grammar, and grow it from there. Take for example, this drawbridge design:
+Let's say that I have a particular design in mind for an aspect of a product that is tedious to model as a grammar but trivial to model with traditional CAD tools. A designer can simply create a section of the design in a CAD tool, convert it to a grammar, and grow new structure from there. Take for example this drawbridge design:
 
 ![](examples/castle-human.png)
 
-This can be converted into the following grammar utterance:
+This was designed using LDraw and stored as a simple list of elements. However, it can be easily converted into the following grammar utterance:
 
 ```
 ( Move(-5,3,0) FillRectNoCheck(4,3,2) )
