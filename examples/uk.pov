@@ -157,8 +157,8 @@
 #declare lc_Color_999 = texture { pigment { rgb <0.500000, 0.500000, 0.500000> } finish { ambient 0.1 phong 0.2 phong_size 20 } }
 
 camera {
-  location <10, 30, 50>
-  look_at <0,5,0>
+  location <0, 30, 45>
+  look_at <0,8,0>
   sky <0,-1,0>
 }
 
