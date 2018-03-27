@@ -20,7 +20,7 @@ from nltk import PCFG
 
 import connectiongrammar
 
-OP = enum.Enum('OP', 'PlaceBoundingSphere Place Move FillRect Rotate ( ) AssertFilled PlaceBoundingBox SetColor')
+OP = enum.Enum('OP', 'PlaceBoundingSphere Place Move FillRect Rotate ( ) AssertFilled PlaceBoundingBox SetColor FillRectNoCheck')
 
 default_color = 1
 
@@ -81,6 +81,9 @@ def get_token(lexeme):
   elif lexeme[0:4] == 'Move':
     delta = tuple(int(i) for i in lexeme[5:-1].split(','))
     return (OP['Move'], delta)
+  elif lexeme[0:15] == 'FillRectNoCheck':
+    bounds = tuple(int(i) for i in lexeme[16:-1].split(','))
+    return (OP['FillRectNoCheck'], bounds)
   elif lexeme[0:8] == 'FillRect':
     bounds = tuple(int(i) for i in lexeme[9:-1].split(','))
     return (OP['FillRect'], bounds)
@@ -148,7 +151,7 @@ class VolumetricImage:
   def __init__(self, voxels = set()):
     self.voxels = voxels
 
-  def fill_rect(self, pos, size, dry_run=False):
+  def fill_rect(self, pos, size, dry_run=False, check=True):
     """
     Fills a 3d rectange of voxels at the current position, but fails if
     a collision occurs.
@@ -162,7 +165,7 @@ class VolumetricImage:
       for y in range(0, size[1]):
         for z in range(bounds[2][0], bounds[2][1]):
           new_pos = (pos[0] + x, pos[1] + y, pos[2] + z)
-          if new_pos in self.voxels:
+          if new_pos in self.voxels and check:
             raise CollisionError('Cannot fill %s' % (new_pos[-1],))
           if not dry_run:
             self.voxels.add(new_pos)
@@ -280,6 +283,8 @@ def exec_ops(img,states,ops,dry_run=False):
       default_color = op[1]
     elif op[0] == OP.FillRect:
       img.fill_rect(states[-1], op[1], dry_run=dry_run)
+    elif op[0] == OP.FillRectNoCheck:
+      img.fill_rect(states[-1], op[1], dry_run=dry_run, check=False)
     elif op[0] == OP.AssertFilled:
       try:
         img.fill_rect(states[-1], (2,1,2), dry_run=dry_run)
