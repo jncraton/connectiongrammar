@@ -52,7 +52,8 @@ class ConnectionGrammar():
     while(i != None):
       productions = self.grammar.productions(lhs=sentence[i])
 
-      best = (0.0, None)
+      best_fitness = 0.0
+      best_prods = []
                         
       for prod in productions:
         test = list(prod.rhs())
@@ -62,12 +63,24 @@ class ConnectionGrammar():
 
         fitness = self.fitness(tuple(sentence[0:i]), tuple(test))
 
-        if fitness > best[0]:
-          best = (fitness, [s for s in prod.rhs()])
-          if fitness >= 1:
+        if fitness > best_fitness:
+          best_prods = []
+
+        if fitness >= best_fitness:
+          best_fitness = fitness
+
+          best_prods.append(prod)
+          
+          if fitness >= 1.0 and 'stud' in str(prod.lhs()).lower(): # TODO: using stud as a check is rubbish. There should be a way to define something as a connection rule that should be checked for fitness, not probabilistically. Since this is just a performance shortcut, it is ok for now.
             break
 
-      sentence = sentence[0:i] + list(best[1]) + sentence[i+1:]
+      try:
+        best = np.random.choice(best_prods, p=[p.prob() for p in best_prods])
+      except ValueError:
+        # Probabilities do not sum to 1. This happens when not all rules have equal fitness
+        best = best_prods[-1]
+
+      sentence = sentence[0:i] + list([s for s in best.rhs()]) + sentence[i+1:]
 
       i = next_nonterm(sentence,start=i)
 
