@@ -119,14 +119,14 @@ Now that we have the program generated, let's step through the program execution
 Rotation and Translation Example
 --------------------------------
 
-The stacking example represents some of the basic concepts, but it is a simplification of the complete system. In addition to the above instructions, this system also implements `Rotate` to adjust the direction of the head. `Move` instructions adjust position relative to head direction, and `Place` instructions use head direction also determine the orientation of placed objects. Positions are also stored on a stack and can be pushed and popped in order to simplify grammar and program design.
+The stacking example represents some of the basic concepts, but it is a simplification of the complete system. In addition to the above instructions, this system also implements `Rotate` to adjust the direction of the head. `Move` instructions adjust position relative to head direction, and `Place` instructions use head direction to determine the orientation of placed objects. Positions are also stored on a stack and can be pushed and popped in order to simplify grammar and program design.
 
 The state of a running program consists of:
 
 1. A stack of head positions. This is initialized with one position at the origin. A position is represented as a 4-tuple (x, y, z, rotation_matrix). The rotation matrix is a standard 3x3 3D transformation matrix.
 2. A list of elements. Elements are represented as a 3-tuple of (position, color, name).
 
-Rotation and translation are important, as connections between these building block and many other physical objects depend on connections being made at specific locations and orientations. This applies in many contexts including screws lining up with associated holes in a connected part and surface-mount PCB connectors properly aligning with their mate. Including rotation and translation in our system allows us to model complex connection types in 3D space.
+Rotation and translation are important, as connections between these building blocks and many other physical objects depend on connections being made at specific locations and orientations. This applies in many contexts including screws lining up with associated holes in a connected part and surface-mount PCB connectors properly aligning with their mate. Including rotation and translation in our system allows us to model complex connection types in 3D space.
  
 ### Program Generation
 
@@ -172,7 +172,7 @@ Steping through the program will generate the following:
 Complex Fitness Function Example
 --------------------------------
 
-The previous examples have used a trivial fitness function that could simply be replaced by "generate a string from the grammar of length n". A non-trivial fitness function should actually use to properties of the generated object to determine fitness.
+The previous examples have used a trivial fitness function that could simply be replaced by generating a string from the grammar of length n. A non-trivial fitness function should use properties of the generated object to determine fitness.
 
 One example would be a fitness function that validates legal collision-free element placement. This can be implemented using any physics simulator, but for simplicity we will simply use an axis-aligned bounding box (AABB) voxel system[8].
 
@@ -181,7 +181,7 @@ Let's begin by significantly expanding our grammar. We'll need two main addition
 1. The ability to add bounds to our geometery. We will implement this via a new `PlaceBoundingBox` operation.
 2. The ability for placed elements to actually consume space. We will implement this via a new `FillRect` operation.
 
-We will also use a greatly expanded grammar for element placement to demonstrate some of the power of this system. The grammars used can be found in the /grammar directory. Here is an example grammar that includes 1x1, 1x2, 2x2, and 2x4 bricks and implements both stud and antistud connections:
+We will also use a greatly expanded our grammar for element placement to demonstrate some of the power of this system. The grammars used can be found in the `/grammars` directory. Here is an example grammar that includes 1x1, 1x2, 2x2, and 2x4 bricks and implements both stud and antistud connections:
 
 ```
 Stud -> '(' 'Move(-3,-3,-1)' B2x4 ')'
@@ -247,7 +247,7 @@ Castle Example
 
 Now let's try to actually make something that looks like a real-world object. Castle walls are easily recognizable, so let's start there.
 
-We can build a basic wall by simply filling in a narrow bounding box. We can add some medieval-style battlements to the top by adding additional bounding boxes at the top in regular intervals of the wall. We can also clean up the studded look on top by adding a few tiles to our grammar:
+We can build a basic wall by simply filling in a narrow bounding box. We can add battlements to the top by adding additional bounding boxes at the top in regular intervals. We can also clean up the studded look on top by adding a few tiles to our grammar:
 
 ```
 Stud -> '(' 'Move(-1,-1,0)' T1x2 ')'
@@ -287,9 +287,9 @@ That's much more interesting than the plain wall. This type of probabilistic rul
 Augmented Design Example
 ------------------------
 
-One of the beautiful attributes of a grammar-based methodology is that is allows us to store the entire state of the design in an expandable connection grammar utterance. This allows us to easily move back and forth between human CAD design and computer procedural generation.
+One of the beautiful attributes of a grammar-based methodology is that it allows us to store the entire state of the design in an expandable connection grammar utterance. This allows us to easily move back and forth between human CAD design and computer procedural generation.
 
-Let's say that I have a particular design in mind for an aspect of a product that is tedious to model as a grammar but trivial to model with traditional CAD tools. A designer can simply create a section of the design in a CAD tool, convert it to a grammar, and grow new structure from there. Take for example this drawbridge design:
+Let's say that a designer a particular design in mind for an aspect of a product that is tedious to model as a grammar but trivial to model with traditional CAD tools. A designer can simply create a section of the design in a CAD tool, convert it to a grammar, and grow new structures from there. Take for example this drawbridge design:
 
 ![](examples/castle-human.png)
 
@@ -339,6 +339,8 @@ We can then expand this within the bounds of our previous wall and generate a wa
 Here's an animation to show the order in which the grammar fulfills connections:
 
 ![](examples/castle-aug.gif)
+
+Using this technique, multiple hand-designed structures can be stictched together using a grammar that understands possible connections between them.
 
 Height Map Example
 ------------------
