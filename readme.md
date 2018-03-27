@@ -336,6 +336,8 @@ We can then expand this within the bounds of our previous wall and generate a wa
 
 ![](examples/castle-human-aug.png)
 
+Here's an animation to show the order in which the grammar fulfills connections:
+
 ![](examples/castle-aug.gif)
 
 Height Map Example
