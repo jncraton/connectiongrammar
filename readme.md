@@ -278,6 +278,15 @@ Each rule now has an associated probaility that indicates how frequently it shou
 
 ![](examples/castle-pcfg.png)
 
+That's obviously not an inspired work of creative genius, but it does provide much more interest than the plain wall. This sort of probabilistic rule-based design could be applied to many areas of product development and design to create new product alterations.
+
+Augmented Design Example
+------------------------
+
+One of the beautiful attributes of a grammar-based methodology is that is allows us to store the entire state of the design in an expandable connection grammar utterance. We can move back and forth between human CAD design and computer procedural generation.
+
+{{ complete this example }}
+
 Height Map Example
 ------------------
 
