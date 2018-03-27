@@ -285,7 +285,11 @@ Augmented Design Example
 
 One of the beautiful attributes of a grammar-based methodology is that is allows us to store the entire state of the design in an expandable connection grammar utterance. We can move back and forth between human CAD design and computer procedural generation.
 
-{{ complete this example }}
+Let's say that I have a particular design in mind for an aspect of a product that is tedious to model as a grammar but trivial to model with traditional CAD tools. A designer can simply create a section of the design in a CAD tool, convert it to a grammar, and grow it from there. Take for example, this drawbridge design:
+
+![](examples/castle-human.png)
+
+This can be converted into the following grammar:
 
 Height Map Example
 ------------------
