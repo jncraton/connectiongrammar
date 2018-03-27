@@ -185,24 +185,24 @@ def bounding_box(size, center=(0,0,0)):
   """ Creates a bounding box centered around the current point 
 
   >>> len(bounding_box((1,2,3)))
-  90
+  144
   >>> (1,2,3) in bounding_box((1,2,3))
   True
-  >>> (-1,-2,-3) in bounding_box((1,2,3))
+  >>> (-2,-3,-4) in bounding_box((1,2,3))
   True
-  >>> (-1,0,0) in bounding_box((1,2,3))
+  >>> (-2,0,0) in bounding_box((1,2,3))
   True
-  >>> (0,1,1) in bounding_box((1,2,3),(1,1,1))
+  >>> (-1,1,1) in bounding_box((1,2,3),(1,1,1))
   True
   """
   voxels = set()
 
   (xsize, ysize, zsize) = size
 
-  for x in range(-xsize, xsize + 1):
-    for y in range(-ysize, ysize + 1):
-      for z in range(-zsize, zsize + 1):
-        if abs(x) == xsize or abs(y) == ysize or abs(z) == zsize:
+  for x in range(-xsize-1, xsize+1):
+    for y in range(-ysize-1, ysize+1):
+      for z in range(-zsize-1, zsize+1):
+        if x == xsize or x == -xsize-1 or y == ysize or y == -ysize-1 or z == zsize or z == -zsize-1:
           voxels.add((center[0]+x,center[1]+y,center[2]+z))
 
   return voxels
