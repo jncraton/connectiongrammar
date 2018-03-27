@@ -2,8 +2,8 @@
 Implements a basic 3d object placer and fitness function
 
 >>> cg = connectiongrammar.ConnectionGrammar(
-...     grammar = CFG.fromstring(
-...     "Stud -> '(' 'Move(0,-3,0)' 'FillRect(2,3,2)' 'Place(3005)' Stud ')'|"),
+...     grammar = PCFG.fromstring(
+...     "Stud -> '(' 'Move(0,-3,0)' 'FillRect(2,3,2)' 'Place(3005)' Stud ')'| [1.0]"),
 ...     fitness=fitness)
 >>> sentence = cg.generate()
 >>> ' '.join(sentence)
@@ -16,6 +16,7 @@ Implements a basic 3d object placer and fitness function
 import functools
 import enum
 import math
+from nltk import PCFG
 
 import connectiongrammar
 
@@ -246,6 +247,8 @@ def parse(ops):
   return (elements, img, states)
 
 def exec_ops(img,states,ops,dry_run=False):
+  global default_color
+
   if isinstance(ops, str):
     ops = ops.split()
 
@@ -274,7 +277,6 @@ def exec_ops(img,states,ops,dry_run=False):
     elif op[0] == OP.Rotate:
       states[-1] = (states[-1][0],states[-1][1],states[-1][2],(states[-1][3] + int(op[1]/90)) % 4)
     elif op[0] == OP.SetColor:
-      global default_color
       default_color = op[1]
     elif op[0] == OP.FillRect:
       img.fill_rect(states[-1], op[1], dry_run=dry_run)
