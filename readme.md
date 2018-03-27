@@ -340,7 +340,11 @@ Here's an animation to show the order in which the grammar fulfills connections:
 
 ![](examples/castle-aug.gif)
 
-Using this technique, multiple hand-designed structures can be stictched together using a grammar that understands possible connections between them.
+Let's not forget that this system can operate in full 3D space, so we can generate a much more secure castle by simply adjusting the bounds in our fitness function:
+
+![](examples/castle3d.png)
+
+Using this human augmentation technique, multiple hand-designed structures can be stictched together using a grammar that understands possible connections between them.
 
 Height Map Example
 ------------------

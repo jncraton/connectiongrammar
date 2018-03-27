@@ -4,7 +4,7 @@ ldr_filename = sys.argv[1]
 gmr_filename = sys.argv[2]
 
 # Assumes castle example
-init = "Init -> 'PlaceBoundingBox(100,100,100)' '(' 'Move(1,0,13)' 'PlaceBoundingBox(11,23,11)' 'PlaceBoundingBox(15,23,15)' ')' '(' 'Move(0,13,0)' 'PlaceBoundingBox(4,12,0)' ')' "
+init = "Init -> 'PlaceBoundingBox(100,100,100)' '(' 'Move(1,0,37)' 'PlaceBoundingBox(35,23,35)' 'PlaceBoundingBox(39,23,39)' ')' '(' 'Move(0,13,0)' 'PlaceBoundingBox(4,12,0)' ')' "
 
 init += "'(' 'Move(-39,-24,0)' "
 
