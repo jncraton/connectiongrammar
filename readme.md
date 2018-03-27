@@ -347,7 +347,7 @@ We can get creative with our fitness function in order to create all kinds of no
 
 ![](examples/uk-heightmap.png)
 
-The fitness function is then able to generate a program to build the following with addition of altitude-based coloring rules:
+The fitness function is then able to generate a program to build the following with the addition of altitude-based coloring rules:
 
 ![](examples/uk.png)
 
