@@ -260,6 +260,24 @@ This produces a nice looking, though quite boring, wall:
 
 ![](examples/castle1.png)
 
+Let's see if we can add some interest by apply a probabilistic context-free grammar using some new rules:
+
+```
+B1x2 -> 'FillRect(4,3,2)' 'SetColor(378)' 'Place(3004)' 'SetColor(71)' BrickConnection1x2 [.1]
+B1x2 -> 'FillRect(4,3,2)' 'Place(3004)' BrickConnection1x2 [.7]
+B1x2 -> 'FillRect(4,3,2)' 'SetColor(72)' 'Place(98283)' 'SetColor(71)' BrickConnection1x2 [.15]
+B1x2 -> 'FillRect(4,3,2)' '(' 'Move(-1,0,0)' B1x1NoCheck 'Move(2,0,0)' B1x1NoCheck ')' [.05]
+B1x1 -> 'FillRect(2,3,2)' B1x1NoCheck
+
+B1x1NoCheck -> 'Place(3005)' BrickConnection [.3]
+B1x1NoCheck -> 'Place(3062b)' BrickConnection [.6]
+B1x1NoCheck -> 'Place(47905)' BrickConnection [.1]
+```
+
+Each rule now has an associated probaility that indicates how frequently it should be applied. Regenerating our castle wall using these new rules gives us something like this:
+
+![](examples/castle-pcfg.png)
+
 Height Map Example
 ------------------
 

@@ -1,5 +1,16 @@
+SetRandColor -> 'SetColor(71)' [.9]
+SetRandColor -> 'SetColor(72)' [.1]
+SetRandColor -> [0]
+
+B1x2 -> 'FillRect(4,3,2)' 'SetColor(378)' 'Place(3004)' 'SetColor(71)' BrickConnection1x2 [.1]
+B1x2 -> 'FillRect(4,3,2)' 'Place(3004)' BrickConnection1x2 [.7]
+B1x2 -> 'FillRect(4,3,2)' 'SetColor(72)' 'Place(98283)' 'SetColor(71)' BrickConnection1x2 [.15]
+B1x2 -> 'FillRect(4,3,2)' '(' 'Move(-1,0,0)' B1x1NoCheck 'Move(2,0,0)' B1x1NoCheck ')' [.05]
+B1x1 -> 'FillRect(2,3,2)' B1x1NoCheck
+
+B1x1NoCheck -> 'Place(3005)' BrickConnection [.3]
+B1x1NoCheck -> 'Place(3062b)' BrickConnection [.6]
+B1x1NoCheck -> 'Place(47905)' BrickConnection [.1]
+
 B2x4 -> 'FillRect(8,3,4)' 'Place(3001)' BrickConnection2x4
 B2x2 -> 'FillRect(4,3,4)' 'Place(3003)' BrickConnection2x2
-B1x2 -> 'FillRect(4,3,2)' 'Place(3004)' BrickConnection1x2 [.9]
-B1x2 -> 'FillRect(4,3,2)' 'Place(98283)' BrickConnection1x2 [.1]
-B1x1 -> 'FillRect(2,3,2)' 'Place(3005)' BrickConnection
