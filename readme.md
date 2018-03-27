@@ -18,6 +18,8 @@ A picture is worth a thousand words, so here is a graphical explaination from [7
 
 ![](turtle-interpretation.png)
 
+As in other procedural modelling grammar applications [11], non-terminal symbols generically represent opportunities for our grammar to grow new structures.
+
 While context-free grammars are suitable for modelling possible connections, they do not have a concept of global state and cannot "see" the rest of the generated objects. A second layer fitness function, modeling a user-defined global ruleset, is required to generate object graphs that adhere to specific global parameters. This is similar to the methods used in other work [1][2]. In the case of simple interconnected shapes, a 3D collision space may be a suitable fitness function to ensure a physically valid shape. Additional rules can be added to ensure that a generated shape is suitable in other ways. For example, rules could be added for thermal disipation to model behavior of various shapes for use as a heat exchangers.
 
 The algorithm for fitting a model to the fitness function is as follows:
@@ -43,10 +45,10 @@ This sort of system is familiar to most people. Using this for demonstration eli
 
 Despite its simple appearance, blocks of this nature to provide enough interesting behavior to demonstrate the complexity that can be generated using context-free grammars. For example, blocks may only be stacked, so in order to move laterally multiple blocks must be stacked in an interconnected pattern.
 
-Brick Stacking Example
-----------------------
+Linear 1D Example
+-----------------
 
-Trivially, this system can be used to generate a stack of bricks. This simplistic example provides a good starting point for demonstration purposes.
+Trivially, this system can be used to generate a stack of bricks linearly upwards in a single dimension. This simplistic example provides a good starting point for demonstration purposes.
 
 ### Program Generation
 
@@ -77,7 +79,7 @@ Adding a simple fitness function to return perfect fitness unless we have more t
 7. `Move(0,-1,0) Place("Brick1x1") Move(0,-1,0) Place("Brick1x1") Move(0,-1,0) Place("Brick1x1")`
     - 3 Elements
     - Fitness: 1.0
-    - We now have only terminals, so we have generated a complete valid program.
+    - We now have only terminals, so we have generated a complete, valid program.
 
 ### Program Execution
 
@@ -372,3 +374,7 @@ References
 [9] Lienhard, Stefan, Cheryl Lau, Pascal Müller, Peter Wonka, and Mark Pauly. "Design Transformations for Rule‐based Procedural Modeling." In Computer Graphics Forum, vol. 36, no. 2, pp. 39-48. 2017.
 
 [10] Aono, Masaki, and Tosiyasu L. Kunii. "Botanical tree image generation." IEEE computer graphics and applications 4, no. 5 (1984): 10-34.
+
+[11] Krecklau, Lars, Darko Pavic, and Leif Kobbelt. "Generalized Use of Non‐Terminal Symbols for Procedural Modeling." In Computer Graphics Forum, vol. 29, no. 8, pp. 2291-2303. Blackwell Publishing Ltd, 2010.
+
+
