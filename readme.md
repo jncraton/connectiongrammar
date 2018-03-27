@@ -10,7 +10,7 @@ Overview
 
 The field computational design synthesis involves using computer algorithm to create designs to meet a set of engineering requirements. There are many tools and algorithms available to aid in computational design synthesis[5]. Generative grammars are one broad class of solutions to this problem.
 
-This project uses a context-free grammar to generate a language that issues commands to a 3D object printer. It moves and rotates an imaginary print head and issues requests to place objects. This is similar to the "turtle interpretation" for L-systems desribed in [3]:
+In some ways, this project is similar in concept to grammar systems for generating trees or algae[10]. This project uses a context-free grammar to generate a language that issues commands to a 3D object printer. It moves and rotates an imaginary print head and issues requests to place objects. This is similar to the "turtle interpretation" for L-systems desribed in [3]:
 
 > The  concept  is  based  on  the idea of an imaginary turtle that walks, turns and draws according to instructions given. At any time the turtle has a current position in  3-space  and  a  heading  vector  (the  forward  direction  of movement). Individual letters in a string are treated as commands. Different  letters  change  position  or  heading,  record  vertices  in  a polygon,  apply  pre-defined  surfaces  to  the  current  position  and orientation, change colour, etc.
 
@@ -29,6 +29,8 @@ The algorithm for fitting a model to the fitness function is as follows:
 5. Repeat back to (3) for each production rule.
 6. Apply the production rule that returned the highest fitness (first rule wins in case of a tie).
 7. Repeat back to (2) until the string contains only terminals.
+
+Grammar production rules may also be assigned a probability to model possible interconnections as a probabilistic context free grammar (PCFG). This allows each created model to be unique, and provides a product designer with more tools to enhance their creative work[9].
 
 Examples
 --------
@@ -366,3 +368,7 @@ References
 [7] Bie, Dongyang, Jie Zhao, Xiaolu Wang, and Yanhe Zhu. "A distributed self-reconfiguration method combining cellular automata and L-systems." In Robotics and Biomimetics (ROBIO), 2015 IEEE International Conference on, pp. 60-65. IEEE, 2015.
 
 [8] Jiménez, Pablo, Federico Thomas, and Carme Torras. "3D collision detection: a survey." Computers & Graphics 25, no. 2 (2001): 269-285.
+
+[9] Lienhard, Stefan, Cheryl Lau, Pascal Müller, Peter Wonka, and Mark Pauly. "Design Transformations for Rule‐based Procedural Modeling." In Computer Graphics Forum, vol. 36, no. 2, pp. 39-48. 2017.
+
+[10] Aono, Masaki, and Tosiyasu L. Kunii. "Botanical tree image generation." IEEE computer graphics and applications 4, no. 5 (1984): 10-34.
