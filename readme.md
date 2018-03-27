@@ -334,7 +334,7 @@ SetColor(71)
 
 We can then expand this within the bounds of our previous wall and generate a wall surrounding our drawbridge:
 
-![](examples/castle-human-aug.png)
+![](examples/castle-aug.gif)
 
 Height Map Example
 ------------------
