@@ -1,0 +1,3 @@
+#!/bin/bash
+
+povray Quality=11 Height=2160 Width=2880 Render_Pattern=3 Include_Header=header.inc +A0.1 +L/lgeo/lgeo +L/lgeo/lgeo/lg +L/lgeo/lgeo/ar c3d.pov
