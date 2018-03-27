@@ -241,7 +241,24 @@ That works fine as well. By combining bounding boxes and bounding spheres, we ca
 Castle Example
 --------------
 
-Now let's try to actually make something that looks like a real-world object. Castle walls are recognizable, so let's start there.
+Now let's try to actually make something that looks like a real-world object. Castle walls are easily recognizable, so let's start there.
+
+We can build a basic wall by simply filling in a bounding box. We can add some medieval-style battlements to the top by prefilling the regular spaces at the the top of the wall. We can also clean up the studded look on top by adding a few tiles to our grammar:
+
+```
+Stud -> '(' 'Move(-1,-1,0)' T1x2 ')'
+Stud -> '(' 'Rotate(90)' 'Move(-1,-1,0)' T1x2 ')'
+Stud -> '(' 'Rotate(180)' 'Move(-1,-1,0)' T1x2 ')'
+Stud -> '(' 'Rotate(270)' 'Move(-1,-1,0)' T1x2 ')'
+Stud -> '(' 'Move(0,-1,0)' T1x1 ')'
+
+T1x1 -> 'FillRect(2,1,2)' 'Place(3070b)'
+T1x2 -> 'FillRect(4,1,2)' 'Place(3069b)' '(' 'Move(-1,1,0)' Antistud 'Move(2,1,0)' ')'
+```
+
+This produces a nice looking, though quite boring, wall:
+
+![](examples/castle1.png)
 
 Height Map Example
 ------------------
