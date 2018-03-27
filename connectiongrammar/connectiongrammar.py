@@ -1,6 +1,5 @@
 import functools
 
-from nltk import CFG
 from nltk.grammar import Nonterminal
 
 class ConnectionGrammar():
