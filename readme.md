@@ -226,7 +226,7 @@ BrickConnection2x2 -> '(' 'Move(0,0,-1)' BrickConnection1x2 'Move(0,0,2)' BrickC
 BrickConnection2x4 -> '(' 'Move(-2,0,0)' BrickConnection2x2 'Move(4,0,0)' BrickConnection2x2 ')'
 ```
 
-Let's run expand that grammar inside a bounding box:
+Let's expand that grammar to fill the inside of a bounding box:
 
 ![](examples/box.gif)
 
