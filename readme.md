@@ -278,7 +278,7 @@ Each rule now has an associated probaility that indicates how frequently it shou
 
 ![](examples/castle-pcfg.png)
 
-That's obviously not an inspired work of creative genius, but it does provide much more interest than the plain wall. This sort of probabilistic rule-based design could be applied to many areas of product development and design to create new product alterations.
+That's obviously not an inspired work of creative genius, but it does provide much more interest than the plain wall. This type of probabilistic rule-based design could be applied to many areas of product development and design to create new product alterations.
 
 Augmented Design Example
 ------------------------
@@ -289,7 +289,48 @@ Let's say that I have a particular design in mind for an aspect of a product tha
 
 ![](examples/castle-human.png)
 
-This can be converted into the following grammar:
+This can be converted into the following grammar utterance:
+
+```
+( Move(-5,3,0) FillRectNoCheck(4,3,2) )
+( Move(-5,9,0) Rotate(180) FillRectNoCheck(4,3,2) )
+( Move(7,3,0) Rotate(180) FillRectNoCheck(4,3,2) )
+( Move(7,9,0) FillRectNoCheck(4,3,2) )
+( Move(7,15,0) Rotate(180) FillRectNoCheck(4,3,2) )
+( Move(-5,15,0) FillRectNoCheck(4,3,2) )
+( Move(6,12,0) Rotate(180) FillRectNoCheck(2,3,2) )
+( Move(6,6,0) Rotate(180) FillRectNoCheck(2,3,2) )
+( Move(-4,6,0) Rotate(180) FillRectNoCheck(2,3,2) )
+( Move(-4,12,0) Rotate(180) FillRectNoCheck(2,3,2) )
+( Move(-5,3,0) SetColor(71) B1x2NoCheck )
+( Move(-5,9,0) SetColor(71) Rotate(180) B1x2NoCheck )
+( Move(7,3,0) SetColor(71) Rotate(180) B1x2NoCheck )
+( Move(7,9,0) SetColor(71) B1x2NoCheck )
+( Move(7,15,0) SetColor(71) Rotate(180) B1x2NoCheck )
+( Move(-5,15,0) SetColor(71) B1x2NoCheck )
+( Move(1,18,0) SetColor(71) Rotate(180) Place(3009) )
+( Move(6,12,0) SetColor(71) Rotate(180) B1x1NoCheck )
+( Move(6,6,0) SetColor(71) Rotate(180) B1x1NoCheck )
+( Move(-4,6,0) SetColor(71) Rotate(180) B1x1NoCheck )
+( Move(-4,12,0) SetColor(71) Rotate(180) B1x1NoCheck )
+( Move(1,0,0) SetColor(71) Place(92950) )
+( Move(1,17,-5) SetColor(70) Rotate(270) Place(3032) )
+( Move(-1,18,-10) SetColor(71) Place(6227) )
+( Move(3,18,-10) SetColor(71) Place(6227) )
+( Move(-2,16,-7) SetColor(308) Rotate(270) Place(91143) )
+( Move(2,16,-7) SetColor(308) Rotate(270) Place(91143) )
+( Move(0,16,-3) SetColor(308) Rotate(270) Place(91143) )
+( Move(4,16,-3) SetColor(308) Rotate(270) Place(91143) )
+( Move(4,16,-9) SetColor(308) Rotate(270) Place(30070) )
+( Move(-2,16,-1) SetColor(308) Rotate(270) Place(30070) )
+( Move(2,16,-1) SetColor(308) Rotate(270) Place(30070) )
+( Move(0,16,-9) SetColor(308) Rotate(270) Place(30070) )
+SetColor(71)
+```
+
+We can then expand this within the bounds of our previous wall and generate a wall surrounding our drawbridge:
+
+![](examples/castle-human-aug.png)
 
 Height Map Example
 ------------------

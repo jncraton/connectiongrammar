@@ -4,7 +4,10 @@ ldr_filename = sys.argv[1]
 gmr_filename = sys.argv[2]
 
 # Assumes castle example
-text = "Init -> 'PlaceBoundingBox(47,21,2)' '(' 'Move(0,13,0)' 'PlaceBoundingBox(5,12,1)' ')' '(' 'Move(-39,-21,0)' 'PlaceBoundingBox(1,3,2)' 'Move(8,0,0)' 'PlaceBoundingBox(1,3,2)'  'Move(8,0,0)' 'PlaceBoundingBox(1,3,2)'  'Move(8,0,0)' 'PlaceBoundingBox(1,3,2)'  'Move(8,0,0)' 'PlaceBoundingBox(1,3,2)'  'Move(8,0,0)' 'PlaceBoundingBox(1,3,2)'  'Move(8,0,0)' 'PlaceBoundingBox(1,3,2)'  'Move(8,0,0)' 'PlaceBoundingBox(1,3,2)'  'Move(8,0,0)' 'PlaceBoundingBox(1,3,2)'  'Move(8,0,0)' 'PlaceBoundingBox(1,3,2)'  'Move(8,0,0)' 'PlaceBoundingBox(1,3,2)'  'Move(8,0,0)' 'PlaceBoundingBox(1,3,2)'  'Move(8,0,0)' 'PlaceBoundingBox(1,3,2)'  'Move(8,0,0)' 'PlaceBoundingBox(1,3,2)'  'Move(8,0,0)' 'PlaceBoundingBox(1,3,2)'  'Move(8,0,0)' 'PlaceBoundingBox(1,3,2)'  'Move(8,0,0)' 'PlaceBoundingBox(1,3,2)' ')' 'SetColor(71)' "
+init = "Init -> 'PlaceBoundingBox(47,21,2)' '(' 'Move(0,13,0)' 'PlaceBoundingBox(5,12,1)' ')' '(' 'Move(-39,-21,0)' 'PlaceBoundingBox(1,3,2)' 'Move(8,0,0)' 'PlaceBoundingBox(1,3,2)'  'Move(8,0,0)' 'PlaceBoundingBox(1,3,2)'  'Move(8,0,0)' 'PlaceBoundingBox(1,3,2)'  'Move(8,0,0)' 'PlaceBoundingBox(1,3,2)'  'Move(8,0,0)' 'PlaceBoundingBox(1,3,2)'  'Move(8,0,0)' 'PlaceBoundingBox(1,3,2)'  'Move(8,0,0)' 'PlaceBoundingBox(1,3,2)'  'Move(8,0,0)' 'PlaceBoundingBox(1,3,2)'  'Move(8,0,0)' 'PlaceBoundingBox(1,3,2)'  'Move(8,0,0)' 'PlaceBoundingBox(1,3,2)'  'Move(8,0,0)' 'PlaceBoundingBox(1,3,2)'  'Move(8,0,0)' 'PlaceBoundingBox(1,3,2)'  'Move(8,0,0)' 'PlaceBoundingBox(1,3,2)'  'Move(8,0,0)' 'PlaceBoundingBox(1,3,2)'  'Move(8,0,0)' 'PlaceBoundingBox(1,3,2)'  'Move(8,0,0)' 'PlaceBoundingBox(1,3,2)' ')' 'SetColor(71)' "
+
+bounds = ""
+text = ""
 
 for line in open(ldr_filename).read().splitlines():
   if line[0] == '1':
@@ -22,11 +25,14 @@ for line in open(ldr_filename).read().splitlines():
     part = part_file.split('.')[0]
 
     place = "'Place(%s)'" % part
+    bound = None
 
     if part == '3005':
       place = "B1x1NoCheck"
+      bound = "'FillRectNoCheck(2,3,2)'"
     if part == '3004':
       place = "B1x2NoCheck"
+      bound = "'FillRectNoCheck(4,3,2)'"
 
     rotate = ""
 
@@ -44,9 +50,11 @@ for line in open(ldr_filename).read().splitlines():
     if (r13 == "1"):
       rotate = "'Rotate(270)'"
 
+    if bound:
+      bounds += "'(' 'Move(%d,%d,%d)' %s %s ')' " % (int(x), int(y), int(z), rotate, bound)
     text += "'(' 'Move(%d,%d,%d)' 'SetColor(%d)' %s %s ')' " % (int(x), int(y), int(z), color, rotate, place)
 
 text += "'SetColor(71)'\n"
 
 with open(gmr_filename, 'w') as gmr_file:
-  gmr_file.write(text)
+  gmr_file.write(init + " " + bounds + " " + text)
