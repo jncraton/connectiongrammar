@@ -4,7 +4,21 @@ ldr_filename = sys.argv[1]
 gmr_filename = sys.argv[2]
 
 # Assumes castle example
-init = "Init -> 'PlaceBoundingBox(46,20,1)' '(' 'Move(0,13,0)' 'PlaceBoundingBox(4,12,0)' ')' '(' 'Move(-39,-21,0)' 'PlaceBoundingBox(1,3,2)' 'Move(8,0,0)' 'PlaceBoundingBox(1,3,2)'  'Move(8,0,0)' 'PlaceBoundingBox(1,3,2)'  'Move(8,0,0)' 'PlaceBoundingBox(1,3,2)'  'Move(8,0,0)' 'PlaceBoundingBox(1,3,2)'  'Move(8,0,0)' 'PlaceBoundingBox(1,3,2)'  'Move(8,0,0)' 'PlaceBoundingBox(1,3,2)'  'Move(8,0,0)' 'PlaceBoundingBox(1,3,2)'  'Move(8,0,0)' 'PlaceBoundingBox(1,3,2)'  'Move(8,0,0)' 'PlaceBoundingBox(1,3,2)'  'Move(8,0,0)' 'PlaceBoundingBox(1,3,2)'  'Move(8,0,0)' 'PlaceBoundingBox(1,3,2)'  'Move(8,0,0)' 'PlaceBoundingBox(1,3,2)'  'Move(8,0,0)' 'PlaceBoundingBox(1,3,2)'  'Move(8,0,0)' 'PlaceBoundingBox(1,3,2)'  'Move(8,0,0)' 'PlaceBoundingBox(1,3,2)'  'Move(8,0,0)' 'PlaceBoundingBox(1,3,2)' ')' 'SetColor(71)' "
+init = "Init -> 'PlaceBoundingBox(100,100,100)' '(' 'Move(1,0,13)' 'PlaceBoundingBox(11,23,11)' 'PlaceBoundingBox(15,23,15)' ')' '(' 'Move(0,13,0)' 'PlaceBoundingBox(4,12,0)' ')' "
+
+init += "'(' 'Move(-39,-24,0)' "
+
+for x in range(0,16):
+  init += "'PlaceBoundingBox(1,3,100)' 'Move(8,0,0)' "
+
+init = init + "')' "
+
+init += "'(' 'Move(0,-24,-43)' "
+
+for y in range(0,16):
+  init += "'PlaceBoundingBox(100,3,1)' 'Move(0,0,8)' "
+
+init = init + "')' 'SetColor(71)' "
 
 bounds = ""
 text = ""
