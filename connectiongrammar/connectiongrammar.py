@@ -1,6 +1,7 @@
 import functools
 
 from nltk.grammar import Nonterminal
+import numpy as np
 
 class ConnectionGrammar():
   """ Encapsulates a connection grammar """
@@ -16,7 +17,7 @@ class ConnectionGrammar():
       if all([isinstance(s, str) for s in rhs]):
         self.grammar.to_terminal[str(prod.lhs())] = rhs
 
-  @functools.lru_cache()
+  #@functools.lru_cache() # TODO: this is disabled after adding PCFG support
   def terminate(self, sym):
     if isinstance(sym, str):
       return [sym]
@@ -26,9 +27,10 @@ class ConnectionGrammar():
         return self.grammar.to_terminal[sym.symbol()]
       except KeyError:
         prods = self.grammar.productions(lhs=sym)
+        prod = prods[0]
         if len(prods) != 1:
-          raise ValueError
-        syms = [self.terminate(s) for s in prods[0].rhs()]
+          prod = np.random.choice(prods, p=[p.prob() for p in prods])
+        syms = [self.terminate(s) for s in prod.rhs()]
         syms = [s for s in syms if s]
         
         return sum(syms, [])
