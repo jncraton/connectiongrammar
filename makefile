@@ -14,3 +14,7 @@ castle:
 augcastle:
 	python3 ldr2gmr.py examples/castle-human.ldr grammars/castle_aug_init.gmr
 	python3 run_grammars.py castle_aug_init brick tile castle_brick_defs close
+
+clean:
+	rm -f output.ldr
+	rm -rf connectiongrammar/__pycache__
