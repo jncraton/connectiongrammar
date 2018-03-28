@@ -10,17 +10,17 @@ Overview
 
 The field computational design synthesis involves using computer algorithm to create designs to meet a set of engineering requirements. There are many tools and algorithms available to aid in computational design synthesis[5]. Generative grammars are one broad class of solutions to this problem.
 
-In some ways, this project is similar in concept to grammar systems for generating trees or algae[10]. This project uses a context-free grammar to generate a language that issues commands to a 3D object printer. It moves and rotates an imaginary print head and issues requests to place objects. This is similar to the "turtle interpretation" for L-systems desribed in [3]:
+In some ways, this project is similar in concept to grammar systems for generating trees or algae[10]. This project uses a context-free grammar to generate a language that issues commands to a 3D object printer. It moves and rotates an imaginary print head and issues requests to place objects. This is similar to the "turtle interpretation" for L-systems described in [3]:
 
 > The  concept  is  based  on  the idea of an imaginary turtle that walks, turns and draws according to instructions given. At any time the turtle has a current position in  3-space  and  a  heading  vector  (the  forward  direction  of movement). Individual letters in a string are treated as commands. Different  letters  change  position  or  heading,  record  vertices  in  a polygon,  apply  pre-defined  surfaces  to  the  current  position  and orientation, change colour, etc.
 
-A picture is worth a thousand words, so here is a graphical explaination from [7]:
+A picture is worth a thousand words, so here is a graphical explanation from [7]:
 
 ![](turtle-interpretation.png)
 
-As in other procedural modelling grammar applications [11], non-terminal symbols generically represent opportunities for our grammar to grow new structures.
+As in other procedural modeling grammar applications [11], non-terminal symbols generically represent opportunities for our grammar to grow new structures.
 
-While context-free grammars are suitable for modelling possible connections, they do not have a concept of global state and cannot "see" the rest of the generated objects. A second layer fitness function, modeling a user-defined global ruleset, is required to generate object graphs that adhere to specific global parameters. This is similar to the methods used in other work [1][2]. In the case of simple interconnected shapes, a 3D collision space may be a suitable fitness function to ensure a physically valid shape. Additional rules can be added to ensure that a generated shape is suitable in other ways. For example, rules could be added for thermal disipation to model behavior of various shapes for use as a heat exchangers.
+While context-free grammars are suitable for modeling possible connections, they do not have a concept of global state and cannot "see" the rest of the generated objects. A second layer fitness function, modeling a user-defined global rule set, is required to generate object graphs that adhere to specific global parameters. This is similar to the methods used in other work [1][2]. In the case of simple interconnected shapes, a 3D collision space may be a suitable fitness function to ensure a physically valid shape. Additional rules can be added to ensure that a generated shape is suitable in other ways. For example, rules could be added for thermal dissipation to model behavior of various shapes for use as a heat sink.
 
 The algorithm for fitting a model to the fitness function is as follows:
 
@@ -41,7 +41,7 @@ This package and basic algorithm could be used to model many kinds of interconne
 
 ![](christiansen1961.jpg)
 
-This sort of system is familiar to most people. Using this for demonstration eliminates the need to describe external domain knowledge as part of an explaining this methodology. It also has the convienient side-effect of being a cheap physical object that can be quickly assembled for debugging and problem solving.
+This sort of system is familiar to most people. Using this for demonstration eliminates the need to describe external domain knowledge as part of an explaining this methodology. It also has the convenient side-effect of being a cheap physical object that can be quickly assembled for debugging and problem solving.
 
 Despite its simple appearance, blocks of this nature to provide enough interesting behavior to demonstrate the complexity that can be generated using context-free grammars. For example, blocks may only be stacked, so in order to move laterally multiple blocks must be stacked in an interconnected pattern.
 
@@ -83,7 +83,7 @@ Adding a simple fitness function to return perfect fitness unless we have more t
 
 ### Program Execution
 
-Now that we have the program generated, let's step through the program execution. The only state we need to consider is the current postion and the list of placed elements:
+Now that we have the program generated, let's step through the program execution. The only state we need to consider is the current position and the list of placed elements:
 
 1. Program initialization
     - position = (0,0,0)
@@ -155,7 +155,7 @@ Place(3001)
 Move(-3,0,-1)
 ```
 
-Steping through the program will generate the following:
+Stepping through the program will generate the following:
 
 1. Execute `Move(-2,0,0) Rotate(90) Move(-3,-3,-1) Place("Brick2x4") Move(-3,0,-1)`
 
@@ -178,7 +178,7 @@ One example would be a fitness function that validates legal collision-free elem
 
 Let's begin by significantly expanding our grammar. We'll need two main additions:
 
-1. The ability to add bounds to our geometery. We will implement this via a new `PlaceBoundingBox` operation.
+1. The ability to add bounds to our geometry. We will implement this via a new `PlaceBoundingBox` operation.
 2. The ability for placed elements to actually consume space. We will implement this via a new `FillRect` operation.
 
 We will also use a greatly expanded our grammar for element placement to demonstrate some of the power of this system. The grammars used can be found in the `/grammars` directory. Here is an example grammar that includes 1x1, 1x2, 2x2, and 2x4 bricks and implements both stud and antistud connections:
@@ -278,7 +278,7 @@ B1x1NoCheck -> 'Place(3062b)' BrickConnection [.6]
 B1x1NoCheck -> 'Place(47905)' BrickConnection [.1]
 ```
 
-Each rule now has an associated probaility that indicates how frequently it should be applied. Regenerating our castle wall using these new rules gives us something like this:
+Each rule now has an associated probability that indicates how frequently it should be applied. Regenerating our castle wall using these new rules gives us something like this:
 
 ![](examples/castle-pcfg.png)
 
@@ -340,11 +340,11 @@ Here's an animation to show the order in which the grammar fulfills connections:
 
 ![](examples/castle-aug.gif)
 
-Let's not forget that this system can operate in full 3D space, so we can generate a much more secure castle by simply adjusting the bounds in our fitness function:
+Let's not forget that this system can operate in full 3D space, so we can generate a much more defensible castle by simply adjusting the bounds in our fitness function:
 
 ![](examples/castle3d.png)
 
-Using this human augmentation technique, multiple hand-designed structures can be stictched together using a grammar that understands possible connections between them.
+Using this human augmentation technique, multiple hand-designed structures can be stitched together using a grammar that understands possible connections between them.
 
 Height Map Example
 ------------------
@@ -360,7 +360,7 @@ The fitness function is then able to generate a program to build the following w
 Alternative Approaches
 ----------------------
 
-One alternative approach in using grammars to represent physical objects is to have the grammar operate on literal shapes[6]. These systems are referred to as shape grammars. This package does not implement shape grammars. Instead, it uses a text grammar to build a language that is interpretted to build up a set of objects. A shape grammar could be applied to solve these issues and may lead to simplifications of the algorithms.
+One alternative approach in using grammars to represent physical objects is to have the grammar operate on literal shapes[6]. These systems are referred to as shape grammars. This package does not implement shape grammars. Instead, it uses a text grammar to build a language that is interpreted to build up a set of objects. A shape grammar could be applied to solve these issues and may lead to simplifications of the algorithms.
 
 References
 ----------
