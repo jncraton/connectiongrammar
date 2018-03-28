@@ -260,7 +260,7 @@ T1x1 -> 'FillRect(2,1,2)' 'Place(3070b)'
 T1x2 -> 'FillRect(4,1,2)' 'Place(3069b)' '(' 'Move(-1,1,0)' Antistud 'Move(2,1,0)' ')'
 ```
 
-This produces a fine looking, though admittedly boring, wall:
+This produces a fine, though admittedly boring, wall:
 
 ![](examples/castle1.png)
 
@@ -289,7 +289,7 @@ Augmented Design Example
 
 One of the beautiful attributes of a grammar-based methodology is that it allows us to store the entire state of the design in an expandable connection grammar utterance. This allows us to easily move back and forth between human CAD design and computer procedural generation.
 
-Let's say that a designer a particular design in mind for an aspect of a product that is tedious to model as a grammar but trivial to model with traditional CAD tools. A designer can simply create a section of the design in a CAD tool, convert it to a grammar, and grow new structures from there. Take for example this drawbridge design:
+Let's say that a designer has a particular design in mind for an aspect of a product that is tedious to model as a grammar but trivial to model with traditional CAD tools. A designer can simply create a section of the design in a CAD tool, convert it to a grammar, and grow new structures from there. Take for example this drawbridge design:
 
 ![](examples/castle-human.png)
 
