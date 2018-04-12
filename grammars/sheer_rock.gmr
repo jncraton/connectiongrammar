@@ -1,0 +1,32 @@
+Init -> 'PlaceBoundingBox(42,42,42)' 'SetColor(72)' Rock16x
+
+Rock2x -> RockSingleStud 'Move(2,0,0)' RockDoubleStud 'Move(2,0,0)'
+Rock4x -> Rock2x Rock2x
+Rock8x -> Rock4x Rock4x
+Rock16x -> Rock8x Rock8x
+
+RockSingleStud -> 'FillRect(2,9,2)' RockSingleTall
+RockSingleStud -> 'FillRect(2,3,2)' 'Place(3040)' '(' 'Move(0,3,0)' RockDoubleStud ')'
+RockSingleStud -> 'FillRect(2,3,2)' 'Place(3005)' '(' 'Move(0,3,0)' RockSingleStud ')'
+RockSingleStud ->
+
+RockSingleTall -> 'Place(4460)' '(' 'Move(0,9,0)' RockDoubleStud ')' [.25]
+RockSingleTall -> S1x2 '(' 'Move(0,3,0)' B1x2  'Move(0,3,0)' B1x2 'Move(0,3,0)' RockDoubleStud ')' [.25]
+RockSingleTall -> B1x1 '(' 'Move(0,3,0)' S1x2  'Move(0,3,0)' B1x2 'Move(0,3,0)' RockDoubleStud ')' [.25]
+RockSingleTall -> B1x1 '(' 'Move(0,3,0)' B1x1  'Move(0,3,0)' S1x2 'Move(0,3,0)' RockDoubleStud ')' [.25]
+RockSingleTall -> [0.0]
+
+RockDoubleStud -> 'FillRect(2,9,2)' RockDoubleTall '(' 'Move(0,9,0)' RockSingleStud ')'
+RockDoubleStud -> 'FillRect(2,3,2)' SI1x2 '(' 'Move(0,3,0)' RockSingleStud ')'
+RockDoubleStud ->
+
+RockDoubleTall -> 'Place(2449)' '(' 'Move(0,9,0)' RockSingleStud ')' [.25]
+RockDoubleTall -> SI1x2 '(' 'Move(0,3,0)' B1x1  'Move(0,3,0)' B1x1 'Move(0,3,0)' RockSingleStud ')' [.25]
+RockDoubleTall -> B1x2 '(' 'Move(0,3,0)' SI1x2  'Move(0,3,0)' B1x1 'Move(0,3,0)' RockSingleStud ')' [.25]
+RockDoubleTall -> B1x2 '(' 'Move(0,3,0)' B1x2  'Move(0,3,0)' SI1x2 'Move(0,3,0)' RockSingleStud ')' [.25]
+RockDoubleTall -> [0.0]
+
+B1x1 -> 'Place(3005)'
+B1x2 -> '(' 'Move(0,0,-1)' 'Rotate(90)' 'Place(3004)' ')'
+S1x2 -> 'Place(3040)'
+SI1x2 -> 'Place(3665)'
