@@ -379,6 +379,17 @@ Alternative Approaches
 
 One alternative approach in using grammars to represent physical objects is to have the grammar operate on literal shapes[6]. These systems are referred to as shape grammars. This package does not implement shape grammars. Instead, it uses a text grammar to build a language that is interpreted to build up a set of objects. A shape grammar could be applied to solve these issues and may lead to simplifications of the algorithms.
 
+Future Work
+-----------
+
+This system takes several shortcuts that could be addressed more completely.
+
+It's simplistic local optimization function could be replaced by something more robust such as gradient descent or [simulated annealing](https://en.wikipedia.org/wiki/Simulated_annealing)[12]. 
+
+The included sample grammars and fitness function can also be enhanced to handle addtional complexity. One basic augmentation would be enhance the rotation operation to operate in full 3D space instead of simple rotation about the vertical axis in the cardinal directions.
+
+Exploring how to integrate methods like this one into the UX of existing CAD products is also an ongoing area of research[5].
+
 References
 ----------
 
@@ -403,5 +414,7 @@ References
 [10] Aono, Masaki, and Tosiyasu L. Kunii. "Botanical tree image generation." IEEE computer graphics and applications 4, no. 5 (1984): 10-34.
 
 [11] Krecklau, Lars, Darko Pavic, and Leif Kobbelt. "Generalized Use of Non‐Terminal Symbols for Procedural Modeling." In Computer Graphics Forum, vol. 29, no. 8, pp. 2291-2303. Blackwell Publishing Ltd, 2010.
+
+[12] Kirkpatrick, Scott, C. Daniel Gelatt, and Mario P. Vecchi. "Optimization by simulated annealing." science 220, no. 4598 (1983): 671-680.
 
 
