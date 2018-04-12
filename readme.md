@@ -374,6 +374,13 @@ The fitness function is then able to generate a program to build the following w
 
 ![](examples/uk.png)
 
+### Sheer Example
+
+We can also procedural generate physical structures such as this rock face:
+
+![](examples/rock.png)
+
+
 Alternative Approaches
 ----------------------
 
