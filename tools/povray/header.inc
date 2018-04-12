@@ -6,13 +6,6 @@ global_settings {
   }
 }
 
-box { <-40,-40,-6.8>,<40,40,-6.8>
-  texture {
-    pigment{ color rgb<.05,.15,.05>}
-    finish { phong 0.1 }
-  }
-}
-
 light_source { 
   <0, 5, 50> rgb <1,1,1> 
 }
