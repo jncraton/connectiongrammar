@@ -386,7 +386,7 @@ This system takes several shortcuts that could be addressed more completely.
 
 It's simplistic local optimization function could be replaced by something more robust such as gradient descent or [simulated annealing](https://en.wikipedia.org/wiki/Simulated_annealing)[12]. 
 
-The included sample grammars and fitness function can also be enhanced to handle addtional complexity. One basic augmentation would be enhance the rotation operation to operate in full 3D space instead of simple rotation about the vertical axis in the cardinal directions.
+The included sample grammars and fitness function can also be enhanced to handle addtional complexity. One basic augmentation would be to enhance the rotation operation to operate in full 3D space instead of simple rotation about the vertical axis in the cardinal directions.
 
 Exploring how to integrate methods like this one into the UX of existing CAD products is also an ongoing area of research[5].
 
