@@ -190,7 +190,7 @@ Stepping through the program will generate the following:
 
 ![](examples/rotation_translation03.png)
 
-### Filled a Bounding Surfaces
+### Filled Bounding Surfaces
 
 The previous examples have used a trivial fitness function that could simply be replaced by generating a string from the grammar of length n. A non-trivial fitness function should use properties of the generated object to determine fitness.
 
