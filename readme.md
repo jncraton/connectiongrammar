@@ -283,7 +283,7 @@ This produces a fine, though admittedly boring, wall:
 
 ![](examples/castle1.png)
 
-### Sheer Rock
+### Rock Face
 
 This system optionally supports probibalistic context free grammar rules. These function the same as regular production rules, but they have probabilities assigned to them and are randomly used instead of being matched against the fitness function. Probabilistic rules are assumed to all produce equal fitness but may adjust the asthetic qualities of the structure.
 
