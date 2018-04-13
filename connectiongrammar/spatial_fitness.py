@@ -138,12 +138,13 @@ class VolumetricImage:
           if not dry_run:
             self.voxels.add(new_pos)
   
-def bounding_sphere(r, b):
+def bounding_sphere(r):
+  """ Creates a bounding sphere with a given radius """
   voxels = set()
   
-  for x in range(-r - b, r + b):
-    for y in range(-r - b, r + b):
-      for z in range(-r - b, r + b):
+  for x in range(-r, r):
+    for y in range(-r, r):
+      for z in range(-r, r):
         if math.ceil((x*x+y*y+z*z)**(1/2)) == r:
           voxels.add((x,y,z))
 
@@ -262,7 +263,7 @@ def exec_ops(img,states,ops,dry_run=False):
 
     if len(img.voxels) == 0:
       # If we didn't set bounds in our first op, create a small bounding sphere
-      img.voxels = bounding_sphere(8,1).copy()
+      img.voxels = bounding_sphere(8).copy()
 
   return elements
 
