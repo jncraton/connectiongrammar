@@ -210,15 +210,15 @@ def parse(ops):
   if len(ops) == 0:
     elements = []
     img = VolumetricImage()
-    states = [(0,0,0,0,1)] # x, y, z, rotation, color
+    stack = [(0,0,0,0,1)] # x, y, z, rotation, color
   else:
-    (elements, img, states) = parse(tuple(ops[:-1]))
+    (elements, img, stack) = parse(tuple(ops[:-1]))
 
-    elements += exec_ops(img, states, tuple([ops[-1]]))
+    elements += exec_ops(img, stack, tuple([ops[-1]]))
 
-  return (elements, img, states)
+  return (elements, img, stack)
 
-def exec_ops(img,states,ops,dry_run=False):
+def exec_ops(img,stack,ops,dry_run=False):
   """ Executes the supplied list of operations against the current state """
   if isinstance(ops, str):
     ops = ops.split()
@@ -227,7 +227,7 @@ def exec_ops(img,states,ops,dry_run=False):
 
   for op in ops:
     if dry_run:
-      states = states.copy()
+      stack = stack.copy()
 
     op = get_token(op)
     
@@ -236,26 +236,26 @@ def exec_ops(img,states,ops,dry_run=False):
     elif op[0] == OP.PlaceBoundingSphere:
       img.voxels = img.voxels.union(bounding_sphere(op[1],1))
     elif op[0] == OP.PlaceBoundingBox:
-      img.voxels = img.voxels.union(bounding_box(op[1],states[-1]))
+      img.voxels = img.voxels.union(bounding_box(op[1],stack[-1]))
     elif op[0] == OP.Place:
-      elements.append((states[-1], op[1]))
+      elements.append((stack[-1], op[1]))
     elif op[0] == OP['(']: 
-      states.append(states[-1])
+      stack.append(stack[-1])
     elif op[0] == OP[')']: 
-      states.pop()
+      stack.pop()
     elif op[0] == OP.Move:
-      states[-1] = move(states[-1], op[1])
+      stack[-1] = move(stack[-1], op[1])
     elif op[0] == OP.Rotate:
-      states[-1] = (states[-1][0],states[-1][1],states[-1][2],(states[-1][3] + int(op[1]/90)) % 4, states[-1][4])
+      stack[-1] = (stack[-1][0],stack[-1][1],stack[-1][2],(stack[-1][3] + int(op[1]/90)) % 4, stack[-1][4])
     elif op[0] == OP.SetColor:
-      states[-1] = (states[-1][0],states[-1][1],states[-1][2],states[-1][3],op[1])
+      stack[-1] = (stack[-1][0],stack[-1][1],stack[-1][2],stack[-1][3],op[1])
     elif op[0] == OP.FillRect:
-      img.fill_rect(states[-1], op[1], dry_run=dry_run)
+      img.fill_rect(stack[-1], op[1], dry_run=dry_run)
     elif op[0] == OP.FillRectNoCheck:
-      img.fill_rect(states[-1], op[1], dry_run=dry_run, check=False)
+      img.fill_rect(stack[-1], op[1], dry_run=dry_run, check=False)
     elif op[0] == OP.AssertFilled:
       try:
-        img.fill_rect(states[-1], (2,1,2), dry_run=dry_run)
+        img.fill_rect(stack[-1], (2,1,2), dry_run=dry_run)
         raise AssertionError
       except CollisionError:
         pass
@@ -297,8 +297,8 @@ def fitness(text, prefix = None):
   to O(n) time from O(n²) time.
   """
   try:
-    (_, img, states) = parse(prefix)
-    exec_ops(img, states, text, dry_run=True)
+    (_, img, stack) = parse(prefix)
+    exec_ops(img, stack, text, dry_run=True)
     return 1.0
   except (CollisionError, AssertionError) as e:
     return 0.0
