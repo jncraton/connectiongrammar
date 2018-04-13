@@ -87,6 +87,10 @@ def apply_rotation(v, mat):
 
 def move(s, delta):
   """
+  Translates a state s by delta
+
+  Translation is relative the current rotation matrix
+  
   >>> move((0, 0, 0, 0, 1), (1, 2, 3))
   (1, 2, 3, 0, 1)
   >>> move((0, 0, 0, 1, 2), (1, 2, 3))
