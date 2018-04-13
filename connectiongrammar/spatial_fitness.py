@@ -45,7 +45,6 @@ def rotation_matrix(dir, ldraw_string=False):
       tuple(items[6:9]),
     ])
 
-
 @functools.lru_cache(maxsize=1024)
 def get_token(lexeme):
   """ Convert lexems to (name, arg) pairs 
@@ -60,31 +59,18 @@ def get_token(lexeme):
   (1, 2, 3)
   """
 
-  if not lexeme:
-    return (None,)
-  elif lexeme[-2:] == '()':
-    return (OP[lexeme[:-2]],)
-  elif lexeme[0:19] == 'PlaceBoundingSphere':
-    return (OP['PlaceBoundingSphere'], int(lexeme[20:-1]))
-  elif lexeme[0:16] == 'PlaceBoundingBox':
-    return (OP['PlaceBoundingBox'], tuple(int(i) for i in lexeme[17:-1].split(',')))
-  elif lexeme[0:5] == 'Place':
-    return (OP['Place'], lexeme[6:-1])
-  elif lexeme[0:6] == 'Rotate':
-    return (OP['Rotate'], int(lexeme[7:-1]))
-  elif lexeme[0:8] == 'SetColor':
-    return (OP['SetColor'], int(lexeme[9:-1]))
-  elif lexeme[0:4] == 'Move':
-    delta = tuple(int(i) for i in lexeme[5:-1].split(','))
-    return (OP['Move'], delta)
-  elif lexeme[0:15] == 'FillRectNoCheck':
-    bounds = tuple(int(i) for i in lexeme[16:-1].split(','))
-    return (OP['FillRectNoCheck'], bounds)
-  elif lexeme[0:8] == 'FillRect':
-    bounds = tuple(int(i) for i in lexeme[9:-1].split(','))
-    return (OP['FillRect'], bounds)
-  else:
+  if len(lexeme) == 1:
     return (OP[lexeme],)
+
+  op = OP[lexeme.split('(')[0]]
+  args = lexeme.split('(')[1][:-1]
+
+  if op in [OP.PlaceBoundingSphere, OP.Rotate, OP.SetColor]:
+    args = int(args)
+  elif op in [OP.PlaceBoundingBox, OP.Move, OP.FillRectNoCheck, OP.FillRect]:
+    args = tuple(int(i) for i in args.split(','))
+
+  return (op, args)
 
 @functools.lru_cache()
 def lex(text):
