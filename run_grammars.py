@@ -7,7 +7,7 @@ from nltk import PCFG
 
 gmr_text = ""
 
-for grammar_file in sys.argv[1:]:
+for grammar_file in sys.argv[2:]:
   gmr_text += open('grammars/%s.gmr' % grammar_file).read()
 
 sym_count = {}
@@ -37,5 +37,7 @@ elements = placer.parse(sentence)[0]
 
 print("Generated model with %d elements" % (len(elements),))
 
-with open('output.ldr','w') as outf:
+assert(len(elements) > 0)
+
+with open(sys.argv[1],'w') as outf:
   outf.write(placer.to_ldraw(elements))

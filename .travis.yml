@@ -7,3 +7,6 @@ install:
     - pip3 install -r requirements.txt
 script:
     - make test
+    - make castle
+    - make rock
+    - make augcastle
