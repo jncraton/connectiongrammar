@@ -5,7 +5,7 @@ profile:
 	head profile.txt -n 20
 
 test:
-	python3 -m doctest connectiongrammar/connectiongrammar.py
+	python3 -m doctest connectiongrammar/generate.py
 	python3 -m doctest connectiongrammar/placer.py
 
 castle:

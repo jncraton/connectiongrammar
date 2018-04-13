@@ -1,9 +1,7 @@
 import functools
 import sys
 
-from connectiongrammar import connectiongrammar, placer
-
-from nltk import PCFG
+from connectiongrammar import generate, placer
 
 gmr_text = ""
 
@@ -27,12 +25,7 @@ def add_prob(line):
 
 gmr_text = '\n'.join(map(add_prob, gmr_text.splitlines()))
 
-cg = connectiongrammar.ConnectionGrammar(
-  grammar = PCFG.fromstring(gmr_text),
-  fitness = placer.fitness
-)
-
-sentence = cg.generate()
+sentence = generate.generate(gmr_text, placer.fitness)
 elements = placer.parse(sentence)[0]
 
 print("Generated model with %d elements" % (len(elements),))

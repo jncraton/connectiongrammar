@@ -1,11 +1,9 @@
 """
 Implements a basic 3d object placer and fitness function
 
->>> cg = connectiongrammar.ConnectionGrammar(
-...     grammar = PCFG.fromstring(
-...     "Stud -> '(' 'Move(0,-3,0)' 'FillRect(2,3,2)' 'Place(3005)' Stud ')'| [1.0]"),
-...     fitness=fitness)
->>> sentence = cg.generate()
+>>> sentence = generate.generate(
+...     "Stud -> '(' 'Move(0,-3,0)' 'FillRect(2,3,2)' 'Place(3005)' Stud ')'| [1.0]",
+...     fitness)
 >>> ' '.join(sentence)
 '( Move(0,-3,0) FillRect(2,3,2) Place(3005) ( Move(0,-3,0) FillRect(2,3,2) Place(3005) ) )'
 >>> elements = parse(' '.join(sentence))[0]
@@ -18,7 +16,7 @@ import enum
 import math
 from nltk import PCFG
 
-import connectiongrammar
+from connectiongrammar import generate
 
 OP = enum.Enum('OP', 'PlaceBoundingSphere Place Move FillRect Rotate ( ) AssertFilled PlaceBoundingBox SetColor FillRectNoCheck')
 
@@ -147,9 +145,9 @@ def fill_bounds(size, rot):
 
 class CollisionError(BaseException): pass
 
+    self.voxels = voxels
 class VolumetricImage:
   def __init__(self, voxels = set()):
-    self.voxels = voxels
 
   def fill_rect(self, pos, size, dry_run=False, check=True):
     """
