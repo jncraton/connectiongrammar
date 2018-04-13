@@ -6,7 +6,7 @@ profile:
 
 test:
 	python3 -m doctest connectiongrammar/generate.py
-	python3 -m doctest connectiongrammar/placer.py
+	python3 -m doctest connectiongrammar/spatial_fitness.py
 
 castle:
 	python3 generateldr.py castle.ldr castle_wall_constraints brick castle_brick_defs tile close

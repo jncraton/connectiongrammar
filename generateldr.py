@@ -1,7 +1,7 @@
 import functools
 import sys
 
-from connectiongrammar import generate, placer
+from connectiongrammar import generate, spatial_fitness
 
 gmr_text = ""
 
@@ -25,13 +25,13 @@ def add_prob(line):
 
 gmr_text = '\n'.join(map(add_prob, gmr_text.splitlines()))
 
-sentence = generate.generate(gmr_text, placer.fitness)
-elements = placer.parse(sentence)[0]
+sentence = generate.generate(gmr_text, spatial_fitness.fitness)
+elements = spatial_fitness.parse(sentence)[0]
 
 print("Generated model with %d elements" % (len(elements),))
 
 assert(len(elements) > 0)
 
 with open(sys.argv[1],'w') as outf:
-  outf.write(placer.to_ldraw(elements))
+  outf.write(spatial_fitness.to_ldraw(elements))
   print("Generated structure saved as '%s'." % sys.argv[1])

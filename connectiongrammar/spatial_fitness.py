@@ -145,9 +145,9 @@ def fill_bounds(size, rot):
 
 class CollisionError(BaseException): pass
 
-    self.voxels = voxels
 class VolumetricImage:
   def __init__(self, voxels = set()):
+    self.voxels = voxels
 
   def fill_rect(self, pos, size, dry_run=False, check=True):
     """
