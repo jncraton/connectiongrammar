@@ -20,8 +20,6 @@ from connectiongrammar import generate
 
 OP = enum.Enum('OP', 'PlaceBoundingSphere Place Move FillRect Rotate ( ) AssertFilled PlaceBoundingBox SetColor FillRectNoCheck')
 
-default_color = 1
-
 @functools.lru_cache()
 def rotation_matrix(dir, ldraw_string=False):
   """ Gets a rotation matrix from a simple cardinal direction
@@ -118,21 +116,21 @@ def apply_rotation(v, mat):
 
 def move(s, delta):
   """
-  >>> move((0, 0, 0, 0), (1, 2, 3))
-  (1, 2, 3, 0)
-  >>> move((0, 0, 0, 1), (1, 2, 3))
-  (-3, 2, 1, 1)
-  >>> move((0, 0, 0, 2), (1, 2, 3))
-  (-1, 2, -3, 2)
-  >>> move((0, 0, 0, 3), (1, 2, 3))
-  (3, 2, -1, 3)
+  >>> move((0, 0, 0, 0, 1), (1, 2, 3))
+  (1, 2, 3, 0, 1)
+  >>> move((0, 0, 0, 1, 2), (1, 2, 3))
+  (-3, 2, 1, 1, 2)
+  >>> move((0, 0, 0, 2, 3), (1, 2, 3))
+  (-1, 2, -3, 2, 3)
+  >>> move((0, 0, 0, 3, 4), (1, 2, 3))
+  (3, 2, -1, 3, 4)
   """
 
   rot = rotation_matrix(s[3])
 
   rot_delta = apply_rotation(delta, rot)
 
-  return (s[0]+rot_delta[0], s[1]+rot_delta[1], s[2]+rot_delta[2],s[3])
+  return (s[0]+rot_delta[0], s[1]+rot_delta[1], s[2]+rot_delta[2],s[3], s[4])
 
 @functools.lru_cache()
 def fill_bounds(size, rot):
@@ -215,7 +213,7 @@ def parse(ops):
   the entire set op operations but instead just checks the new ones
    
   >>> parse("FillRect(2,3,2) Place(3005)")[0]
-  [((0, 0, 0, 0), 1, '3005')]
+  [((0, 0, 0, 0, 1), '3005')]
 
   >>> len(parse("FillRect(2,3,2) Place(3005)")[1].voxels)
   12
@@ -231,7 +229,7 @@ def parse(ops):
   >>> parse.cache_info().hits
   1
   >>> parse("Move(1,0,0) Move(1,0,0)")[2][0]
-  (2, 0, 0, 0)
+  (2, 0, 0, 0, 1)
   """
   if isinstance(ops, str):
     ops = ops.split()
@@ -239,7 +237,7 @@ def parse(ops):
   if len(ops) == 0:
     elements = []
     img = VolumetricImage()
-    states = [(0,0,0,0)]
+    states = [(0,0,0,0,1)] # x, y, z, rotation, color
   else:
     (elements, img, states) = parse(tuple(ops[:-1]))
 
@@ -248,8 +246,6 @@ def parse(ops):
   return (elements, img, states)
 
 def exec_ops(img,states,ops,dry_run=False):
-  global default_color
-
   if isinstance(ops, str):
     ops = ops.split()
 
@@ -268,7 +264,7 @@ def exec_ops(img,states,ops,dry_run=False):
     elif op[0] == OP.PlaceBoundingBox:
       img.voxels = img.voxels.union(bounding_box(op[1],states[-1]))
     elif op[0] == OP.Place:
-      elements.append((states[-1], default_color, op[1]))
+      elements.append((states[-1], op[1]))
     elif op[0] == OP['(']: 
       states.append(states[-1])
     elif op[0] == OP[')']: 
@@ -276,9 +272,9 @@ def exec_ops(img,states,ops,dry_run=False):
     elif op[0] == OP.Move:
       states[-1] = move(states[-1], op[1])
     elif op[0] == OP.Rotate:
-      states[-1] = (states[-1][0],states[-1][1],states[-1][2],(states[-1][3] + int(op[1]/90)) % 4)
+      states[-1] = (states[-1][0],states[-1][1],states[-1][2],(states[-1][3] + int(op[1]/90)) % 4, states[-1][4])
     elif op[0] == OP.SetColor:
-      default_color = op[1]
+      states[-1] = (states[-1][0],states[-1][1],states[-1][2],states[-1][3],op[1])
     elif op[0] == OP.FillRect:
       img.fill_rect(states[-1], op[1], dry_run=dry_run)
     elif op[0] == OP.FillRectNoCheck:
@@ -306,10 +302,11 @@ def to_ldraw(els):
 
   for el in els:
     pos = (el[0][0] * 10, el[0][1] * 8, el[0][2] * 10)
+    color = el[0][4]
 
     rotation = rotation_matrix(el[0][3], ldraw_string=True)
 
-    ldraw += ("1 %d %d %d %d %s %s.dat\n" % (el[1], pos[0], pos[1], pos[2], rotation, el[2].replace('r','')))
+    ldraw += ("1 %d %d %d %d %s %s.dat\n" % (color, pos[0], pos[1], pos[2], rotation, el[1].replace('r','')))
     ldraw += "0 STEP\n"
 
   return ldraw
