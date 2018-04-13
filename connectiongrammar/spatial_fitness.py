@@ -104,20 +104,21 @@ def move(s, delta):
 
   return (s[0]+rot_delta[0], s[1]+rot_delta[1], s[2]+rot_delta[2],s[3], s[4])
 
-@functools.lru_cache()
-def fill_bounds(size, rot):
-  bounds = [abs(i) for i in apply_rotation(size,rotation_matrix(rot))]
-
-  bounds[0] = (-int(bounds[0]/2),int(bounds[0]/2))
-  bounds[2] = (-int(bounds[2]/2),int(bounds[2]/2))
-
-  return tuple(bounds)
-
 class CollisionError(BaseException): pass
 
 class VolumetricImage:
   def __init__(self, voxels = set()):
     self.voxels = voxels
+
+  @functools.lru_cache()
+  def get_bounds(size, rot):
+    """ Gets a cacheable tuple representing the bounds of a 3d rectangle """
+    bounds = [abs(i) for i in apply_rotation(size,rotation_matrix(rot))]
+  
+    bounds[0] = (-int(bounds[0]/2),int(bounds[0]/2))
+    bounds[2] = (-int(bounds[2]/2),int(bounds[2]/2))
+  
+    return tuple(bounds)
 
   def fill_rect(self, pos, size, dry_run=False, check=True):
     """
@@ -127,7 +128,7 @@ class VolumetricImage:
     This operation can be viewed as one transaction. If it fails for 
     any point, no changes are made.
     """
-    bounds = fill_bounds(size, pos[3])
+    bounds = VolumetricImage.get_bounds(size, pos[3])
     
     for x in range(bounds[0][0], bounds[0][1]):
       for y in range(0, size[1]):
