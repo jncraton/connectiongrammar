@@ -1,7 +1,7 @@
 Connection Grammar
 ==================
 
-[![Build Status](https://travis-ci.com/jncraton/connectiongrammar.svg?token=yQJxZLQNAHqWRpN2k3wf&branch=master)](https://travis-ci.com/jncraton/connectiongrammar)
+[![Build Status](https://travis-ci.org/jncraton/connectiongrammar.svg?token=yQJxZLQNAHqWRpN2k3wf&branch=master)](https://travis-ci.org/jncraton/connectiongrammar)
 
 This package provides a way to develop text grammars that represent a language of interconnected 3D objects in a Python environment.
 
