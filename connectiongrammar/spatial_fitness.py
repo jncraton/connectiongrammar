@@ -73,18 +73,6 @@ def get_token(lexeme):
   return (op, args)
 
 @functools.lru_cache()
-def lex(text):
-  """ Convers a text into a list of tokens 
-
-  >>> [t[0].name for t in lex("( Place(3005) )")]
-  ['(', 'Place', ')']
-  """
-  if isinstance(text, str):
-    text = text.split()
-  
-  return map(get_token, text)
-
-@functools.lru_cache()
 def apply_rotation(v, mat):
   """ Applies a rotation matrix to a vector 
 
