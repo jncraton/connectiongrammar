@@ -421,9 +421,11 @@ Future Work
 
 This system takes several shortcuts that could be addressed more completely.
 
-It's simplistic local optimization function could be replaced by something more robust such as gradient descent or [simulated annealing](https://en.wikipedia.org/wiki/Simulated_annealing)[12]. 
+The simplistic local optimization function could be replaced by something more robust such as gradient descent or [simulated annealing](https://en.wikipedia.org/wiki/Simulated_annealing)[12]. Brute force search could be implemented for applications where n is small.
 
-The included sample grammars and fitness function can also be enhanced to handle additional complexity. One basic augmentation would be to enhance the rotation operation to operate in full 3D space instead of simple rotation about the vertical axis in the cardinal directions.
+The included sample grammars and fitness function could be enhanced to handle additional complexity. One basic augmentation would be to enhance the rotation operation to operate in full 3D space instead of simple rotation about the vertical axis in the cardinal directions.
+
+Additional grammars and fitness functions could be included to demonstrate the utility of this methodology in other areas such as circuit design, IC layout, and nano technology. One option could be to replicated prior work generating MEMS resonators with a shape grammar[13].
 
 Exploring how to integrate methods like this one into the UX of existing CAD products is also an ongoing area of research[5].
 
@@ -454,4 +456,4 @@ References
 
 [12] Kirkpatrick, Scott, C. Daniel Gelatt, and Mario P. Vecchi. "Optimization by simulated annealing." science 220, no. 4598 (1983): 671-680.
 
-
+[13] Agarwal, Manish, Jonathan Cagan, and George Stiny. "A micro language: generating MEMS resonators by using a coupled form—function shape grammar." Environment and Planning B: Planning and Design 27, no. 4 (2000): 615-626.
