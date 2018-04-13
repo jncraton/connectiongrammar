@@ -20,6 +20,8 @@ from connectiongrammar import generate
 
 OP = enum.Enum('OP', 'PlaceBoundingSphere Place Move FillRect Rotate ( ) AssertFilled PlaceBoundingBox SetColor FillRectNoCheck')
 
+class CollisionError(BaseException): pass
+
 @functools.lru_cache()
 def rotation_matrix(dir, ldraw_string=False):
   """ Gets a rotation matrix from a simple cardinal direction
@@ -103,8 +105,6 @@ def move(s, delta):
   rot_delta = apply_rotation(delta, rotation_matrix(s[3]))
 
   return (s[0]+rot_delta[0], s[1]+rot_delta[1], s[2]+rot_delta[2],s[3], s[4])
-
-class CollisionError(BaseException): pass
 
 class VolumetricImage:
   def __init__(self, voxels = set()):
