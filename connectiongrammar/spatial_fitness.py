@@ -219,6 +219,7 @@ def parse(ops):
   return (elements, img, states)
 
 def exec_ops(img,states,ops,dry_run=False):
+  """ Executes the supplied list of operations against the current state """
   if isinstance(ops, str):
     ops = ops.split()
 
