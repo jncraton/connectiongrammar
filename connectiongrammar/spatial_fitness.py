@@ -81,9 +81,6 @@ def apply_rotation(v, mat):
   >>> apply_rotation((1,2,3),((0,0,-1), (0,1,0), (1,0,0)))
   (-3, 2, 1)
   """
-  if isinstance(mat, int):
-    mat = rotation_matrix(mat)
-  
   return tuple([mat[i][0] * v[0] +\
           mat[i][1] * v[1] +\
           mat[i][2] * v[2] for i in range(0, len(v))])
@@ -99,16 +96,13 @@ def move(s, delta):
   >>> move((0, 0, 0, 3, 4), (1, 2, 3))
   (3, 2, -1, 3, 4)
   """
-
-  rot = rotation_matrix(s[3])
-
-  rot_delta = apply_rotation(delta, rot)
+  rot_delta = apply_rotation(delta, rotation_matrix(s[3]))
 
   return (s[0]+rot_delta[0], s[1]+rot_delta[1], s[2]+rot_delta[2],s[3], s[4])
 
 @functools.lru_cache()
 def fill_bounds(size, rot):
-  bounds = [abs(i) for i in apply_rotation(size,rot)]
+  bounds = [abs(i) for i in apply_rotation(size,rotation_matrix(rot))]
 
   bounds[0] = (-int(bounds[0]/2),int(bounds[0]/2))
   bounds[2] = (-int(bounds[2]/2),int(bounds[2]/2))
