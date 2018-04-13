@@ -41,4 +41,4 @@ assert(len(elements) > 0)
 
 with open(sys.argv[1],'w') as outf:
   outf.write(placer.to_ldraw(elements))
-  print("Generated structure saves as '%s'." % sys.argv[1])
+  print("Generated structure saved as '%s'." % sys.argv[1])
