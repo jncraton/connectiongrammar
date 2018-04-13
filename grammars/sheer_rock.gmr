@@ -1,12 +1,8 @@
-Init -> 'PlaceBoundingBox(128,128,128)' 'SetColor(72)' Rock64x
+Init -> 'PlaceBoundingBox(128,128,128)' 'SetColor(72)' 'Move(-124,0,0)' RockStudSlice
 
-Rock2x -> RockSingleStud 'Move(2,0,0)' RockDoubleStud 'Move(2,0,0)'
-Rock4x -> Rock2x Rock2x
-Rock8x -> Rock4x Rock4x
-Rock16x -> Rock8x Rock8x
-Rock32x -> Rock16x Rock16x
-Rock64x -> Rock32x Rock32x
-Rock128x -> Rock64x Rock64x
+RockStudSlice -> 'AssertFilled()'
+RockStudSlice -> RockSingleStud 'Move(2,0,0)' RockDoubleStud 'Move(2,0,0)' RockStudSlice
+RockStudSlice -> 
 
 RockSingleStud -> 'FillRect(2,9,2)' RockSingleTall
 RockSingleStud -> 'FillRect(2,3,2)' 'Place(3040)' '(' 'Move(0,3,0)' RockDoubleStud ')'
