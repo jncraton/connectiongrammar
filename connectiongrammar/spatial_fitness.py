@@ -314,10 +314,20 @@ def to_ldraw(els):
 
   return ldraw
 
-def fitness(valid_ops, new_ops):
+def fitness(text, prefix = None):
+  """ 
+  Simple fitness function returning perfect fitness if no collisions and 
+  worst possible fitness otherwise.
+
+  For performance reasons, a fitness function may take a prefix. This 
+  prefix will be prepended to the text and assumed to be valid. This
+  is an optimization that allows some generation algorithms to avoid
+  throwing away work from previous calls to fitness boosting complexity
+  to O(n) time from O(n²) time.
+  """
   try:
-    (_, img, states) = parse(valid_ops)
-    exec_ops(img, states, new_ops, dry_run=True)
+    (_, img, states) = parse(prefix)
+    exec_ops(img, states, text, dry_run=True)
     return 1.0
   except (CollisionError, AssertionError) as e:
     return 0.0

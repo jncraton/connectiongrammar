@@ -34,7 +34,7 @@ def generate(grammar, fitness_fn):
       test = [terminate(grammar, s) for s in test]
       test = [a for b in test for a in b if a] # This flattens the list
 
-      fitness = fitness_fn(tuple(sentence[0:i]), tuple(test))
+      fitness = fitness_fn(tuple(test), prefix = tuple(sentence[0:i]))
 
       if fitness > best_fitness:
         best_prods = []
