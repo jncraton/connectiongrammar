@@ -270,6 +270,13 @@ def exec_ops(img,stack,ops,dry_run=False):
   return elements
 
 def to_ldraw(els):
+  """
+  Converts the element list to the contents of an ldraw file.
+
+  There are no checks implemented to make sure valid ldraw elements are
+  being placed, so if your grammar isn't placing ldraw elements this
+  will return fairly useless results.
+  """
   yellow = 14
   blue = 1
 
