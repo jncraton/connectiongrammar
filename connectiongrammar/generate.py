@@ -44,13 +44,13 @@ def generate(grammar, fitness_fn):
 
         best_prods.append(prod)
         
-        if fitness >= 1.0 and 'stud' in str(prod.lhs()).lower(): # TODO: using stud as a check is rubbish. There should be a way to define something as a connection rule that should be checked for fitness, not probabilistically. Since this is just a performance shortcut, it is ok for now.
+        if fitness >= 1.0 and prod.prob() == 0.0:
           break
 
     try:
       best = np.random.choice(best_prods, p=[p.prob() for p in best_prods])
     except ValueError:
-      # Probabilities do not sum to 1. This happens when not all rules have equal fitness
+      # Probabilities do not sum to 1, so we're checking against a fitness function
       best = best_prods[-1]
 
     sentence = sentence[0:i] + list([s for s in best.rhs()]) + sentence[i+1:]
@@ -77,8 +77,18 @@ def terminate(grammar, sym):
       return sum(syms, [])
 
 def load_grammar(content):
-  grammar = PCFG.fromstring(content)
+  PCFG.EPSILON = 2 # Allow probabilities to sum to zero
+
+  def add_prob(line):
+    if not line or line.endswith(']'):
+      return line
   
+    return line + ' [0.0]'
+  
+  content = '\n'.join(map(add_prob, content.splitlines()))
+
+  grammar = PCFG.fromstring(content)
+
   grammar.to_terminal = {}
   
   for prod in grammar.productions():

@@ -17,14 +17,6 @@ for line in gmr_text.splitlines():
   if line and not line.endswith(']'):
     sym_count[get_sym(line)] = sym_count.get(get_sym(line), 0) + 1
 
-def add_prob(line):
-  if not line or line.endswith(']'):
-    return line
-
-  return '%s [%f]' % (line, 1 / sym_count[get_sym(line)])
-
-gmr_text = '\n'.join(map(add_prob, gmr_text.splitlines()))
-
 sentence = generate.generate(gmr_text, spatial_fitness.fitness)
 elements = spatial_fitness.parse(sentence)[0]
 
