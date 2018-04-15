@@ -13,7 +13,7 @@ RockSingleTall -> 'Place(4460)' '(' 'Move(0,9,0)' RockDoubleStud ')' [.25]
 RockSingleTall -> S1x2 '(' 'Move(0,3,0)' B1x2  'Move(0,3,0)' B1x2 'Move(0,3,0)' RockDoubleStud ')' [.25]
 RockSingleTall -> B1x1 '(' 'Move(0,3,0)' S1x2  'Move(0,3,0)' B1x2 'Move(0,3,0)' RockDoubleStud ')' [.25]
 RockSingleTall -> B1x1 '(' 'Move(0,3,0)' B1x1  'Move(0,3,0)' S1x2 'Move(0,3,0)' RockDoubleStud ')' [.25]
-RockSingleTall -> [0.0]
+RockSingleTall -> 
 
 RockDoubleStud -> 'FillRect(2,9,2)' RockDoubleTall '(' 'Move(0,9,0)' RockSingleStud ')'
 RockDoubleStud -> 'FillRect(2,3,2)' SI1x2 '(' 'Move(0,3,0)' RockSingleStud ')'
@@ -23,7 +23,7 @@ RockDoubleTall -> 'Place(2449)' '(' 'Move(0,9,0)' RockSingleStud ')' [.25]
 RockDoubleTall -> SI1x2 '(' 'Move(0,3,0)' B1x1  'Move(0,3,0)' B1x1 'Move(0,3,0)' RockSingleStud ')' [.25]
 RockDoubleTall -> B1x2 '(' 'Move(0,3,0)' SI1x2  'Move(0,3,0)' B1x1 'Move(0,3,0)' RockSingleStud ')' [.25]
 RockDoubleTall -> B1x2 '(' 'Move(0,3,0)' B1x2  'Move(0,3,0)' SI1x2 'Move(0,3,0)' RockSingleStud ')' [.25]
-RockDoubleTall -> [0.0]
+RockDoubleTall ->
 
 B1x1 -> 'Place(3005)'
 B1x2 -> '(' 'Move(0,0,-1)' 'Rotate(90)' 'Place(3004)' ')'
