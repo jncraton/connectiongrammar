@@ -19,5 +19,5 @@ rock:
 	python3 generateldr.py rock.ldr sheer_rock
 
 clean:
-	rm -f output.ldr
+	rm -f *.ldr
 	rm -rf connectiongrammar/__pycache__
