@@ -27,30 +27,31 @@ def generate(grammar, fitness_fn):
 
     best_fitness = 0.0
     best_prods = []
-                      
-    for prod in productions:
-      test = list(prod.rhs())
-
-      test = [terminate(grammar, s) for s in test]
-      test = [a for b in test for a in b if a] # This flattens the list
-
-      fitness = fitness_fn(tuple(test), prefix = tuple(sentence[0:i]))
-
-      if fitness > best_fitness:
-        best_prods = []
-
-      if fitness >= best_fitness:
-        best_fitness = fitness
-
-        best_prods.append(prod)
-        
-        if fitness >= 1.0 and prod.prob() == 0.0:
-          break
 
     try:
-      best = np.random.choice(best_prods, p=[p.prob() for p in best_prods])
+      # Attempt random selection if we are dealing with probabilistic rules
+      best = np.random.choice(productions, p=[p.prob() for p in productions])
     except ValueError:
       # Probabilities do not sum to 1, so we're checking against a fitness function
+      for prod in productions:
+        test = list(prod.rhs())
+  
+        test = [terminate(grammar, s) for s in test]
+        test = [a for b in test for a in b if a] # This flattens the list
+  
+        fitness = fitness_fn(tuple(test), prefix = tuple(sentence[0:i]))
+  
+        if fitness > best_fitness:
+          best_prods = []
+  
+        if fitness >= best_fitness:
+          best_fitness = fitness
+  
+          best_prods.append(prod)
+          
+          if fitness >= 1.0:
+            break
+  
       best = best_prods[-1]
 
     sentence = sentence[0:i] + list([s for s in best.rhs()]) + sentence[i+1:]
