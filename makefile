@@ -1,7 +1,7 @@
 all: test
 
 profile:
-	python3 -m cProfile -s tottime bricksphere.py > profile.txt
+	python3 -m cProfile -s tottime generateldr.py castle.ldr castle_wall_constraints brick castle_brick_defs tile close > profile.txt
 	head profile.txt -n 20
 
 test:
