@@ -2,7 +2,7 @@
 Implements a basic 3d object placer and fitness function
 
 >>> sentence = generate.generate(
-...     "Stud -> '(' 'Move(0,-3,0)' 'FillRect(2,3,2)' 'Place(3005)' Stud ')'| [1.0]",
+...     "Stud -> '(' 'Move(0,-3,0)' 'FillRect(2,3,2)' 'Place(3005)' Stud ')'\\n Stud ->",
 ...     fitness)
 >>> ' '.join(sentence)
 '( Move(0,-3,0) FillRect(2,3,2) Place(3005) ( Move(0,-3,0) FillRect(2,3,2) Place(3005) ) )'
