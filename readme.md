@@ -16,7 +16,7 @@ In some ways, this project is similar in concept to grammar systems for generati
 
 A picture is worth a thousand words, so here is a graphical explanation from [7]:
 
-![](turtle-interpretation.png)
+![](docs/turtle-interpretation.png)
 
 As in other procedural modeling grammar applications [11], non-terminal symbols generically represent opportunities for our grammar to grow new structures.
 
@@ -62,7 +62,7 @@ Examples
 
 This package and basic algorithm could be used to model many kinds of interconnected structures. For demonstration purposes, I will explore interconnected stud-and-tube-based building blocks such as [4]:
 
-![](christiansen1961.jpg)
+![](docs/christiansen1961.jpg)
 
 This sort of system is familiar to most people. Using this for demonstration eliminates the need to describe external domain knowledge as part of an explaining this methodology. It also has the convenient side-effect of being a cheap physical object that can be quickly assembled for debugging and problem solving.
 
