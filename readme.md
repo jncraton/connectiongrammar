@@ -3,7 +3,7 @@ Connection Grammar
 
 [![Build Status](https://travis-ci.org/jncraton/connectiongrammar.svg?branch=master)](https://travis-ci.org/jncraton/connectiongrammar)
 
-This package provides a way to develop text grammars that represent a language of interconnected 3D objects in a Python environment.
+This package provides a way to develop text grammars that represent a language of interconnected 3D objects in a Python environment. If you want to jump right in to using this or hacking on it, check out the [getting started](docs/getting_started.md) guide.
 
 Overview
 --------
