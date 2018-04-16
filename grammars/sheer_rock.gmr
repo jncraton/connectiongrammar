@@ -1,28 +1,28 @@
-Init -> 'PlaceBoundingBox(128,128,128)' 'SetColor(72)' 'Move(-124,0,0)' RockStudSlice
+Init -> 'PlaceBoundingBox(128,128,128)' 'SetColor(72)' 'Move(-124,0,0)' RockSlice
 
-RockStudSlice -> 'AssertFilled()'
-RockStudSlice -> RockSingleStud 'Move(2,0,0)' RockDoubleStud 'Move(2,0,0)' RockStudSlice
-RockStudSlice -> 
+RockSlice -> 'AssertFilled()'
+RockSlice -> RockSingle 'Move(2,0,0)' RockDouble 'Move(2,0,0)' RockSlice
+RockSlice -> 
 
-RockSingleStud -> 'FillRect(2,9,2)' RockSingleTall
-RockSingleStud -> 'FillRect(2,3,2)' 'Place(3040)' '(' 'Move(0,3,0)' RockDoubleStud ')'
-RockSingleStud -> 'FillRect(2,3,2)' 'Place(3005)' '(' 'Move(0,3,0)' RockSingleStud ')'
-RockSingleStud ->
+RockSingle -> 'FillRect(2,9,2)' RockSingleTall
+RockSingle -> 'FillRect(2,3,2)' 'Place(3040)' '(' 'Move(0,3,0)' RockDouble ')'
+RockSingle -> 'FillRect(2,3,2)' 'Place(3005)' '(' 'Move(0,3,0)' RockSingle ')'
+RockSingle ->
 
-RockSingleTall -> 'Place(4460)' '(' 'Move(0,9,0)' RockDoubleStud ')' [.25]
-RockSingleTall -> S1x2 '(' 'Move(0,3,0)' B1x2  'Move(0,3,0)' B1x2 'Move(0,3,0)' RockDoubleStud ')' [.25]
-RockSingleTall -> B1x1 '(' 'Move(0,3,0)' S1x2  'Move(0,3,0)' B1x2 'Move(0,3,0)' RockDoubleStud ')' [.25]
-RockSingleTall -> B1x1 '(' 'Move(0,3,0)' B1x1  'Move(0,3,0)' S1x2 'Move(0,3,0)' RockDoubleStud ')' [.25]
+RockSingleTall -> 'Place(4460)' '(' 'Move(0,9,0)' RockDouble ')' [.25]
+RockSingleTall -> S1x2 '(' 'Move(0,3,0)' B1x2  'Move(0,3,0)' B1x2 'Move(0,3,0)' RockDouble ')' [.25]
+RockSingleTall -> B1x1 '(' 'Move(0,3,0)' S1x2  'Move(0,3,0)' B1x2 'Move(0,3,0)' RockDouble ')' [.25]
+RockSingleTall -> B1x1 '(' 'Move(0,3,0)' B1x1  'Move(0,3,0)' S1x2 'Move(0,3,0)' RockDouble ')' [.25]
 RockSingleTall -> 
 
-RockDoubleStud -> 'FillRect(2,9,2)' RockDoubleTall '(' 'Move(0,9,0)' RockSingleStud ')'
-RockDoubleStud -> 'FillRect(2,3,2)' SI1x2 '(' 'Move(0,3,0)' RockSingleStud ')'
-RockDoubleStud ->
+RockDouble -> 'FillRect(2,9,2)' RockDoubleTall '(' 'Move(0,9,0)' RockSingle ')'
+RockDouble -> 'FillRect(2,3,2)' SI1x2 '(' 'Move(0,3,0)' RockSingle ')'
+RockDouble ->
 
-RockDoubleTall -> 'Place(2449)' '(' 'Move(0,9,0)' RockSingleStud ')' [.25]
-RockDoubleTall -> SI1x2 '(' 'Move(0,3,0)' B1x1  'Move(0,3,0)' B1x1 'Move(0,3,0)' RockSingleStud ')' [.25]
-RockDoubleTall -> B1x2 '(' 'Move(0,3,0)' SI1x2  'Move(0,3,0)' B1x1 'Move(0,3,0)' RockSingleStud ')' [.25]
-RockDoubleTall -> B1x2 '(' 'Move(0,3,0)' B1x2  'Move(0,3,0)' SI1x2 'Move(0,3,0)' RockSingleStud ')' [.25]
+RockDoubleTall -> 'Place(2449)' '(' 'Move(0,9,0)' RockSingle ')' [.25]
+RockDoubleTall -> SI1x2 '(' 'Move(0,3,0)' B1x1  'Move(0,3,0)' B1x1 'Move(0,3,0)' RockSingle ')' [.25]
+RockDoubleTall -> B1x2 '(' 'Move(0,3,0)' SI1x2  'Move(0,3,0)' B1x1 'Move(0,3,0)' RockSingle ')' [.25]
+RockDoubleTall -> B1x2 '(' 'Move(0,3,0)' B1x2  'Move(0,3,0)' SI1x2 'Move(0,3,0)' RockSingle ')' [.25]
 RockDoubleTall ->
 
 B1x1 -> 'Place(3005)'
