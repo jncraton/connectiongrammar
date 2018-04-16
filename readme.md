@@ -8,9 +8,9 @@ This package provides a way to develop text grammars that represent a language o
 Overview
 --------
 
-The field computational design synthesis involves using computer algorithm to create designs to meet a set of engineering requirements. There are many tools and algorithms available to aid in computational design synthesis[5]. Generative grammars are one broad class of solutions to this problem.
+The field computational design synthesis involves using computer algorithms to create designs to meet a set of engineering requirements. There are many tools and algorithms available to aid in computational design synthesis[5]. Generative grammars are one broad class of solutions to this problem.
 
-In some ways, this project is similar in concept to grammar systems for generating trees or algae[10]. This project uses a context-free grammar to generate a language that issues commands to a 3D object printer. It moves and rotates an imaginary print head and issues requests to place objects. This is similar to the "turtle interpretation" for L-systems described in [3]:
+This work uses context-free grammars to represent valid connections between objects. This is somewhat similar in concept to previous grammar systems for generating trees or algae[10]. The generated a language issues commands to a 3D object printer. It moves and rotates an imaginary print head and issues requests to place objects. This is similar to the "turtle interpretation" for L-systems described in [3]:
 
 > The  concept  is  based  on  the idea of an imaginary turtle that walks, turns and draws according to instructions given. At any time the turtle has a current position in  3-space  and  a  heading  vector  (the  forward  direction  of movement). Individual letters in a string are treated as commands. Different  letters  change  position  or  heading,  record  vertices  in  a polygon,  apply  pre-defined  surfaces  to  the  current  position  and orientation, change colour, etc.
 
@@ -22,7 +22,7 @@ As in other procedural modeling grammar applications [11], non-terminal symbols 
 
 While context-free grammars are suitable for modeling possible connections, they do not have a concept of global state and cannot "see" the rest of the generated objects. A second layer fitness function, modeling a user-defined global rule set, is required to generate object graphs that adhere to specific global parameters. This is similar to the methods used in other work [1][2]. In the case of simple interconnected shapes, a 3D collision space may be a suitable fitness function to ensure a physically valid shape. Additional rules can be added to ensure that a generated shape is suitable in other ways. For example, rules could be added for thermal dissipation to model behavior of various shapes for use as a heat sink.
 
-Grammar production rules may also be assigned a probability to model possible interconnections as a probabilistic context free grammar (PCFG). This allows each created model to be unique, and provides a product designer with more tools to enhance their creative work[9].
+Grammar production rules may also be assigned a probability to model possible interconnections as a probabilistic context-free grammar (PCFG). This allows each created model to be unique, and provides a product designer with more tools to enhance their creative work[9].
 
 Complexity
 ----------
@@ -285,7 +285,7 @@ This produces a fine, though admittedly boring, wall:
 
 ### Rock Face
 
-This system optionally supports probabilistic context free grammar rules. These function the same as regular production rules, but they have probabilities assigned to them and are randomly used instead of being matched against the fitness function. Probabilistic rules are assumed to all produce equal fitness but may adjust the aesthetic qualities of the structure.
+This system optionally supports probabilistic context-free grammar rules. These function the same as regular production rules, but they have probabilities assigned to them and are randomly used instead of being matched against the fitness function. Probabilistic rules are assumed to all produce equal fitness but may adjust the aesthetic qualities of the structure.
 
 Here is an example ruleset to construct a wall with the irregular appearance of a sheer rock face:
     
