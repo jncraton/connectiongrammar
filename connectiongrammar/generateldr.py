@@ -1,7 +1,7 @@
 import functools
 import sys
 
-from connectiongrammar import generate, spatial_fitness
+import generate, spatial_fitness
 
 gmr_text = ""
 

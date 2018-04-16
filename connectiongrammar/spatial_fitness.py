@@ -16,7 +16,7 @@ import enum
 import math
 from nltk import PCFG
 
-from connectiongrammar import generate
+import generate
 
 OP = enum.Enum('OP', 'PlaceBoundingSphere Place Move FillRect Rotate ( ) AssertFilled PlaceBoundingBox SetColor FillRectNoCheck')
 
