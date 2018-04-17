@@ -1,0 +1,10 @@
+SetRandColor -> 'SetColor(1)' [.25]
+SetRandColor -> 'SetColor(2)' [.25]
+SetRandColor -> 'SetColor(4)' [.25]
+SetRandColor -> 'SetColor(14)' [.25]
+SetRandColor -> 
+
+B2x4 -> 'FillRect(8,3,4)' SetRandColor 'Place(3001)' BrickConnection2x4
+B2x2 -> 'FillRect(4,3,4)' SetRandColor 'Place(3003)' BrickConnection2x2
+B1x2 -> 'FillRect(4,3,2)' SetRandColor 'Place(3004)' BrickConnection1x2
+B1x1 -> 'FillRect(2,3,2)' SetRandColor 'Place(3005)' BrickConnection

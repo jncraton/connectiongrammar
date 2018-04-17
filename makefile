@@ -9,7 +9,7 @@ test:
 	python3 -m doctest connectiongrammar/spatial_fitness.py
 
 dish:
-	python3 connectiongrammar/generateldr.py dish.ldr dish_constraints brick brick_defs close
+	python3 connectiongrammar/generateldr.py dish.ldr dish_constraints brick rainbow_brick_defs close
 
 castle:
 	python3 connectiongrammar/generateldr.py castle.ldr castle_wall_constraints brick castle_brick_defs tile close
