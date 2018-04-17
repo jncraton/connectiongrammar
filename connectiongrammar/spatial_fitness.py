@@ -235,7 +235,7 @@ def exec_ops(img,stack,ops,dry_run=False):
     if op[0] == None:
       pass
     elif op[0] == OP.PlaceBoundingSphere:
-      img.voxels = img.voxels.union(bounding_sphere(op[1],1))
+      img.voxels = img.voxels.union(bounding_sphere(op[1]))
     elif op[0] == OP.PlaceBoundingBox:
       img.voxels = img.voxels.union(bounding_box(op[1],stack[-1]))
     elif op[0] == OP.Place:
