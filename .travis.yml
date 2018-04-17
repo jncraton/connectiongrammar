@@ -10,3 +10,4 @@ script:
     - make castle
     - make rock
     - make augcastle
+    - make dish
