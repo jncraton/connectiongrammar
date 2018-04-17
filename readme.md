@@ -5,6 +5,8 @@ Connection Grammar
 
 This package provides a way to develop text grammars that represent a language of interconnected 3D objects in a Python environment. If you want to jump right in to using this or hacking on it, check out the [getting started](docs/getting_started.md) guide.
 
+![Rainbow dish render](examples/dish.png)
+
 Overview
 --------
 
@@ -260,7 +262,7 @@ We can see that the grammar is able to fill the entire bounding box with bricks 
 
 That works fine as well. By combining bounding boxes and bounding spheres, we can build some fairly complex shapes, such as this dish:
 
-![](examples/dish-render.png)
+![](examples/blue_dish-render.png)
 
 ### Castle
 
