@@ -289,7 +289,7 @@ This produces a fine, though admittedly boring, wall:
 
 This system optionally supports probabilistic context-free grammar rules. These function the same as regular production rules, but they have probabilities assigned to them and are randomly used instead of being matched against the fitness function. Probabilistic rules are assumed to all produce equal fitness but may adjust the aesthetic qualities of the structure.
 
-Here is an example ruleset to construct a wall with the irregular appearance of a sheer rock face:
+Here is an example ruleset to construct a wall with the irregular appearance of a sheer rock face as [requested on Bricks Stack Exchange](https://bricks.stackexchange.com/q/9766/708):
     
     RockSingleStud -> 'FillRect(2,9,2)' RockSingleTall
     RockSingleStud -> 'FillRect(2,3,2)' 'Place(3040)' '(' 'Move(0,3,0)' RockDoubleStud ')'
