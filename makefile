@@ -15,7 +15,7 @@ castle:
 	python3 connectiongrammar/generateldr.py castle.ldr castle_wall_constraints brick castle_brick_defs tile close
 
 augcastle:
-	python3 connectiongrammar/ldr2gmr.py examples/castle-human.ldr grammars/castle_aug_init.gmr
+	python3 connectiongrammar/ldr2gmr.py examples/castle/drawbridge.ldr grammars/castle_aug_init.gmr
 	python3 connectiongrammar/generateldr.py augcastle.ldr castle_aug_init brick tile castle_brick_defs close
 
 rock:
