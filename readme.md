@@ -283,7 +283,7 @@ T1x2 -> 'FillRect(4,1,2)' 'Place(3069b)' '(' 'Move(-1,1,0)' Antistud 'Move(2,1,0
 
 This produces a fine, though admittedly boring, wall:
 
-![](examples/castle/castle1.png)
+![](examples/castle/simple.png)
 
 ### Rock Face
 
@@ -334,7 +334,7 @@ B1x1NoCheck -> 'Place(47905)' BrickConnection [.1]
 
 Each rule now has an associated probability that indicates how frequently it should be applied. Regenerating our castle wall using these new rules gives us something like this:
 
-![](examples/castle/castle-pcfg.png)
+![](examples/castle/pcfg.png)
 
 That's much more interesting than the plain wall. This type of probabilistic rule-based design could be applied to many areas of product development and design to create new product alterations.
 
@@ -346,7 +346,7 @@ One of the beautiful attributes of a grammar-based methodology is that it allows
 
 Let's say that a designer has a particular design in mind for an aspect of a product that is tedious to model as a grammar but trivial to model with traditional CAD tools. A designer can simply create a section of the design in a CAD tool, convert it to a grammar, and grow new structures from there. Take for example this drawbridge design:
 
-![](examples/castle/castle-human.png)
+![](examples/castle/drawbridge.png)
 
 This was designed using LDraw and stored as a simple list of elements. However, it can be easily converted into the following grammar utterance:
 
@@ -389,15 +389,15 @@ SetColor(71)
 
 We can then expand this within the bounds of our previous wall and generate a wall surrounding our drawbridge:
 
-![](examples/castle/castle-human-aug.png)
+![](examples/castle/augmented.png)
 
 Here's an animation to show the order in which the grammar fulfills connections:
 
-![](examples/castle/castle-aug.gif)
+![](examples/castle/augmented.gif)
 
 Let's not forget that this system can operate in full 3D space, so we can generate a much more defensible castle by simply adjusting the bounds in our fitness function:
 
-![](examples/castle/castle3d.png)
+![](examples/castle/four-walled.png)
 
 Using this human augmentation technique, multiple hand-designed structures can be stitched together using a grammar that understands possible connections between them.
 
