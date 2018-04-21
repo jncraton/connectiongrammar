@@ -1,3 +1,7 @@
+# Brick definitions
+# This file is a stub that can be replace by more complex
+# probabilistic definitions
+
 B2x4 -> 'FillRect(8,3,4)' 'Place(3001)' BrickConnection2x4
 B2x2 -> 'FillRect(4,3,4)' 'Place(3003)' BrickConnection2x2
 B1x2 -> 'FillRect(4,3,2)' 'Place(3004)' BrickConnection1x2

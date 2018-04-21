@@ -1,3 +1,8 @@
+# Grammar for basic brick connections
+# This covers 1x1, 1x2, 2x2, and 2x4 bricks
+
+# Stud connections on top of bricks
+
 Stud -> '(' 'Move(0,-1,0)' 'AssertFilled()' ')'
 
 Stud -> '(' 'Move(-3,-3,-1)' B2x4 ')'
@@ -19,6 +24,8 @@ Stud -> '(' 'Rotate(180)' 'Move(-1,-3,0)' B1x2 ')'
 
 Stud -> '(' 'Move(0,-3,0)' B1x1 ')'
 
+# Antistud connections on bottom of bricks
+
 Antistud -> 'AssertFilled()'
 
 Antistud -> '(' 'Move(-3,0,-1)' B2x4 ')'
@@ -36,6 +43,8 @@ Antistud -> '(' 'Rotate(90)' 'Move(-1,0,0)' B1x2 ')'
 Antistud -> '(' 'Rotate(180)' 'Move(-1,0,0)' B1x2 ')'
 Antistud -> '(' 'Rotate(270)' 'Move(-1,0,0)' B1x2 ')'
 Antistud -> '(' B1x1 ')'
+
+# Some helpers to simplify add all of the non-terminals to each brick
 
 BrickConnection -> '(' Stud 'Move(0,3,0)' Antistud ')'
 BrickConnection1x2 -> '(' 'Move(-1,0,0)' BrickConnection 'Move(2,0,0)' BrickConnection ')'

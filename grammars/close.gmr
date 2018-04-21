@@ -1,2 +1,5 @@
+# Closes a grammar
+# This ensures that there is an epsilon rule for every connection type.
+
 Stud ->
 Antistud ->

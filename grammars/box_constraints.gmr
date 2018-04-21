@@ -1,1 +1,4 @@
+# Creates a basic bounding box in voxel space and creates a single stud
+# connection at it's center
+
 Init -> 'PlaceBoundingBox(8,9,8)' Stud

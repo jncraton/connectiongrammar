@@ -1,3 +1,10 @@
+# Sheer rock face example
+#
+# This uses probabilistic production rules to create a nice looking rock
+# face. This also demonstates that non-terminals don't have to be raw
+# connection types. In this example, a separate connection type is 
+# defined for single studs and double studs.
+
 Init -> 'PlaceBoundingBox(128,128,128)' 'SetColor(72)' 'Move(-124,0,0)' RockSlice
 
 RockSlice -> 'AssertFilled()'

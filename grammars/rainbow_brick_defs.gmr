@@ -1,3 +1,5 @@
+# Brick definitions for rainbow builds
+
 SetRandColor -> 'SetColor(1)' [.25]
 SetRandColor -> 'SetColor(2)' [.25]
 SetRandColor -> 'SetColor(4)' [.25]

@@ -1,3 +1,8 @@
+# Probabilistic brick definitions for the castle
+#
+# This replaces the constant production rules for 1x2 bricks with
+# probabilistic alternatives to provide a more dynamic look.
+
 SetRandColor -> 'SetColor(71)' [.9]
 SetRandColor -> 'SetColor(72)' [.1]
 SetRandColor -> [0]
