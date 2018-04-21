@@ -83,7 +83,7 @@ def terminate(grammar, sym):
       prod = prods[0]
       if len(prods) != 1:
         prod = np.random.choice(prods, p=[p.prob() for p in prods])
-      syms = [terminate(grammar, s) for s in prod.rhs()]
+      syms = [list(terminate(grammar, s)) for s in prod.rhs()]
       syms = [s for s in syms if s]
       
       return sum(syms, [])
