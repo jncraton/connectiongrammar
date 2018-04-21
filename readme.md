@@ -203,7 +203,7 @@ Let's begin by significantly expanding our grammar. We'll need two main addition
 1. The ability to add bounds to our geometry. We will implement this via a new `PlaceBoundingBox` operation.
 2. The ability for placed elements to actually consume space. We will implement this via a new `FillRect` operation.
 
-We will also use a greatly expanded our grammar for element placement to demonstrate some of the power of this system. The grammars used can be found in the `/grammars` directory. Here is an example grammar that includes 1x1, 1x2, 2x2, and 2x4 bricks and implements both stud and antistud connections:
+We will also use a greatly expanded our grammar for element placement to demonstrate some of the power of this system. The grammars used can be found in the `/examples` directory. Here is an example grammar that includes 1x1, 1x2, 2x2, and 2x4 bricks and implements both stud and antistud connections:
 
 ```
 Stud -> '(' 'Move(-3,-3,-1)' B2x4 ')'
