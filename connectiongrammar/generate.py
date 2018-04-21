@@ -61,8 +61,19 @@ def generate(grammar, fitness_fn):
   return tuple(sentence)
 
 def terminate(grammar, sym):
+  """ Returns the sortest tuple of terminals for a given symbol
+
+  >>> terminate(load_grammar('Nothing -> '), Nonterminal('Nothing'))
+  ()
+  
+  >>> terminate(load_grammar("Something -> 'Something'"), Nonterminal('Something'))
+  ('Something',)
+
+  >>> terminate(None, 'Something')
+  ('Something',)
+  """
   if isinstance(sym, str):
-    return [sym]
+    return (sym,)
 
   if isinstance(sym, Nonterminal):
     try:
