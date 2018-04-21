@@ -8,7 +8,16 @@ import sys
 import generate, spatial_fitness
 
 if __name__ == '__main__':
-  gmr_text = '\n'.join([open('%s' % g).read() for g in  sys.argv[2:]])
+  import argparse
+
+  parser = argparse.ArgumentParser(description=__doc__)
+  parser.add_argument('output', type=str, help='Output LDraw file')
+  parser.add_argument('input', type=str, nargs='+',
+                      help='Set of grammars to concatenate')
+  
+  args = parser.parse_args()
+
+  gmr_text = '\n'.join([open('%s' % g).read() for g in args.input])
 
   sentence = generate.generate(gmr_text, spatial_fitness.fitness)
   elements = spatial_fitness.parse(sentence)[0]
@@ -19,4 +28,4 @@ if __name__ == '__main__':
   
   with open(sys.argv[1],'w') as outf:
     outf.write(spatial_fitness.to_ldraw(elements))
-    print("Generated structure saved as '%s'." % sys.argv[1])
+    print("Generated structure saved as '%s'." % args.output)
