@@ -6,7 +6,7 @@ import sys
 import generate, spatial_fitness
 
 if __name__ == '__main__':
-  gmr_text = '\n'.join([open('grammars/%s.gmr' % g).read() for g in  sys.argv[2:]])
+  gmr_text = '\n'.join([open('grammars/%s.pcfg' % g).read() for g in  sys.argv[2:]])
 
   sentence = generate.generate(gmr_text, spatial_fitness.fitness)
   elements = spatial_fitness.parse(sentence)[0]
