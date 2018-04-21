@@ -9,17 +9,17 @@ test:
 	python3 -m doctest connectiongrammar/spatial_fitness.py
 
 dish:
-	python3 connectiongrammar/generateldr.py dish.ldr dish_constraints brick rainbow_brick_defs close
+	python3 connectiongrammar/generateldr.py dish.ldr examples/dish/constraints.pcfg examples/brick.pcfg examples/rainbow_brick_defs.pcfg examples/close.pcfg
 
 castle:
-	python3 connectiongrammar/generateldr.py castle.ldr castle_wall_constraints brick castle_brick_defs tile close
+	python3 connectiongrammar/generateldr.py castle.ldr examples/castle/wall_constraints.pcfg examples/brick.pcfg examples/castle/brick_defs.pcfg examples/tile.pcfg examples/close.pcfg
 
 augcastle:
-	python3 connectiongrammar/ldr2gmr.py examples/castle/drawbridge.ldr grammars/castle_aug_init.gmr
-	python3 connectiongrammar/generateldr.py augcastle.ldr castle_aug_init brick tile castle_brick_defs close
+	python3 connectiongrammar/ldr2gmr.py examples/castle/drawbridge.ldr examples/castle/augmented_init.pcfg
+	python3 connectiongrammar/generateldr.py augcastle.ldr examples/castle/augmented_init.pcfg examples/brick.pcfg examples/tile.pcfg examples/castle/brick_defs.pcfg examples/close.pcfg
 
 rock:
-	python3 connectiongrammar/generateldr.py rock.ldr sheer_rock
+	python3 connectiongrammar/generateldr.py rock.ldr examples/rock/rock.pcfg
 
 clean:
 	rm -f *.ldr
