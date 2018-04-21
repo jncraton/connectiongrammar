@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
 
+""" Converts an LDraw file to a grammar utterance """
+
 import sys
 
 if __name__ == '__main__':

@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
 
+""" Generates an LDraw file from a set of grammar rules """
+
 import functools
 import sys
 
