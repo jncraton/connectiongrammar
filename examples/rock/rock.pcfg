@@ -5,21 +5,21 @@
 # connection types. In this example, a separate connection type is 
 # defined for single studs and double studs.
 
-Init -> 'PlaceBoundingBox(128,128,128)' 'SetColor(72)' 'Move(-124,0,0)' RockSlice
+Init -> 'PlaceBoundingBox(24,24,24)' 'SetColor(72)' 'Move(-20,0,0)' RockSlice
 
 RockSlice -> 'AssertFilled()'
-RockSlice -> RockSingle 'Move(2,0,0)' RockDouble 'Move(2,0,0)' RockSlice
+RockSlice -> '(' RockSingle 'Move(2,0,0)' RockDouble 'Move(2,0,0)' RockSlice ')'
 RockSlice -> 
 
 RockSingle -> 'FillRect(2,9,2)' RockSingleTall
 RockSingle -> 'FillRect(2,3,2)' 'Place(3040)' '(' 'Move(0,3,0)' RockDouble ')'
 RockSingle -> 'FillRect(2,3,2)' 'Place(3005)' '(' 'Move(0,3,0)' RockSingle ')'
-RockSingle ->
+RockSingle -> 
 
 RockSingleTall -> 'Place(4460)' '(' 'Move(0,9,0)' RockDouble ')' [.25]
-RockSingleTall -> S1x2 '(' 'Move(0,3,0)' B1x2  'Move(0,3,0)' B1x2 'Move(0,3,0)' RockDouble ')' [.25]
-RockSingleTall -> B1x1 '(' 'Move(0,3,0)' S1x2  'Move(0,3,0)' B1x2 'Move(0,3,0)' RockDouble ')' [.25]
-RockSingleTall -> B1x1 '(' 'Move(0,3,0)' B1x1  'Move(0,3,0)' S1x2 'Move(0,3,0)' RockDouble ')' [.25]
+RockSingleTall -> '(' S1x2 'Move(0,3,0)' B1x2  'Move(0,3,0)' B1x2 'Move(0,3,0)' RockDouble ')' [.25]
+RockSingleTall -> '(' B1x1 'Move(0,3,0)' S1x2  'Move(0,3,0)' B1x2 'Move(0,3,0)' RockDouble ')' [.25]
+RockSingleTall -> '(' B1x1 'Move(0,3,0)' B1x1  'Move(0,3,0)' S1x2 'Move(0,3,0)' RockDouble ')' [.25]
 RockSingleTall -> 
 
 RockDouble -> 'FillRect(2,9,2)' RockDoubleTall '(' 'Move(0,9,0)' RockSingle ')'
@@ -27,9 +27,9 @@ RockDouble -> 'FillRect(2,3,2)' SI1x2 '(' 'Move(0,3,0)' RockSingle ')'
 RockDouble ->
 
 RockDoubleTall -> 'Place(2449)' '(' 'Move(0,9,0)' RockSingle ')' [.25]
-RockDoubleTall -> SI1x2 '(' 'Move(0,3,0)' B1x1  'Move(0,3,0)' B1x1 'Move(0,3,0)' RockSingle ')' [.25]
-RockDoubleTall -> B1x2 '(' 'Move(0,3,0)' SI1x2  'Move(0,3,0)' B1x1 'Move(0,3,0)' RockSingle ')' [.25]
-RockDoubleTall -> B1x2 '(' 'Move(0,3,0)' B1x2  'Move(0,3,0)' SI1x2 'Move(0,3,0)' RockSingle ')' [.25]
+RockDoubleTall -> '(' SI1x2 'Move(0,3,0)' B1x1  'Move(0,3,0)' B1x1 'Move(0,3,0)' RockSingle ')' [.25]
+RockDoubleTall -> '(' B1x2 'Move(0,3,0)' SI1x2  'Move(0,3,0)' B1x1 'Move(0,3,0)' RockSingle ')' [.25]
+RockDoubleTall -> '(' B1x2 'Move(0,3,0)' B1x2  'Move(0,3,0)' SI1x2 'Move(0,3,0)' RockSingle ')' [.25]
 RockDoubleTall ->
 
 B1x1 -> 'Place(3005)'
