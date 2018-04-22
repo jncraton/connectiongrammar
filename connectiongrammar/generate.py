@@ -47,9 +47,7 @@ def generate(grammar: PCFG, fitness_fn):
       best_prods = []
 
       for prod in productions:
-        test = [t for t in terminated(grammar, list(prod.rhs()))]
-  
-        fitness = fitness_fn(tuple(test), prefix = tuple(sentence[0:i]))
+        fitness = fitness_fn(terminated(grammar, prod.rhs()), prefix = tuple(sentence[0:i]))
   
         if fitness > best_fitness:
           best_prods = []
@@ -86,9 +84,9 @@ def terminated(grammar, sym):
   >>> list(terminated(load_grammar("A -> B\\nB -> 'C'"), Nonterminal('A')))
   ['C']
   """
-  if isinstance(sym, str): yield sym
-
-  if isinstance(sym, Nonterminal):
+  if isinstance(sym, str): 
+    yield sym
+  elif isinstance(sym, Nonterminal):
     try:
       for w in grammar.to_terminal[sym.symbol()]: yield w
     except KeyError:
@@ -98,8 +96,7 @@ def terminated(grammar, sym):
         prod = np.random.choice(prods, p=[p.prob() for p in prods])
       for sym in prod.rhs():
         for terminal in terminated(grammar, sym): yield terminal
-
-  if isinstance(sym, list):
+  else: # Assume iterable
     for s in sym:
       for terminal in terminated(grammar, s): yield terminal
 
