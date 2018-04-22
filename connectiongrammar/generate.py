@@ -5,7 +5,7 @@ from nltk import PCFG
 
 import numpy as np
 
-def generate(grammar, fitness_fn):
+def generate(grammar: PCFG, fitness_fn):
   """ 
   Generate an utterance from the supplied grammar fitted to the fitness function
   """
