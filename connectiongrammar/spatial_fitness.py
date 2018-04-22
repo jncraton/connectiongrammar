@@ -305,8 +305,11 @@ def fitness(text, prefix = None):
   to O(n) time from O(n²) time.
   """
   try:
-    (_, img, stack) = parse(prefix)
-    exec_ops(img, stack, text, dry_run=True)
+    try:
+      (_, img, stack) = parse(prefix)
+      exec_ops(img, stack, text, dry_run=True)
+    except TypeError:
+      raise(TypeError("Likely unterminated lexeme\n%s" % [str(o) for o in prefix + text]))
     return 1.0
   except (CollisionError, AssertionError) as e:
     return 0.0
