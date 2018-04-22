@@ -89,16 +89,27 @@ def terminate(grammar, sym):
       return sum(syms, [])
 
 def load_grammar(content):
-  PCFG.EPSILON = 2 # Allow probabilities to sum to zero
+  """
+  Load a grammar from a string
 
+  This is similar to calling PCFG.from_string directly, but it does a 
+  little extra parsing to make probabilities optional.
+
+  >>> load_grammar('Start -> ').productions()
+  [Start ->  [0]]
+  
+  >>> load_grammar("Start -> 'a' [.3] | 'b' [.7]").productions()
+  [Start -> 'a' [0.3], Start -> 'b' [0.7]]
+  """
   def add_prob(line):
     if not line or line.endswith(']'):
       return line
   
-    return line + ' [0.0]'
+    return line + ' [0]'
   
   content = '\n'.join(map(add_prob, content.splitlines()))
 
+  PCFG.EPSILON = 2 # Allow probabilities to sum to nearly anything
   grammar = PCFG.fromstring(content)
 
   grammar.to_terminal = {}
