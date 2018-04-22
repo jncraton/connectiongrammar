@@ -1,7 +1,7 @@
 all: test
 
 profile:
-	python3 -m cProfile -s tottime generateldr.py castle.ldr castle_wall_constraints brick castle_brick_defs tile close > profile.txt
+	python3 -m cProfile -s tottime connectiongrammar/generateldr.py castle.ldr examples/castle/wall_constraints.pcfg examples/brick_shared/brick.pcfg examples/castle/brick_defs.pcfg examples/brick_shared/tile.pcfg examples/brick_shared/close.pcfg > profile.txt
 	head profile.txt -n 20
 
 test:
