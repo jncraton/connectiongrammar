@@ -18,7 +18,19 @@ from nltk import PCFG
 
 import generate
 
-OP = enum.Enum('OP', 'PlaceBoundingSphere Place Move FillRect Rotate ( ) AssertFilled PlaceBoundingBox SetColor FillRectNoCheck')
+OP = enum.Enum('OP', """
+  Place
+  Move
+  Rotate
+  SetColor
+  FillRect
+  FillRectNoCheck
+  AssertFilled
+  PlaceBoundingBox
+  PlaceBoundingSphere
+  (
+  )
+""")
 
 class CollisionError(BaseException): pass
 
