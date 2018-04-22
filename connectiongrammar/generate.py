@@ -47,10 +47,7 @@ def generate(grammar: PCFG, fitness_fn):
       best_prods = []
 
       for prod in productions:
-        test = list(prod.rhs())
-  
-        test = [terminate(grammar, s) for s in test]
-        test = [a for b in test for a in b if a] # This flattens the list
+        test = [t for t in terminated(grammar, list(prod.rhs()))]
   
         fitness = fitness_fn(tuple(test), prefix = tuple(sentence[0:i]))
   
@@ -72,33 +69,39 @@ def generate(grammar: PCFG, fitness_fn):
 
   return tuple(sentence)
   
-def terminate(grammar, sym):
-  """ Returns the sortest tuple of terminals for a given symbol
+def terminated(grammar, sym):
+  """ 
+  Generator to yield terminal symbols for a non-terminal or list of
+  non-terminals.
 
-  >>> terminate(load_grammar('Nothing -> '), Nonterminal('Nothing'))
-  ()
+  >>> list(terminated(load_grammar('Nothing -> '), Nonterminal('Nothing')))
+  []
   
-  >>> terminate(load_grammar("Something -> 'Something'"), Nonterminal('Something'))
-  ('Something',)
+  >>> list(terminated(load_grammar("Something -> 'Something'"), Nonterminal('Something')))
+  ['Something']
 
-  >>> terminate(None, 'Something')
-  ('Something',)
+  >>> list(terminated(None, 'Something'))
+  ['Something']
+
+  >>> list(terminated(load_grammar("A -> B\\nB -> 'C'"), Nonterminal('A')))
+  ['C']
   """
-  if isinstance(sym, str):
-    return (sym,)
+  if isinstance(sym, str): yield sym
 
   if isinstance(sym, Nonterminal):
     try:
-      return grammar.to_terminal[sym.symbol()]
+      for w in grammar.to_terminal[sym.symbol()]: yield w
     except KeyError:
       prods = grammar.productions(lhs=sym)
       prod = prods[0]
       if len(prods) != 1:
         prod = np.random.choice(prods, p=[p.prob() for p in prods])
-      syms = [list(terminate(grammar, s)) for s in prod.rhs()]
-      syms = [s for s in syms if s]
-      
-      return sum(syms, [])
+      for sym in prod.rhs():
+        for terminal in terminated(grammar, sym): yield terminal
+
+  if isinstance(sym, list):
+    for s in sym:
+      for terminal in terminated(grammar, s): yield terminal
 
 def load_grammar(content):
   """
@@ -130,7 +133,7 @@ def load_grammar(content):
     rhs = prod.rhs()
 
     if all([isinstance(s, str) for s in rhs]):
-      grammar.to_terminal[str(prod.lhs())] = rhs
+      grammar.to_terminal[str(prod.lhs())] = list(rhs)
 
   return grammar
 
