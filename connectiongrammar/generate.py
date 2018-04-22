@@ -106,13 +106,7 @@ def load_grammar(content):
   >>> load_grammar("Start -> 'a' [.3] | 'b' [.7]").productions()
   [Start -> 'a' [0.3], Start -> 'b' [0.7]]
   """
-  def add_prob(line):
-    if not line or line.endswith(']'):
-      return line
-  
-    return line + ' [0]'
-  
-  content = '\n'.join(map(add_prob, content.splitlines()))
+  content = '\n'.join(map(lambda l: l if not l or l[-1] == ']' else l + ' [0]', content.splitlines()))
 
   PCFG.EPSILON = 2 # Allow probabilities to sum to nearly anything
   
