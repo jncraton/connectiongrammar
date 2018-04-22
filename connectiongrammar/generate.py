@@ -22,14 +22,14 @@ def generate(grammar: PCFG, fitness_fn):
   while(i != None):
     productions = grammar.productions(lhs=sentence[i])
 
-    best_fitness = 0.0
-    best_prods = []
-
     try:
       # Attempt random selection if we are dealing with probabilistic rules
       best = np.random.choice(productions, p=[p.prob() for p in productions])
     except ValueError:
       # Probabilities do not sum to 1, so we're checking against a fitness function
+      best_fitness = 0.0
+      best_prods = []
+
       for prod in productions:
         test = list(prod.rhs())
   
