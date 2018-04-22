@@ -1,9 +1,33 @@
 import functools
+import itertools
 
 from nltk.grammar import Nonterminal
 from nltk import PCFG
 
 import numpy as np
+
+def next_nonterm(sentence: list, i=0):
+  """
+  Generator to yield the index of the next non-terminal in a sentence.
+
+  This assumes that the sentence may be modified in place in between
+  yields. The sentence may only modified following the returned 
+  non-terminal.
+
+  >>> [n for n in next_nonterm([Nonterminal('a')])]
+  [0]
+  
+  >>> [n for n in next_nonterm(['a', Nonterminal('b')])]
+  [1]
+  
+  >>> [n for n in next_nonterm(['a', Nonterminal('b'), 'c', Nonterminal('d')])]
+  [1, 3]
+  """
+  for i in itertools.count():
+    try:
+      if isinstance(sentence[i], Nonterminal): yield i
+    except IndexError:
+      break
 
 def generate(grammar: PCFG, fitness_fn):
   """ 
@@ -11,15 +35,7 @@ def generate(grammar: PCFG, fitness_fn):
   """
   sentence = [grammar.start()]
 
-  def next_nonterm(sentence,start=0):
-    for i in range(start,len(sentence)):
-      if isinstance(sentence[i], Nonterminal):
-        return i
-
-    return None 
-
-  i = next_nonterm(sentence)
-  while(i != None):
+  for i in next_nonterm(sentence):
     productions = grammar.productions(lhs=sentence[i])
 
     try:
@@ -51,12 +67,11 @@ def generate(grammar: PCFG, fitness_fn):
   
       best = best_prods[-1]
 
-    sentence = sentence[0:i] + list([s for s in best.rhs()]) + sentence[i+1:]
-
-    i = next_nonterm(sentence,start=i)
+    sentence.pop(i)
+    [sentence.insert(i,s) for s in reversed(best.rhs())]
 
   return tuple(sentence)
-
+  
 def terminate(grammar, sym):
   """ Returns the sortest tuple of terminals for a given symbol
 
