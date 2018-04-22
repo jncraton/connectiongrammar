@@ -32,6 +32,14 @@ def next_nonterm(sentence: list, i=0):
 def generate(grammar: PCFG, fitness_fn):
   """ 
   Generate an utterance from the supplied grammar fitted to the fitness function
+
+  Here's an example usage to generate a simple stack of three blocks:
+  
+  >>> def fitness(_, prefix):
+  ...   return len(prefix) < 3
+  >>> grammar = load_grammar("block_top -> 'block' block_top|")
+  >>> generate(grammar, fitness)
+  ('block', 'block', 'block')
   """
   sentence = [grammar.start()]
 
