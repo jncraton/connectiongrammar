@@ -9,9 +9,6 @@ def generate(grammar, fitness_fn):
   """ 
   Generate an utterance from the supplied grammar fitted to the fitness function
   """
-  if isinstance(grammar, str):
-    grammar = load_grammar(grammar)
-
   sentence = [grammar.start()]
 
   def next_nonterm(sentence,start=0):

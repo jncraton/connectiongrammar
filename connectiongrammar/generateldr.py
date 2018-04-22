@@ -17,9 +17,9 @@ if __name__ == '__main__':
   
   args = parser.parse_args()
 
-  gmr_text = '\n'.join([open('%s' % g).read() for g in args.input])
+  grammar = '\n'.join([open('%s' % g).read() for g in args.input])
 
-  sentence = generate.generate(gmr_text, spatial_fitness.fitness)
+  sentence = generate.generate(generate.load_grammar(grammar), spatial_fitness.fitness)
   elements = spatial_fitness.parse(sentence)[0]
   
   print("Generated model with %d elements" % (len(elements),))
