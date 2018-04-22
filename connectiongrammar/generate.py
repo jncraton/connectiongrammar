@@ -87,15 +87,8 @@ def terminated(grammar, sym):
   if isinstance(sym, str): 
     yield sym
   elif isinstance(sym, Nonterminal):
-    try:
-      for w in grammar.to_terminal[sym.symbol()]: yield w
-    except KeyError:
-      prods = grammar.productions(lhs=sym)
-      prod = prods[0]
-      if len(prods) != 1:
-        prod = np.random.choice(prods, p=[p.prob() for p in prods])
-      for sym in prod.rhs():
-        for terminal in terminated(grammar, sym): yield terminal
+    for sym in grammar.productions(lhs=sym)[-1].rhs():
+      for terminal in terminated(grammar, sym): yield terminal
   else: # Assume iterable
     for s in sym:
       for terminal in terminated(grammar, s): yield terminal
@@ -122,15 +115,5 @@ def load_grammar(content):
   content = '\n'.join(map(add_prob, content.splitlines()))
 
   PCFG.EPSILON = 2 # Allow probabilities to sum to nearly anything
-  grammar = PCFG.fromstring(content)
-
-  grammar.to_terminal = {}
   
-  for prod in grammar.productions():
-    rhs = prod.rhs()
-
-    if all([isinstance(s, str) for s in rhs]):
-      grammar.to_terminal[str(prod.lhs())] = list(rhs)
-
-  return grammar
-
+  return PCFG.fromstring(content)
