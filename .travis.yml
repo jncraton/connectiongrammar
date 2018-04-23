@@ -4,10 +4,11 @@ python:
 os:
     - linux
 install:
+    - apt-get install doxygen
     - pip3 install -r requirements.txt
-    - apt install doxygen
 script:
     - make test
+    - make profile
     - make castle
     - make rock
     - make augcastle
