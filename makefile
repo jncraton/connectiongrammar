@@ -21,6 +21,10 @@ augcastle:
 rock:
 	python3 connectiongrammar/ldrgenerate.py rock.ldr examples/rock/rock.pcfg
 
+doxygen:
+	doxygen .doxygen
+
 clean:
 	rm -f *.ldr
 	rm -rf connectiongrammar/__pycache__
+	rm -rf docs/html docs/latex

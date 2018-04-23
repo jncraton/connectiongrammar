@@ -5,9 +5,11 @@ os:
     - linux
 install:
     - pip3 install -r requirements.txt
+    - apt install doxygen
 script:
     - make test
     - make castle
     - make rock
     - make augcastle
     - make dish
+    - make doxygen
