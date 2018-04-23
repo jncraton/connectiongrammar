@@ -22,6 +22,13 @@ OP = enum.Enum('OP', """
 
 class CollisionError(BaseException): pass
 
+matrices = [
+  ((1,0,0),(0,1,0),(0,0,1)), # front
+  ((0,0,-1),(0,1,0),(1,0,0)), # right
+  ((-1,0,0),(0,1,0),(0,0,-1)), # back
+  ((0,0,1),(0,1,0),(-1,0,0)), # left
+]
+
 @functools.lru_cache()
 def rotation_matrix(dir):
   """ Gets a rotation matrix from a simple cardinal direction
@@ -30,12 +37,13 @@ def rotation_matrix(dir):
   >>> rotation_matrix(2)
   ((-1, 0, 0), (0, 1, 0), (0, 0, -1))
   """
-  return [
-    ((1,0,0),(0,1,0),(0,0,1)), # front
-    ((0,0,-1),(0,1,0),(1,0,0)), # right
-    ((-1,0,0),(0,1,0),(0,0,-1)), # back
-    ((0,0,1),(0,1,0),(-1,0,0)), # left
-  ][dir]
+  return matrices[dir]
+
+@functools.lru_cache()
+def rotate_matrix(mat, rot):
+  current_dir = matrices.index(mat)
+  
+  return matrices[(current_dir + int(rot)) % 4]
 
 @functools.lru_cache(maxsize=1024)
 def get_token(lexeme):
@@ -83,16 +91,16 @@ def move(s, delta):
 
   Translation is relative the current rotation matrix
   
-  >>> move((0, 0, 0, 0, 1), (1, 2, 3))
-  (1, 2, 3, 0, 1)
-  >>> move((0, 0, 0, 1, 2), (1, 2, 3))
-  (-3, 2, 1, 1, 2)
-  >>> move((0, 0, 0, 2, 3), (1, 2, 3))
-  (-1, 2, -3, 2, 3)
-  >>> move((0, 0, 0, 3, 4), (1, 2, 3))
-  (3, 2, -1, 3, 4)
+  >>> move((0, 0, 0, ((1, 0, 0), (0, 1, 0), (0, 0, 1)), 1), (1, 2, 3))
+  (1, 2, 3, ((1, 0, 0), (0, 1, 0), (0, 0, 1)), 1)
+  >>> move((0, 0, 0, ((0,0,-1),(0,1,0),(1,0,0)), 2), (1, 2, 3))
+  (-3, 2, 1, ((0, 0, -1), (0, 1, 0), (1, 0, 0)), 2)
+  >>> move((0, 0, 0, ((-1, 0, 0), (0, 1, 0), (0, 0, -1)), 3), (1, 2, 3))
+  (-1, 2, -3, ((-1, 0, 0), (0, 1, 0), (0, 0, -1)), 3)
+  >>> move((0, 0, 0, ((0,0,1),(0,1,0),(-1,0,0)), 4), (1, 2, 3))
+  (3, 2, -1, ((0, 0, 1), (0, 1, 0), (-1, 0, 0)), 4)
   """
-  rot_delta = apply_rotation(delta, rotation_matrix(s[3]))
+  rot_delta = apply_rotation(delta, s[3])
 
   return (s[0]+rot_delta[0], s[1]+rot_delta[1], s[2]+rot_delta[2],s[3], s[4])
 
@@ -103,7 +111,7 @@ class VolumetricImage:
   @functools.lru_cache()
   def get_bounds(size, rot):
     """ Gets a cacheable tuple representing the bounds of a 3d rectangle """
-    bounds = [abs(i) for i in apply_rotation(size,rotation_matrix(rot))]
+    bounds = [abs(i) for i in apply_rotation(size,rot)]
   
     bounds[0] = (-int(bounds[0]/2),int(bounds[0]/2))
     bounds[2] = (-int(bounds[2]/2),int(bounds[2]/2))
@@ -177,7 +185,7 @@ def parse(ops):
   the entire set op operations but instead just checks the new ones
    
   >>> parse("FillRect(2,3,2) Place(3005)")[0]
-  [((0, 0, 0, 0, 1), '3005')]
+  [((0, 0, 0, ((1, 0, 0), (0, 1, 0), (0, 0, 1)), 1), '3005')]
 
   >>> len(parse("FillRect(2,3,2) Place(3005)")[1].voxels)
   12
@@ -193,7 +201,7 @@ def parse(ops):
   >>> parse.cache_info().hits
   1
   >>> parse("Move(1,0,0) Move(1,0,0)")[2][0]
-  (2, 0, 0, 0, 1)
+  (2, 0, 0, ((1, 0, 0), (0, 1, 0), (0, 0, 1)), 1)
   """
   if isinstance(ops, str):
     ops = ops.split()
@@ -201,7 +209,7 @@ def parse(ops):
   if len(ops) == 0:
     elements = []
     img = VolumetricImage()
-    stack = [(0,0,0,0,1)] # x, y, z, rotation, color
+    stack = [(0,0,0,rotation_matrix(0),1)] # x, y, z, rotation, color
   else:
     (elements, img, stack) = parse(tuple(ops[:-1]))
 
@@ -237,7 +245,7 @@ def exec_ops(img,stack,ops,dry_run=False):
     elif op[0] == OP.Move:
       stack[-1] = move(stack[-1], op[1])
     elif op[0] == OP.Rotate:
-      stack[-1] = (stack[-1][0],stack[-1][1],stack[-1][2],(stack[-1][3] + int(op[1]/90)) % 4, stack[-1][4])
+      stack[-1] = (stack[-1][0],stack[-1][1],stack[-1][2],rotate_matrix(stack[-1][3], op[1]/90), stack[-1][4])
     elif op[0] == OP.SetColor:
       stack[-1] = (stack[-1][0],stack[-1][1],stack[-1][2],stack[-1][3],op[1])
     elif op[0] == OP.FillRect:
@@ -258,27 +266,6 @@ def exec_ops(img,stack,ops,dry_run=False):
       img.voxels = bounding_sphere(8).copy()
 
   return elements
-
-def to_ldraw(els):
-  """
-  Converts the element list to the contents of an ldraw file.
-
-  There are no checks implemented to make sure valid ldraw elements are
-  being placed, so if your grammar isn't placing ldraw elements this
-  will return fairly useless results.
-  """
-  ldraw = ""
-
-  for el in els:
-    pos = (el[0][0] * 10, el[0][1] * 8, el[0][2] * 10)
-    color = el[0][4]
-
-    rot_mat = ' '.join([str(v) for v in sum(rotation_matrix(el[0][3]),())])
-
-    ldraw += ("1 %d %d %d %d %s %s.dat\n" % (color, pos[0], pos[1], pos[2], rot_mat, el[1].replace('r','')))
-    ldraw += "0 STEP\n"
-
-  return ldraw
 
 def fitness(text, prefix = None):
   """ 
