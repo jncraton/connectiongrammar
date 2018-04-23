@@ -1,22 +1,10 @@
 """
 Implements a basic 3d object placer and fitness function
-
->>> sentence = generate.generate(generate.load_grammar(
-...     "Stud -> '(' 'Move(0,-3,0)' 'FillRect(2,3,2)' 'Place(3005)' Stud ')'\\n Stud ->"),
-...     fitness)
->>> ' '.join(sentence)
-'( Move(0,-3,0) FillRect(2,3,2) Place(3005) ( Move(0,-3,0) FillRect(2,3,2) Place(3005) ) )'
->>> elements = parse(' '.join(sentence))[0]
->>> len(elements)
-2
 """
 
 import functools
 import enum
 import math
-from nltk import PCFG
-
-import generate
 
 OP = enum.Enum('OP', """
   Place
@@ -279,9 +267,6 @@ def to_ldraw(els):
   being placed, so if your grammar isn't placing ldraw elements this
   will return fairly useless results.
   """
-  yellow = 14
-  blue = 1
-
   ldraw = ""
 
   for el in els:

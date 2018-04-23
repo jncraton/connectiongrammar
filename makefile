@@ -5,6 +5,7 @@ profile:
 	head profile.txt -n 20
 
 test:
+	python3 -m pyflakes connectiongrammar
 	python3 -m doctest connectiongrammar/generate.py
 	python3 -m doctest connectiongrammar/spatial_fitness.py
 

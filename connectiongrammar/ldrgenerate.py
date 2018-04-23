@@ -2,7 +2,6 @@
 
 """ Generates an LDraw file from a set of grammar rules """
 
-import functools
 import sys
 
 import generate, spatial_fitness
