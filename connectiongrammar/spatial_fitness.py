@@ -23,10 +23,10 @@ OP = enum.Enum('OP', """
 class CollisionError(BaseException): pass
 
 matrices = [
-  ((1,0,0),(0,1,0),(0,0,1)), # front
-  ((0,0,-1),(0,1,0),(1,0,0)), # right
-  ((-1,0,0),(0,1,0),(0,0,-1)), # back
-  ((0,0,1),(0,1,0),(-1,0,0)), # left
+  ((1, 0, 0), (0, 1, 0), (0, 0, 1)), # front
+  ((0, 0, -1), (0, 1, 0), (1, 0, 0)), # right
+  ((-1, 0, 0), (0, 1, 0), (0, 0, -1)), # back
+  ((0, 0, 1), (0, 1, 0), (-1, 0, 0)), # left
 ]
 
 @functools.lru_cache()
@@ -40,10 +40,17 @@ def rotation_matrix(dir):
   return matrices[dir]
 
 @functools.lru_cache()
-def rotate_matrix(mat, rot):
+def rotate_matrix(mat, rot: int):
+  """ Rotates a rotatation matrix about the vertical axis 
+
+  >>> rotate_matrix(((1,0,0),(0,1,0),(0,0,1)), 90)
+  ((0, 0, -1), (0, 1, 0), (1, 0, 0))
+  >>> rotate_matrix(((1,0,0),(0,1,0),(0,0,1)), 360)
+  ((1, 0, 0), (0, 1, 0), (0, 0, 1))
+  """
   current_dir = matrices.index(mat)
   
-  return matrices[(current_dir + int(rot)) % 4]
+  return matrices[(current_dir + int(rot/90)) % 4]
 
 @functools.lru_cache(maxsize=1024)
 def get_token(lexeme):
@@ -245,7 +252,7 @@ def exec_ops(img,stack,ops,dry_run=False):
     elif op[0] == OP.Move:
       stack[-1] = move(stack[-1], op[1])
     elif op[0] == OP.Rotate:
-      stack[-1] = (stack[-1][0],stack[-1][1],stack[-1][2],rotate_matrix(stack[-1][3], op[1]/90), stack[-1][4])
+      stack[-1] = (stack[-1][0],stack[-1][1],stack[-1][2],rotate_matrix(stack[-1][3], op[1]), stack[-1][4])
     elif op[0] == OP.SetColor:
       stack[-1] = (stack[-1][0],stack[-1][1],stack[-1][2],stack[-1][3],op[1])
     elif op[0] == OP.FillRect:
