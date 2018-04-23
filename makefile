@@ -6,8 +6,10 @@ profile:
 
 test:
 	python3 -m pyflakes connectiongrammar
-	python3 -m doctest connectiongrammar/generate.py
-	python3 -m doctest connectiongrammar/spatial_fitness.py
+	python3 -m doctest -o ELLIPSIS connectiongrammar/generate.py
+	python3 -m doctest -o ELLIPSIS connectiongrammar/spatial_fitness.py
+	python3 -m doctest -o ELLIPSIS connectiongrammar/ldrgenerate.py
+	python3 -m doctest -o ELLIPSIS connectiongrammar/ldr2pcfg.py
 
 dish:
 	python3 connectiongrammar/ldrgenerate.py dish.ldr examples/dish/constraints.pcfg examples/brick_shared/brick.pcfg examples/brick_shared/rainbow_brick_defs.pcfg examples/brick_shared/close.pcfg

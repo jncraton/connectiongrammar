@@ -13,6 +13,9 @@ def to_ldraw(els):
   There are no checks implemented to make sure valid ldraw elements are
   being placed, so if your grammar isn't placing ldraw elements this
   will return fairly useless results.
+
+  >>> to_ldraw([((1,2,3,((4,5,6),(7,8,9),(0,1,2)),3),'3005')])
+  '1 3 10 16 30 4 5 6 7 8 9 0 1 2 3005.dat...
   """
   ldraw = ""
 
