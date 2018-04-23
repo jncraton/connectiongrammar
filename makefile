@@ -1,4 +1,4 @@
-all: test
+all: test profile
 
 profile:
 	python3 -m cProfile -s tottime connectiongrammar/ldrgenerate.py castle.ldr examples/castle/wall_constraints.pcfg examples/brick_shared/brick.pcfg examples/castle/brick_defs.pcfg examples/brick_shared/tile.pcfg examples/brick_shared/close.pcfg > profile.txt
