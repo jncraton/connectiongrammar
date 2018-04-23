@@ -35,29 +35,19 @@ OP = enum.Enum('OP', """
 class CollisionError(BaseException): pass
 
 @functools.lru_cache()
-def rotation_matrix(dir, ldraw_string=False):
+def rotation_matrix(dir):
   """ Gets a rotation matrix from a simple cardinal direction
   >>> rotation_matrix(0)
   ((1, 0, 0), (0, 1, 0), (0, 0, 1))
   >>> rotation_matrix(2)
   ((-1, 0, 0), (0, 1, 0), (0, 0, -1))
   """
-  matricies = [ #front,right,back,left
-    "1 0 0 0 1 0 0 0 1", #identity matrix
-    "0 0 -1 0 1 0 1 0 0",
-    "-1 0 0 0 1 0 0 0 -1",
-    "0 0 1 0 1 0 -1 0 0",
-  ]
-
-  if ldraw_string:
-    return matricies[dir]
-  else:
-    items = [int(i) for i in matricies[dir].split()]
-    return tuple([
-      tuple(items[0:3]),
-      tuple(items[3:6]),
-      tuple(items[6:9]),
-    ])
+  return [
+    ((1,0,0),(0,1,0),(0,0,1)), # front
+    ((0,0,-1),(0,1,0),(1,0,0)), # right
+    ((-1,0,0),(0,1,0),(0,0,-1)), # back
+    ((0,0,1),(0,1,0),(-1,0,0)), # left
+  ][dir]
 
 @functools.lru_cache(maxsize=1024)
 def get_token(lexeme):
@@ -298,9 +288,9 @@ def to_ldraw(els):
     pos = (el[0][0] * 10, el[0][1] * 8, el[0][2] * 10)
     color = el[0][4]
 
-    rotation = rotation_matrix(el[0][3], ldraw_string=True)
+    rot_mat = ' '.join([str(v) for v in sum(rotation_matrix(el[0][3]),())])
 
-    ldraw += ("1 %d %d %d %d %s %s.dat\n" % (color, pos[0], pos[1], pos[2], rotation, el[1].replace('r','')))
+    ldraw += ("1 %d %d %d %d %s %s.dat\n" % (color, pos[0], pos[1], pos[2], rot_mat, el[1].replace('r','')))
     ldraw += "0 STEP\n"
 
   return ldraw
