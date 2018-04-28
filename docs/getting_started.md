@@ -35,7 +35,7 @@ There are also some scripts included in the tools directory for rendering direct
 Customizing Models
 ------------------
 
-The source for this project is located in the `connectiongrammar` directory, and the connection representations can be found in the `examples` directory. This contains the actual production rules that describe legal connections between objects. These grammar can be altered to add or change connections and parts.
+The source for this project is located in the `connectiongrammar` directory, and the connection representations can be found in the `examples` directory. This contains the actual production rules that describe legal connections between objects. These grammars can be altered to add or change connections and parts.
 
 Here's a high-level view of the Python source files:
 
