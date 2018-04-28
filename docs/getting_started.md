@@ -35,4 +35,20 @@ There are also some scripts included in the tools directory for rendering direct
 Customizing Models
 ------------------
 
-The source for this project is located in the connectiongrammar directory, but the connection representations can be found in the grammars directory. This contains the actual production rules that describe legal connections between objects. These grammar can be altered to add or change connections and parts.
+The source for this project is located in the `connectiongrammar` directory, and the connection representations can be found in the `examples` directory. This contains the actual production rules that describe legal connections between objects. These grammar can be altered to add or change connections and parts.
+
+Here's a high-level view of the Python source files:
+
+- connectiongrammar/generate.py - Generate a valid utterance of a supplied grammar and fitness function.
+- connectiongrammar/spatial_fitness.py - A basic voxel-based fitness function that simply ensures there are not collisions between objects.
+- connectiongrammar/ldrgenerate.py - Converts utterances of the example grammar to LDraw files. This can be run directly as a Python script to generate a structure from a grammar. See the makefile for example usage.
+- connectiongrammar/ldr2pcfg.py - Converts an LDraw file to a grammar. This grammar can be used to produce structures that include an LDraw CAD model.
+
+There are also several included example grammars in the examples directory:
+
+- basic - Simple cube and sphere model
+- castle - Probabilistic castle structure
+- rock - Probabilistic rock face
+- dish - Dish structure demonstrating combining multiple bounding surfaces
+- heighmap - Heightmap of the UK. This isn't runnable in the current version of the project, but is included simply as another potential application.
+- brick_shared - Grammar portions that are used by several of the other examples
