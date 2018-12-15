@@ -11,7 +11,7 @@ This package provides a way to develop text grammars that represent a language o
 Overview
 --------
 
-The field computational design synthesis involves using computer algorithms to create designs to meet a set of engineering requirements. There are many tools and algorithms available to aid in computational design synthesis[5]. Generative grammars are one broad class of solutions to this problem.
+The field of computational design synthesis involves using computer algorithms to create designs to meet a set of engineering requirements. There are many tools and algorithms available to aid in computational design synthesis[5]. Generative grammars are one broad class of solutions to this problem.
 
 This work uses context-free grammars to represent valid connections between objects. This is somewhat similar in concept to previous grammar systems for generating trees or algae[10]. The generated a language issues commands to a 3D object printer. It moves and rotates an imaginary print head and issues requests to place objects. This is similar to the "turtle interpretation" for L-systems described in [3]:
 
