@@ -292,5 +292,5 @@ def fitness(text, prefix = None):
     except TypeError:
       raise(TypeError("Likely unterminated lexeme\n%s" % [str(o) for o in prefix + text]))
     return 1.0
-  except CollisionError, AssertionError:
+  except (CollisionError, AssertionError):
     return 0.0
