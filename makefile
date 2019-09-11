@@ -27,7 +27,10 @@ rock:
 doxygen:
 	doxygen .doxygen
 
+docs/slides.html: docs/slides.md
+	pandoc --mathjax -t revealjs --standalone -V theme:white -V history=true -V revealjs-url="https://revealjs.com" -o $@ $<
+
 clean:
 	rm -f *.ldr
 	rm -rf connectiongrammar/__pycache__
-	rm -rf docs/html docs/latex
+	rm -rf docs/html docs/latex docs/slides.html
