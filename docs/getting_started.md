@@ -26,6 +26,10 @@ Models are stored in LDraw file format. These are fairly simple to view and edit
 
 `sudo apt install leocad`
 
+You may also want the full LDraw parts library. It can be installed using:
+
+`sudo apt install ldraw-parts`
+
 Models can then be viewed as:
 
 `leocad castle.ldr`
