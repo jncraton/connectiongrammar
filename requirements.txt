@@ -1,3 +1,4 @@
 pyflakes
 nltk
 pillow
+numpy
