@@ -460,3 +460,5 @@ References
 [12] Kirkpatrick, Scott, C. Daniel Gelatt, and Mario P. Vecchi. "Optimization by simulated annealing." science 220, no. 4598 (1983): 671-680.
 
 [13] Agarwal, Manish, Jonathan Cagan, and George Stiny. "A micro language: generating MEMS resonators by using a coupled form—function shape grammar." Environment and Planning B: Planning and Design 27, no. 4 (2000): 615-626.
+
+[14] Campbell, Matthew I., and Kristina Shea. “Computational Design Synthesis.” Artificial Intelligence for Engineering Design, Analysis and Manufacturing 28, no. 3 (2014): 207–8. doi:10.1017/S0890060414000171.
