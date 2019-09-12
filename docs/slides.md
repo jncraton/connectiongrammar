@@ -19,7 +19,7 @@ Context-free Grammars
 =====================
 
 Language Hierarchy
-==================
+------------------
 
 - Regular - Can be recognized finite state automata
 - Context-free - Can be recognized by pushdown automata
