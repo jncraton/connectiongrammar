@@ -2,6 +2,7 @@ Connection Grammar
 ==================
 
 [![Build Status](https://travis-ci.org/jncraton/connectiongrammar.svg?branch=master)](https://travis-ci.org/jncraton/connectiongrammar)
+[![Netlify Status](https://api.netlify.com/api/v1/badges/8a18e3c9-d0a2-4dd2-93c7-187f52885244/deploy-status)](https://app.netlify.com/sites/connectiongrammar/deploys)
 [![DOI](https://zenodo.org/badge/125765412.svg)](https://zenodo.org/badge/latestdoi/125765412)
 
 This package provides a way to develop text grammars that represent a language of interconnected 3D objects in a Python environment. If you want to jump right in to using this or hacking on it, check out the [getting started](docs/getting_started.md) guide.
