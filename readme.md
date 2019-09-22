@@ -15,7 +15,7 @@ Overview
 
 The field of computational design synthesis involves using computer algorithms to create designs to meet a set of engineering requirements. There are many tools and algorithms available to aid in computational design synthesis[5]. Generative grammars are one broad class of solutions to this problem.
 
-This work uses context-free grammars to represent valid connections between objects. This is somewhat similar in concept to previous grammar systems for generating trees or algae[10]. The generated a language issues commands to a 3D object printer. It moves and rotates an imaginary print head and issues requests to place objects. This is similar to the "turtle interpretation" for L-systems described in [3]:
+This work uses context-free grammars to represent valid connections between objects. This is somewhat similar in concept to previous grammar systems for generating trees or algae[10]. The generated a language issues commands to a 3D object printer. It moves and rotates an imaginary print head and issues requests to place objects. This is similar to the "turtle interpretation" for L-systems [15] described in [3]:
 
 > The  concept  is  based  on  the idea of an imaginary turtle that walks, turns and draws according to instructions given. At any time the turtle has a current position in  3-space  and  a  heading  vector  (the  forward  direction  of movement). Individual letters in a string are treated as commands. Different  letters  change  position  or  heading,  record  vertices  in  a polygon,  apply  pre-defined  surfaces  to  the  current  position  and orientation, change colour, etc.
 
@@ -464,3 +464,5 @@ References
 [13] Agarwal, Manish, Jonathan Cagan, and George Stiny. "A micro language: generating MEMS resonators by using a coupled form—function shape grammar." Environment and Planning B: Planning and Design 27, no. 4 (2000): 615-626.
 
 [14] Campbell, Matthew I., and Kristina Shea. “Computational Design Synthesis.” Artificial Intelligence for Engineering Design, Analysis and Manufacturing 28, no. 3 (2014): 207–8. doi:10.1017/S0890060414000171.
+
+[15] Lindenmayer, Aristid. "Mathematical models for cellular interactions in development I. Filaments with one-sided inputs." Journal of theoretical biology 18, no. 3 (1968): 280-299.
