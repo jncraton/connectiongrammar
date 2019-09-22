@@ -27,8 +27,11 @@ rock:
 doxygen:
 	doxygen .doxygen
 
-docs/slides.html: docs/slides.md
+docs/slides.html: docs/slides.md docs/english-parse-example.png
 	pandoc --mathjax -t revealjs --standalone -V theme:white -V history=true -V revealjs-url="https://revealjs.com" -o $@ $<
+
+docs/%.png: docs/%.dot
+	dot -Tpng $< -o $@
 
 clean:
 	rm -f *.ldr

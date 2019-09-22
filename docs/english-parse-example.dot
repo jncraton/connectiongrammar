@@ -1,0 +1,12 @@
+digraph G {
+  "S" -> "NP"
+  "S" -> "VP"
+  "NP" -> "Adj"
+  "NP" -> "Noun"
+  "Noun" -> "boys"
+  "Adj" -> "Tall"
+  "VP" -> "Verb"
+  "VP" -> "Adv"
+  "Verb" -> "run"
+  "Adv" -> "fast"
+}
