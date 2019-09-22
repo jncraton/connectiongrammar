@@ -6,7 +6,7 @@ Connection Grammar
 [![Revealjs presentation](https://img.shields.io/badge/revealjs-presentation-blue)](https://connectiongrammar.netlify.com/docs/slides.html)
 [![DOI](https://zenodo.org/badge/125765412.svg)](https://zenodo.org/badge/latestdoi/125765412)
 
-This package provides a way to develop text grammars that represent a language of interconnected 3D objects in a Python environment. If you want to jump right in to using this or hacking on it, check out the [getting started](docs/getting_started.md) guide.
+This package provides tools to generate interconnected objects whose connection points are defined by a context-free grammar. If you want to start using this or hacking on it, check out the [getting started](docs/getting_started.md) guide.
 
 ![Rainbow dish render](examples/dish/dish.png)
 
