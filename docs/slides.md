@@ -175,8 +175,97 @@ Fill space
 
 ![Filling a castle wall](../examples/castle/simple.png)
 
+Probabilistic Grammar Rules
+===========================
+
+---
+
+Rules can be assigned a probability to be used to select randomly at generation time
+
+---
+
+Random colors
+-------------
+
+- Stud -> Place("Red Brick") Stud [.5]
+- Stud -> Place("Blue Brick") Stud [.5]
+- Stud -> ɛ
+
+---
+
+![A probabilistic rock face](../examples/rock/rock.png){height=480px}
+
+---
+
+![A probabilistic castle wall](../examples/castle/pcfg.png)
+
+Augmented Human Design
+======================
+
+---
+
+Sometimes designers may want to manually build sections of the design and allow software to fill in the gaps.
+
+---
+
+We can convert CAD designs to grammar utterances that can be expanded.
+
+---
+
+![A manually created drawbridge model](../examples/castle/drawbridge.png)
+
+---
+
+![Augmenting a generated wall with the model](../examples/castle/augmented.gif)
+
+Other Examples
+==============
+
+---
+
+![Castle](../examples/castle/four-walled.png){height=480px}
+
+---
+
+![Height map](../examples/heightmap/uk-heightmap.png){height=480px}
+
+---
+
+![UK Model](../examples/heightmap/uk.png){height=480px}
+
+Performance
+===========
+
+Naive Solver
+------------
+
+- O(cⁿ)
+- Intractable for most `n`
+
+Linear Solver
+-------------
+
+- O(n)
+- Selects first path that passes fitness test
+- Will usually miss global optimum
+- Requires careful grammar ordering
+
 Future Work
 ===========
+
+Intuitive Grammar Model
+-----------------------
+
+- Create UX patterns for interacting with grammars in specific domains
+- Teaching using examples rather than writing grammar rules
+
+More solver options
+-------------------
+
+- Branch and bound
+- Gradient Descent
+- Simulated Annealing
+- Genetic Algorithms
 
 Grammars as machine learning models
 -----------------------------------
