@@ -4,24 +4,29 @@ Connection Grammar
 Motivation
 ==========
 
+---
+
+![Calvin on computers in 1995](computer-fuss-comic.png)
+
 Common Computer Usage
 ---------------------
 
-- Management - Input, store, transfer, output
-- Analysis - Search, machine learning, solvers
+- Data Management - Input, transfer, edit, and output
+- Data Analysis - Search, optimize, and solve
 
 Design synthesis
 ----------------
+
+---
 
 > As engineering artifacts grow in complexity, we need to offload some design decisions to the computer. We need the computer to help us synthesize many of the minute details in our engineering devices as well as ensure high performance by searching among a myriad alternatives for the optimal combination of building blocks and parameter values [1]
 
 ---
 
-![Calvin on computers in 1995](computer-fuss-comic.png)
+Computers in 2019
+-----------------
 
----
-
-[Computers in 2019](https://thisarticledoesnotexist.com/)
+[This article does not exist](https://thisarticledoesnotexist.com/){target=_blank}
 
 Context-free Grammars
 =====================
@@ -29,9 +34,9 @@ Context-free Grammars
 Language Hierarchy
 ------------------
 
-- Regular - Can be recognized finite state automata
+- Regular - Can be recognized by finite state automata
 - Context-free - Can be recognized by pushdown automata
-- Recursively enumerable - Can be recognized by Turing machine
+- Recursively enumerable - Can be recognized by Turing machines
 
 CFG Example
 -----------
