@@ -36,4 +36,4 @@ docs/%.png: docs/%.dot
 clean:
 	rm -f *.ldr
 	rm -rf connectiongrammar/__pycache__
-	rm -rf docs/html docs/latex docs/slides.html
+	rm -rf docs/html docs/latex docs/slides.html docs/english-parse-example.png
