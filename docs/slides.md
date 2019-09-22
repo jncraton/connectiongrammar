@@ -46,9 +46,33 @@ CFG Example
 
 ![Parse tree](english-parse-example.png)
 
+Lindenmayer Systems
+===================
+
+Development
+-----------
+
+Used to model plant growth using grammar production rules
+
+---
+
+![Fractal plant generated using L-system](fractal-plant.png)
+
+---
+
+![Turtle Interpretation [3]](turtle-interpretation.png)
+
 References
 ==========
 
 ---
 
 - [1] Campbell, Matthew I., and Kristina Shea. “Computational Design Synthesis.” Artificial Intelligence for Engineering Design, Analysis and Manufacturing 28, no. 3 (2014): 207–8. doi:10.1017/S0890060414000171.
+
+---
+
+- [2] Lindenmayer, Aristid. "Mathematical models for cellular interactions in development I. Filaments with one-sided inputs." Journal of theoretical biology 18, no. 3 (1968): 280-299.
+
+---
+
+- [3] Bie, Dongyang, Jie Zhao, Xiaolu Wang, and Yanhe Zhu. "A distributed self-reconfiguration method combining cellular automata and L-systems." In Robotics and Biomimetics (ROBIO), 2015 IEEE International Conference on, pp. 60-65. IEEE, 2015.
