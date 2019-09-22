@@ -62,6 +62,127 @@ Used to model plant growth using grammar production rules
 
 ![Turtle Interpretation [3]](turtle-interpretation.png)
 
+Interconnected Objects
+----------------------
+
+- Grammar rules represent valid ways that objects can be connected to one another
+- Non-terminals are connection points
+- Terminals are object placements
+
+LEGO Example
+============
+
+---
+
+![Godtfred Kirk Christiansen patent](christiansen1961.jpg)
+
+Grammar Rules
+-------------
+
+- Stud -> 'Move(0,-1,0)' 'Place("Brick1x1")' Stud
+- Stud -> ɛ
+
+A Tower
+-------
+
+---
+
+Stud
+
+---
+
+Move(0,-1,0) Place("Brick1x1") Stud
+
+![Single element tower](../examples/basic/1x1stack01.png)
+
+---
+
+Move(0,-1,0) Place("Brick1x1") Move(0,-1,0) Place("Brick1x1") Stud
+
+![Two element tower](../examples/basic/1x1stack02.png)
+
+---
+
+Move(0,-1,0) Place("Brick1x1") Move(0,-1,0) Place("Brick1x1") Stud
+
+![Three element tower](../examples/basic/1x1stack03.png)
+
+Capturing more connection options
+---------------------------------
+
+Grammar including rotation
+--------------------------
+
+- Stud -> 'Move(-2,0,0)' 'Rotate(90)' 'Move(-3,-3,-1)' 'Place(3001)' 'Move(-3,0,-1)' Stud
+- Stud -> ɛ
+
+---
+
+Stud
+
+---
+
+Move(-2,0,0) Rotate(90) Move(-3,-3,-1) Place(3001) Move(-3,0,-1) Stud
+
+![Single element stucture](../examples/basic/rotation_translation01.png)
+
+---
+
+Move(-2,0,0) Rotate(90) Move(-3,-3,-1) Place(3001) Move(-3,0,-1) Move(-2,0,0) Rotate(90) Move(-3,-3,-1) Place(3001) Move(-3,0,-1) Stud
+
+![Two element stucture](../examples/basic/rotation_translation02.png)
+
+---
+
+Move(-2,0,0) Rotate(90) Move(-3,-3,-1) Place(3001) Move(-3,0,-1) Move(-2,0,0) Rotate(90) Move(-3,-3,-1) Place(3001) Move(-3,0,-1) Move(-2,0,0) Rotate(90) Move(-3,-3,-1) Place(3001) Move(-3,0,-1) Stud
+
+![Three element stucture](../examples/basic/rotation_translation03.png)
+
+Structure Fitness
+=================
+
+Limitations of grammars
+-----------------------
+
+Define syntax, not meaning
+
+---
+
+![A "correct" sentence](english-nonsense-example.png)
+
+---
+
+We need a way to determine the fitness of the meaning of an utterance to a particular purpose
+
+Fill space
+----------
+
+- Use voxel-based collision detection
+
+---
+
+![Voxels](voxels.png)
+
+---
+
+![Filling a box](../examples/basic/box.gif)
+
+---
+
+![Filling a sphere](../examples/basic/sphere.gif)
+
+---
+
+![Filling a castle wall](../examples/castle/simple.png)
+
+Future Work
+===========
+
+Grammars as machine learning models
+-----------------------------------
+
+> Do you know of any attempts to learn a connection grammar, instead of creating it by hand?
+
 References
 ==========
 

@@ -1,0 +1,12 @@
+digraph G {
+  "S" -> "NP"
+  "S" -> "VP"
+  "NP" -> "Adj"
+  "NP" -> "Noun"
+  "Noun" -> "water"
+  "Adj" -> "Square"
+  "VP" -> "Verb"
+  "VP" -> "Adv"
+  "Verb" -> "sleeps"
+  "Adv" -> "keenly"
+}

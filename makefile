@@ -27,7 +27,7 @@ rock:
 doxygen:
 	doxygen .doxygen
 
-docs/slides.html: docs/slides.md docs/english-parse-example.png
+docs/slides.html: docs/slides.md docs/english-parse-example.png docs/english-nonsense-example.png
 	pandoc --mathjax -t revealjs --standalone -V theme:white -V history=true -V revealjs-url="https://revealjs.com" -o $@ $<
 
 docs/%.png: docs/%.dot
@@ -36,4 +36,4 @@ docs/%.png: docs/%.dot
 clean:
 	rm -f *.ldr
 	rm -rf connectiongrammar/__pycache__
-	rm -rf docs/html docs/latex docs/slides.html docs/english-parse-example.png
+	rm -rf docs/html docs/latex docs/slides.html docs/english-parse-example.png docs/english-nonsense-example.png
