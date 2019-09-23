@@ -74,8 +74,8 @@ Interconnected Objects
 - Non-terminals are connection points
 - Terminals are object placements
 
-LEGO Example
-============
+Example Application
+===================
 
 ---
 
@@ -198,11 +198,11 @@ Random colors
 
 ---
 
-![A probabilistic rock face](../examples/rock/rock.png){height=480px}
+![A probabilistic castle wall](../examples/castle/pcfg.png)
 
 ---
 
-![A probabilistic castle wall](../examples/castle/pcfg.png)
+![A probabilistic rock face](../examples/rock/rock.png){height=480px}
 
 Augmented Human Design
 ======================
