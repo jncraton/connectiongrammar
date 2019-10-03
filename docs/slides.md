@@ -186,6 +186,10 @@ Fill space
 
 ---
 
+![Filling a dish](../examples/dish/dish.png)
+
+---
+
 ![Filling a castle wall](../examples/castle/simple.png)
 
 Probabilistic Grammar Rules
@@ -200,8 +204,8 @@ Rules can be assigned a probability to be used to select randomly at generation 
 Random colors
 -------------
 
-- Stud -> Place("Red Brick") Stud [.5]
-- Stud -> Place("Blue Brick") Stud [.5]
+- Stud -> Place("Gray Brick") Stud [.8]
+- Stud -> Place("Green Brick") Stud [.2]
 - Stud -> ɛ
 
 ---
