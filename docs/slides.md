@@ -277,21 +277,18 @@ Future Work
 Intuitive Grammar Model
 -----------------------
 
-- Create UX patterns for interacting with grammars in specific domains
-- Teaching using examples rather than writing grammar rules
+Create UX patterns for interacting with grammars in specific domains
 
-More solver options
+More Solver Options
 -------------------
 
 - Branch and bound
-- Gradient Descent
-- Simulated Annealing
-- Genetic Algorithms
+- Gradient descent
+- Simulated annealing
+- Genetic algorithms
 
 Grammars as machine learning models
 -----------------------------------
-
-> Do you know of any attempts to learn a connection grammar, instead of creating it by hand?
 
 References
 ==========
