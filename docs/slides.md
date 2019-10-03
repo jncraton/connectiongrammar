@@ -259,6 +259,10 @@ Naive Solver
 - O(cⁿ)
 - Intractable for most `n`
 
+---
+
+![There are over 900 million ways to assemble 6 2x4 bricks](https://c1.staticflickr.com/5/4388/36657141723_1af73ccdb4_n.jpg)
+
 Linear Solver
 -------------
 
