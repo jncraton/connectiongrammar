@@ -30,6 +30,10 @@ Computers in 2019
 
 ---
 
+[This person does not exist](https://thispersondoesnotexist.com/){target=_blank}
+
+---
+
 [Request for Comments on Patenting Artificial Intelligence Inventions](https://www.federalregister.gov/documents/2019/08/27/2019-18443/request-for-comments-on-patenting-artificial-intelligence-inventions){target=_blank}
 
 Context-free Grammars
