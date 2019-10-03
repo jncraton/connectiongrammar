@@ -42,6 +42,10 @@ Language Hierarchy
 - Context-free - Can be recognized by pushdown automata
 - Recursively enumerable - Can be recognized by Turing machines
 
+---
+
+![](https://upload.wikimedia.org/wikipedia/commons/thumb/a/a2/Automata_theory.svg/640px-Automata_theory.svg.png)
+
 CFG Example
 -----------
 
