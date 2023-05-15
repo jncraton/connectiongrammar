@@ -1,7 +1,7 @@
 Connection Grammar
 ==================
 
-[![Build Status](https://travis-ci.org/jncraton/connectiongrammar.svg?branch=master)](https://travis-ci.org/jncraton/connectiongrammar)
+[![CI](https://github.com/jncraton/connectiongrammar/actions/workflows/build.yml/badge.svg)](https://github.com/jncraton/connectiongrammar/actions/workflows/build.yml)
 [![Netlify Status](https://api.netlify.com/api/v1/badges/8a18e3c9-d0a2-4dd2-93c7-187f52885244/deploy-status)](https://app.netlify.com/sites/connectiongrammar/deploys)
 [![Revealjs presentation](https://img.shields.io/badge/revealjs-presentation-blue)](https://connectiongrammar.netlify.com/docs/slides.html)
 [![DOI](https://zenodo.org/badge/125765412.svg)](https://zenodo.org/badge/latestdoi/125765412)
