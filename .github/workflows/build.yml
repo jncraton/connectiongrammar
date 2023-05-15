@@ -1,0 +1,31 @@
+name: CI
+on: push
+jobs:
+  build:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest]
+        python-version: [3.5, 3.6, 3.x]
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v2
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Update system packages and install dependencies
+        run: |
+          sudo apt-get -qq update
+          sudo apt-get -y install doxygen graphviz
+      - name: Install Python dependencies
+        run: pip3 install -r requirements.txt
+      - name: Run tests and build steps
+        run: |
+          make test
+          make profile
+          make castle
+          make rock
+          make augcastle
+          make dish
+          make doxygen
